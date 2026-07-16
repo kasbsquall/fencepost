@@ -127,7 +127,7 @@ def test_preanswer_html_contains_no_mutant_or_execution_evidence(tmp_path) -> No
             raise AssertionError("student server exposed report.json")
 
 
-def test_empty_answer_is_immutable_and_round_trips_through_grading(tmp_path) -> None:
+def test_blank_requires_explicit_unknown_and_round_trips_through_grading(tmp_path) -> None:
     with _running_probe(tmp_path) as (base, report_path, output):
         report = load_report(report_path)
         place = report["places"][0]
@@ -140,13 +140,45 @@ def test_empty_answer_is_immutable_and_round_trips_through_grading(tmp_path) -> 
         token = _token(start)
         question_bytes, _, _ = _post(base + "/begin", {"csrf_token": token})
         question = question_bytes.decode("utf-8")
+        assert "I don" in question
+        try:
+            _post(
+                base + "/answer/0",
+                {
+                    "csrf_token": token,
+                    "site_id": site_id,
+                    "answer": "",
+                    "commitment": "answer",
+                },
+            )
+        except HTTPError as exc:
+            assert exc.code == 422
+            retry = exc.read().decode("utf-8")
+            assert "Write an answer" in retry
+            assert escape(mutation["unified_diff"], quote=True) not in retry
+            assert escape(evidence["failing_assertion"]["message"], quote=True) not in retry
+        else:
+            raise AssertionError("a blank answer reached the reveal")
+        assert not output.exists()
+        try:
+            _get(base + "/reveal/0")
+        except HTTPError as exc:
+            assert exc.code == 403
+        else:
+            raise AssertionError("blank submission committed an answer")
+
         reveal_bytes, _, reveal_url = _post(
             base + "/answer/0",
-            {"csrf_token": token, "site_id": site_id, "answer": ""},
+            {
+                "csrf_token": token,
+                "site_id": site_id,
+                "answer": "",
+                "commitment": "unknown",
+            },
         )
         reveal = reveal_bytes.decode("utf-8")
         assert reveal_url.endswith("/reveal/0")
-        assert "No answer given." in reveal
+        assert "I don&#x27;t know" in reveal
         assert escape(mutation["unified_diff"], quote=True) in reveal
         assert escape(evidence["failing_assertion"]["message"], quote=True) in reveal
         assert not output.exists()
@@ -157,6 +189,7 @@ def test_empty_answer_is_immutable_and_round_trips_through_grading(tmp_path) -> 
                 "csrf_token": token,
                 "site_id": site_id,
                 "answer": "This later edit must not replace the committed answer.",
+                "commitment": "answer",
             },
         )
         between_bytes, _, between_url = _post(
@@ -169,8 +202,8 @@ def test_empty_answer_is_immutable_and_round_trips_through_grading(tmp_path) -> 
             base + "/download", {"csrf_token": _token(end)}
         )
         assert "attachment" in headers["Content-Disposition"]
-        assert json.loads(payload_bytes) == {site_id: ""}
-        assert _load_answers(output) == {site_id: ""}
+        assert json.loads(payload_bytes) == {site_id: "I don't know"}
+        assert _load_answers(output) == {site_id: "I don't know"}
 
     triage, contexts, blame = _records_with_two_gaps_at_one_site()
     graded = run_probes(
@@ -183,6 +216,6 @@ def test_empty_answer_is_immutable_and_round_trips_through_grading(tmp_path) -> 
     )
     assert graded.submitted_answer_count == 1
     assert graded.graded_answer_count == 1
-    assert graded.results[0].answer == ""
+    assert graded.results[0].answer == "I don't know"
     assert graded.results[0].assessment is not None
     assert graded.results[0].assessment.verdict == "INSUFFICIENT"

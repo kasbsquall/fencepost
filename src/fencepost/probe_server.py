@@ -32,6 +32,7 @@ from .ui.student import (
 
 
 MAX_FORM_BYTES = 1_000_000
+UNKNOWN_ANSWER = "I don't know"
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -321,7 +322,31 @@ def _handler(
                                 "/end" if current is None else f"/question/{current}"
                             )
                             return
-                        session.answers[site_id] = form.get("answer", [""])[0]
+                        commitment = form.get("commitment", [""])[0]
+                        typed_answer = form.get("answer", [""])[0]
+                        if commitment == "unknown":
+                            answer = UNKNOWN_ANSWER
+                        elif commitment == "answer" and typed_answer.strip():
+                            answer = typed_answer
+                        elif commitment == "answer":
+                            self._html(
+                                render_probe_question(
+                                    place,
+                                    index=answer_index,
+                                    total=total,
+                                    token=session.token,
+                                    validation_message=(
+                                        "Write an answer, or choose â€œI donâ€™t knowâ€ "
+                                        "to continue."
+                                    ),
+                                ),
+                                422,
+                            )
+                            return
+                        else:
+                            self._bad_request()
+                            return
+                        session.answers[site_id] = answer
                 self._redirect(f"/reveal/{answer_index}")
                 return
 

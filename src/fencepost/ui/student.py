@@ -143,6 +143,7 @@ def render_probe_question(
     index: int,
     total: int,
     token: str,
+    validation_message: str | None = None,
 ) -> str:
     question = _mapping(place.get("question")).get("question_text")
     site_id = place.get("site_id")
@@ -156,7 +157,12 @@ def render_probe_question(
     <input type="hidden" name="site_id" value="{_text(site_id)}">
     <label for="answer">Your answer</label>
     <textarea id="answer" name="answer" rows="8" autofocus></textarea>
-    <button class="probe-button" type="submit">Submit answer</button>
+    {f'<p class="probe-choice-message" role="status">{_text(validation_message)}</p>' if validation_message else ''}
+    <div class="probe-commit-actions">
+      <button class="probe-button" type="submit" name="commitment" value="answer">Submit answer</button>
+      <button class="probe-button probe-button-secondary" type="submit" name="commitment" value="unknown">I donâ€™t know</button>
+    </div>
+    <p class="probe-choice-note">Either choice records your response before the evidence is shown.</p>
   </form>
 </section>"""
     return _page(

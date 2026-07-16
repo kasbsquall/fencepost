@@ -58,6 +58,8 @@ def build_report(
     mutant_results: Sequence[MutantResult],
     function_by_mutant_id: Mapping[str, str],
     artifact_dir: Path,
+    repository_path: str | None = None,
+    run_started_at: str | None = None,
 ) -> FencepostReport:
     """Create the UI-ready JSON contract and its instructor-facing Markdown view."""
     context_by_id = {
@@ -165,6 +167,8 @@ def build_report(
             "probe/summary.json",
         ),
         complete=triage.triage_complete and probe.complete,
+        repository_path=repository_path,
+        run_started_at=run_started_at,
     )
     report_root = artifact_dir / "report"
     _write_json(report_root / "report.json", report)
@@ -221,6 +225,7 @@ def _function_assessments(
         if item.label_contract == "REAL_GAP"
     }
     question_sites: dict[tuple[str, str], set[str]] = defaultdict(set)
+    question_mutant_ids: set[str] = set()
     for site in probe.results:
         if not site.mutants:
             continue
@@ -229,6 +234,7 @@ def _function_assessments(
             site.mutants[0].qualified_function_name,
         )
         question_sites[key].add(site.site_id)
+        question_mutant_ids.update(mutant.mutant_id for mutant in site.mutants)
 
     results = []
     for (path, function_name), mutants in grouped.items():
@@ -240,6 +246,9 @@ def _function_assessments(
         )
         gap_count = sum(
             item.candidate.id in contract_gap_ids for item in mutants
+        )
+        question_mutants = sum(
+            item.candidate.id in question_mutant_ids for item in mutants
         )
         if mutants and killed == len(mutants):
             status = "CLEAN"
@@ -261,6 +270,8 @@ def _function_assessments(
                 survived_submitted_tests=survived,
                 broken_mutants=broken,
                 contract_real_gap_mutants=gap_count,
+                question_mutants=question_mutants,
+                not_questioned_mutants=max(0, survived - question_mutants),
                 question_site_count=len(question_sites[(path, function_name)]),
                 artifact_refs=tuple(
                     f"mutants/{item.candidate.id}/result.json" for item in mutants

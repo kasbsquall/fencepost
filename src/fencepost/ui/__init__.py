@@ -577,6 +577,125 @@ def _instructor_headline(report: Mapping[str, Any]) -> tuple[str, str]:
     return headline, " ".join(detail)
 
 
+def _count(value: object) -> int | None:
+    if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+        return value
+    return None
+
+
+def _outcome_flow(
+    *,
+    total: object,
+    segments: Sequence[tuple[str, str, object]],
+    label: str,
+    compact: bool = False,
+) -> str:
+    """Render an artifact-sized part-to-whole without inline styles or scripts."""
+    whole = _count(total)
+    if whole is None or whole == 0:
+        return ""
+    present = [
+        (class_name, noun, count)
+        for class_name, noun, raw_count in segments
+        if (count := _count(raw_count)) is not None and count > 0
+    ]
+    if not present or sum(item[2] for item in present) > whole:
+        return ""
+    labels = "".join(
+        f'<th class="flow-label flow-label-{class_name}" colspan="{count}" scope="col">'
+        f'<span class="data-value">{count}</span> {_text(noun)}</th>'
+        for class_name, noun, count in present
+    )
+    bars = "".join(
+        f'<td class="flow-segment flow-{class_name}" colspan="{count}">'
+        f'<span class="visually-hidden">{count} {_text(noun)}</span></td>'
+        for class_name, noun, count in present
+    )
+    remainder = whole - sum(item[2] for item in present)
+    if remainder:
+        labels += f'<th class="flow-label flow-label-unclassified" colspan="{remainder}" scope="col"></th>'
+        bars += f'<td class="flow-segment flow-unclassified" colspan="{remainder}" aria-hidden="true"></td>'
+    compact_class = " outcome-flow-compact" if compact else ""
+    return f"""<table class="outcome-flow{compact_class}" aria-label="{_text(label)}">
+  <caption>{_text(label)}</caption>
+  <thead><tr>{labels}</tr></thead>
+  <tbody><tr>{bars}</tr></tbody>
+</table>"""
+
+
+def _mutation_flow(report: Mapping[str, Any]) -> str:
+    mutation = _mapping(report.get("mutation_summary"))
+    total = mutation.get("total_mutants")
+    caught = mutation.get("killed_by_submitted_tests")
+    discuss = report.get("question_mutant_count")
+    withheld = report.get("not_questioned_mutant_count")
+    flow = _outcome_flow(
+        total=total,
+        segments=(
+            ("caught", "caught", caught),
+            ("discuss", "to discuss", discuss),
+            ("withheld", "withheld", withheld),
+        ),
+        label=f"Outcome of {total} code changes" if _count(total) is not None else "Code-change outcomes",
+    )
+    if not flow:
+        return ""
+    return f"""<section class="mutation-flow" aria-labelledby="mutation-flow-heading">
+  <div class="mutation-flow-heading"><p class="eyebrow">The run at a glance</p><h2 id="mutation-flow-heading">What happened when the code changed</h2></div>
+  {flow}
+</section>"""
+
+
+def _function_flows(assessments: Sequence[Mapping[str, Any]]) -> str:
+    ordered = sorted(
+        assessments,
+        key=lambda item: (
+            item.get("status") != "CLEAN",
+            -(
+                (_count(item.get("killed_by_submitted_tests")) or 0)
+                / (_count(item.get("total_mutants")) or 1)
+            ),
+            str(item.get("qualified_function_name") or ""),
+        ),
+    )
+    rows = []
+    for item in ordered:
+        name = item.get("qualified_function_name")
+        total = item.get("total_mutants")
+        caught = item.get("killed_by_submitted_tests")
+        discuss = item.get("question_mutants")
+        discuss_noun = "to discuss"
+        if _count(discuss) is None:
+            discuss = item.get("contract_real_gap_mutants")
+            discuss_noun = "verified gaps"
+        withheld = item.get("not_questioned_mutants")
+        flow = _outcome_flow(
+            total=total,
+            segments=(
+                ("caught", "caught", caught),
+                ("discuss", discuss_noun, discuss),
+                ("withheld", "withheld", withheld),
+            ),
+            label=f"{name or 'Unknown function'} change outcomes",
+            compact=True,
+        )
+        if not flow:
+            continue
+        rows.append(
+            '<li class="function-flow-row">'
+            f'<div class="function-flow-name">{_code(name or "<unknown>")}'
+            f'{f"<span><span class=\"data-value\">{caught}</span> of <span class=\"data-value\">{total}</span> caught</span>" if _count(caught) is not None and _count(total) is not None else ""}'
+            f'</div>{flow}</li>'
+        )
+    if not rows:
+        return ""
+    return (
+        '<div class="function-flow-list" aria-label="Change outcomes by function">'
+        '<p class="eyebrow">Change outcomes by function</p>'
+        f'<ul>{"".join(rows)}</ul></div>'
+    )
+
+
 def _function_outcomes(report: Mapping[str, Any]) -> str:
     assessments = [
         _mapping(item) for item in _sequence(report.get("function_assessments"))
@@ -630,6 +749,7 @@ def _function_outcomes(report: Mapping[str, Any]) -> str:
 <section class="function-outcomes" aria-labelledby="outcomes-heading">
   <div class="section-intro"><p class="eyebrow">Both sides of the evidence</p><h2 id="outcomes-heading">What their tests already protect</h2></div>
   <div class="function-columns">{''.join(columns)}</div>
+  {_function_flows(assessments)}
 </section>""".strip()
 
 
@@ -733,7 +853,7 @@ def render_report_document(report: Mapping[str, Any]) -> str:
   {_icon_sprite()}
   <a class="skip-link" href="#main">Skip to report</a>
   <header class="masthead">
-    <div class="shell masthead-inner">{_logo()}<nav aria-label="Report navigation"><a href="/method">Method</a></nav></div>
+    <div class="shell masthead-inner">{_logo()}<nav aria-label="Report navigation"><a href="/">Home</a><a href="/method">Method</a></nav></div>
   </header>
   <main class="shell" id="main">
     {f'<aside class="formative-notice"><strong>Formative, human-reviewed.</strong><span>{_text(formative)}</span></aside>' if formative else ''}
@@ -742,6 +862,7 @@ def render_report_document(report: Mapping[str, Any]) -> str:
       <h1 id="run-title">{_data_text(headline)}</h1>
       {f'<p class="headline-detail">{_data_text(summary)}</p>' if summary else ''}
     </section>
+    {_mutation_flow(report)}
     {_coverage_section(report)}
     {_function_outcomes(report)}
     <section class="shielded" aria-labelledby="shielded-heading">
@@ -787,7 +908,7 @@ def render_method_document(report: Mapping[str, Any]) -> str:
 <body id="top">
   {_icon_sprite()}
   <a class="skip-link" href="#main">Skip to method</a>
-  <header class="masthead"><div class="shell masthead-inner">{_logo()}<nav aria-label="Report navigation"><a href="/">Instructor report</a></nav></div></header>
+  <header class="masthead"><div class="shell masthead-inner">{_logo()}<nav aria-label="Report navigation"><a href="/">Home</a><a href="/report">Instructor report</a></nav></div></header>
   <main class="shell method-main" id="main">
     <section class="run-header"><p class="eyebrow">Technical appendix</p><h1>How Fencepost decides what is fair to ask.</h1><p class="headline-detail">These rates describe mutation triage, not the student. They are kept here so an instructor or reviewer can audit the method without mistaking them for a score.</p></section>
     {f'<section class="rates" aria-label="Equivalent mutant rates">{rates}</section>' if rates else ''}
@@ -796,6 +917,122 @@ def render_method_document(report: Mapping[str, Any]) -> str:
     <section class="method-copy"><h2>Two lenses, both retained</h2><p><strong>STRICT</strong> permits every distinction Python can express. <strong>CONTRACT</strong> admits only plain-caller evidence and drives student questions. Technical or pedagogically inappropriate witnesses are retained under “Deliberately not asked,” never silently deleted.</p></section>
     <section class="method-copy"><h2>Execution trail</h2><p>Fencepost combines AST mutation, Git-blame attribution, Docker sandbox execution, and dual-mode equivalence triage. GPT-5.6 generates adversarial tests inside the product; it phrases tests and questions, while executed results remain the ground truth.</p></section>
   </main>
+</body>
+</html>"""
+
+
+def _command_arg(value: object) -> str:
+    rendered = str(value)
+    if not rendered or any(character.isspace() for character in rendered):
+        return f'"{rendered.replace(chr(34), chr(92) + chr(34))}"'
+    return rendered
+
+
+def render_landing_document(
+    report: Mapping[str, Any],
+    *,
+    artifact_dir: Path,
+    probe_url: str,
+) -> str:
+    """Render the artifact-backed doorway to the instructor and student views."""
+    schema = report.get("schema_version")
+    if schema != SUPPORTED_REPORT_SCHEMA:
+        return render_error_document(
+            f"This viewer requires report schema {SUPPORTED_REPORT_SCHEMA}; "
+            f"the supplied data declares {schema!r}."
+        )
+    student = report.get("student_name") or report.get("student_email")
+    repository_path = report.get("repository_path")
+    repository_name = (
+        Path(repository_path).name
+        if isinstance(repository_path, str) and repository_path
+        else None
+    )
+    commit = report.get("repository_commit")
+    started_at = report.get("run_started_at")
+    run_facts = []
+    if repository_name:
+        run_facts.append(
+            f'<div><dt>Repository</dt><dd>{_code(repository_name)}</dd></div>'
+        )
+    if commit:
+        run_facts.append(f'<div><dt>Commit</dt><dd>{_code(commit)}</dd></div>')
+    if student:
+        run_facts.append(f'<div><dt>Student</dt><dd>{_text(student)}</dd></div>')
+    if started_at:
+        run_facts.append(
+            f'<div><dt>Run started</dt><dd><time datetime="{_text(started_at)}">{_text(started_at)}</time></dd></div>'
+        )
+
+    artifact_arg = _command_arg(artifact_dir)
+    commands = []
+    if repository_path and report.get("student_email") and commit:
+        commands.append(
+            (
+                "Produce this analysis",
+                "fencepost "
+                f"{_command_arg(repository_path)} --student-email "
+                f"{_command_arg(report['student_email'])} --output {artifact_arg} "
+                f"--commit {_command_arg(commit)}",
+            )
+        )
+    commands.extend(
+        (
+            ("Open this home and instructor report", f"fencepost serve {artifact_arg}"),
+            (
+                "Open the evidence-withheld student probe",
+                f"fencepost probe {artifact_arg} --out answers.json",
+            ),
+        )
+    )
+    command_rows = "".join(
+        f'<li><span>{_text(label)}</span><pre><code>{_text(command)}</code></pre></li>'
+        for label, command in commands
+    )
+    title = report.get("title") or "Fencepost comprehension report"
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Fencepost run home</title>
+  <link rel="stylesheet" href="/assets/ledger.css">
+</head>
+<body id="top">
+  {_icon_sprite()}
+  <a class="skip-link" href="#main">Skip to run views</a>
+  <header class="masthead"><div class="shell masthead-inner">{_logo()}<nav aria-label="Run navigation"><a href="/report">Report</a><a href="/method">Method</a></nav></div></header>
+  <main class="shell landing-main" id="main">
+    <section class="landing-hero">
+      <p class="eyebrow">One run, two human views</p>
+      <h1>Choose where you enter the conversation.</h1>
+      <p class="headline-detail">Fencepost keeps the instructor's execution evidence separate until the student has committed each answer.</p>
+    </section>
+    {f'<dl class="run-ledger">{"".join(run_facts)}</dl>' if run_facts else ''}
+    <section class="view-choices" aria-labelledby="views-heading">
+      <h2 class="visually-hidden" id="views-heading">Run views</h2>
+      <article class="view-choice">
+        <p class="eyebrow">Instructor view</p>
+        <h2>Read the report.</h2>
+        <p>Review what the submitted tests protect and decide whether to have a conversation.</p>
+        <a class="view-link" href="/report">Open instructor report {_icon("arrow")}</a>
+      </article>
+      <article class="view-choice">
+        <p class="eyebrow">Student view</p>
+        <h2>Answer from your code.</h2>
+        <p>Answer questions about your own code, then see what your tests never checked.</p>
+        <a class="view-link" href="{_text(probe_url)}">Open student probe {_icon("arrow")}</a>
+      </article>
+    </section>
+    <p class="probe-origin-note">The student probe runs on its own local address so unrevealed instructor evidence is not reachable from that view. Start it with the command below.</p>
+    <section class="command-ledger" aria-labelledby="commands-heading">
+      <div class="section-intro"><p class="eyebrow">From the terminal</p><h2 id="commands-heading">Produce and open the views.</h2></div>
+      <ol>{command_rows}</ol>
+    </section>
+    <section class="method-door"><div><p class="eyebrow">For reviewers</p><h2>Audit how the evidence was filtered.</h2><p>Both equivalence rates, their raw counts, and the contract limitation remain in the method view.</p></div><a class="view-link" href="/method">Open method {_icon("arrow")}</a></section>
+  </main>
+  <footer class="shell"><span class="wordmark small"><span>fence</span><span class="wordmark-post">post</span></span><span>{_text(title)} · local and offline</span></footer>
 </body>
 </html>"""
 
@@ -832,6 +1069,7 @@ __all__ = [
     "load_report",
     "render_artifact_page",
     "render_error_document",
+    "render_landing_document",
     "render_method_document",
     "render_report_document",
     "resolve_report_path",
