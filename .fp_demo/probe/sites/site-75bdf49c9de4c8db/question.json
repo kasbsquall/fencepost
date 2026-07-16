@@ -1,0 +1,9 @@
+{
+  "generation_duration_seconds": 14.594000000000051,
+  "input_tokens": 14861,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 444,
+  "provider": "codex-cli",
+  "question_text": "At p = 100, what should `percentile` return, and why can\u2019t it use an index equal to the number of scores?",
+  "response_id": "019f6c7e-ac2b-7f60-adf5-a05f4341c915"
+}

@@ -17,6 +17,9 @@ from .contract import CONTRACT_LIMITATION, CONTRACT_RULES
 from .models import (
     AnalysisResult,
     AuthoredLineCoverage,
+    AttributionCommit,
+    AttributionExclusion,
+    AttributionSummary,
     BlameLine,
     ExecutionResult,
     MutantResult,
@@ -33,11 +36,13 @@ from .mutation import (
     generate_mutation,
 )
 from .repository import (
+    ATTRIBUTION_LIMITATION,
     RepositoryError,
     SourceFile,
     blame_file,
     extract_archive,
     load_source_files,
+    repository_history_signals,
     resolve_commit,
 )
 from .probe import run_probes
@@ -164,6 +169,51 @@ def _student_name(blame: dict[str, dict[int, BlameLine]]) -> str | None:
     return names.most_common(1)[0][0] if names else None
 
 
+def _attribution_summary(
+    repo: Path, blame: dict[str, dict[int, BlameLine]]
+) -> AttributionSummary:
+    lines = [line for file_lines in blame.values() for line in file_lines.values()]
+    commits: dict[str, AttributionCommit] = {}
+    for line in lines:
+        if not line.commit or line.commit in commits:
+            continue
+        commits[line.commit] = AttributionCommit(
+            commit=line.commit,
+            author_name=line.author_name,
+            author_email=line.author_email,
+            committer_name=line.committer_name,
+            committer_email=line.committer_email,
+            author_matches_committer=line.author_matches_committer,
+            co_authors=line.co_authors,
+            history_rewrite_signals=line.history_rewrite_signals,
+        )
+    commit_records = tuple(commits[key] for key in sorted(commits))
+    return AttributionSummary(
+        method="git blame -M -C -C -w --line-porcelain",
+        limitation=ATTRIBUTION_LIMITATION,
+        analyzed_line_count=len(lines),
+        student_attributed_line_count=sum(line.is_student for line in lines),
+        solely_student_attributed_line_count=sum(
+            line.solely_student_attributed for line in lines
+        ),
+        coauthored_excluded_line_count=sum(
+            line.is_student and bool(line.co_authors) for line in lines
+        ),
+        moved_line_count=sum(line.moved_by_blame for line in lines),
+        copied_line_count=sum(line.copied_by_blame for line in lines),
+        commit_count=len(commit_records),
+        author_committer_mismatch_commit_count=sum(
+            not item.author_matches_committer for item in commit_records
+        ),
+        history_rewrite_signal_commit_count=sum(
+            bool(item.history_rewrite_signals) for item in commit_records
+        ),
+        repository_history_signals=repository_history_signals(repo),
+        commits=commit_records,
+        artifact_ref="run.json",
+    )
+
+
 def _candidate_inventory(
     sources: tuple[SourceFile, ...],
     blame: dict[str, dict[int, BlameLine]],
@@ -172,11 +222,13 @@ def _candidate_inventory(
     tuple[_EligibleCandidate, ...],
     AuthoredLineCoverage,
     dict[str, str],
+    tuple[AttributionExclusion, ...],
 ]:
     eligible: list[_EligibleCandidate] = []
     authored_mutatable_lines: set[tuple[str, int]] = set()
     covered_authored_mutatable_lines: set[tuple[str, int]] = set()
     function_by_candidate: dict[str, str] = {}
+    attribution_exclusions: dict[tuple[str, int], AttributionExclusion] = {}
     for source in sources:
         covered = set(covered_lines.get(source.path, ()))
         attributed = blame[source.path]
@@ -186,7 +238,20 @@ def _candidate_inventory(
             raise PipelineError(f"cannot parse {source.path}: {exc}") from exc
         for candidate in candidates:
             line = attributed.get(candidate.anchor.line)
-            if line is None or not line.is_student:
+            if line is None:
+                continue
+            if not line.solely_student_attributed:
+                if line.is_student and line.co_authors:
+                    attribution_exclusions.setdefault(
+                        (source.path, candidate.anchor.line),
+                        AttributionExclusion(
+                            path=source.path,
+                            line=candidate.anchor.line,
+                            commit=line.commit,
+                            reason="co_authored_commit",
+                            co_authors=line.co_authors,
+                        ),
+                    )
                 continue
             key = (source.path, candidate.anchor.line)
             authored_mutatable_lines.add(key)
@@ -210,7 +275,12 @@ def _candidate_inventory(
         ),
         artifact_ref="selection.json",
     )
-    return tuple(eligible), coverage, function_by_candidate
+    return (
+        tuple(eligible),
+        coverage,
+        function_by_candidate,
+        tuple(attribution_exclusions.values()),
+    )
 
 
 def _mutant_timeout(config: RunConfig, baseline_duration: float) -> float:
@@ -315,6 +385,7 @@ def run_analysis(
         commit = resolve_commit(repo, config.commit)
         sources = load_source_files(repo, commit)
         blame = _blame_index(repo, commit, sources, config.student_email)
+        attribution_summary = _attribution_summary(repo, blame)
     except RepositoryError as exc:
         raise PipelineError(str(exc)) from exc
 
@@ -364,6 +435,7 @@ def run_analysis(
                 for source in sources
             ],
             "blame": blame,
+            "attribution_summary": attribution_summary,
         },
     )
 
@@ -400,7 +472,7 @@ def run_analysis(
             )
         except SandboxError as exc:
             raise PipelineError(str(exc)) from exc
-        eligible, authored_line_coverage, function_by_candidate = (
+        eligible, authored_line_coverage, function_by_candidate, attribution_exclusions = (
             _candidate_inventory(sources, blame, covered)
         )
         _write_json(
@@ -410,6 +482,7 @@ def run_analysis(
                 "authored_line_coverage": authored_line_coverage,
                 "eligible_candidates": [item.candidate for item in eligible],
                 "candidate_functions": function_by_candidate,
+                "attribution_exclusions": attribution_exclusions,
             },
         )
 
@@ -568,6 +641,7 @@ def run_analysis(
                 artifact_dir=artifact_dir,
                 repository_path=str(repo),
                 run_started_at=run_started_at,
+                attribution_summary=attribution_summary,
             )
 
     result = AnalysisResult(

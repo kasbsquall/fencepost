@@ -283,6 +283,43 @@ code {
 .coverage-context p:last-child { margin-bottom: 0; }
 .coverage-low { border-left: 4px solid var(--red); }
 
+.attribution-context {
+  margin-top: 24px;
+  padding: 28px 30px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--tan);
+  background: var(--card);
+}
+
+.attribution-context > p { max-width: 880px; }
+.attribution-context > ul,
+.attribution-commits ul {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding-left: 20px;
+  color: var(--tan-strong);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.attribution-commits { margin-top: 20px; border-top: 1px solid var(--line); }
+.attribution-commits > summary {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  gap: 7px;
+  padding: 10px 7px;
+  cursor: pointer;
+  color: var(--tan-strong);
+  font-family: var(--mono);
+  font-size: 12px;
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+
+.attribution-commits .disclosure-icon { width: 15px; height: 15px; transition: transform 120ms ease; }
+.attribution-commits[open] .disclosure-icon { transform: rotate(180deg); }
+
 .places, .shielded, .function-outcomes { padding-top: 92px; }
 .section-intro { max-width: 740px; margin-bottom: 26px; }
 .section-intro > p:last-child { color: var(--tan-strong); }
@@ -359,6 +396,7 @@ summary::-webkit-details-marker { display: none; }
 .unified-diff > summary:hover,
 .trace > summary:hover,
 .technical-evidence > summary:hover,
+.attribution-commits > summary:hover,
 .answer-section details > summary:hover {
   background: var(--sunken);
 }
@@ -369,6 +407,7 @@ summary::-webkit-details-marker { display: none; }
 .unified-diff > summary:active,
 .trace > summary:active,
 .technical-evidence > summary:active,
+.attribution-commits > summary:active,
 .answer-section details > summary:active {
   background: var(--sunken);
   box-shadow: inset 3px 0 0 var(--tan-strong);

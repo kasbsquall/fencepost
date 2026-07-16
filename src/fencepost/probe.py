@@ -312,7 +312,7 @@ def _grounding(
     authored: list[AuthoredSourceLine] = []
     for number in range(line, end_line + 1):
         blamed = blame[path].get(number)
-        if blamed is None or not blamed.is_student:
+        if blamed is None or not blamed.solely_student_attributed:
             continue
         authored.append(
             AuthoredSourceLine(
@@ -324,6 +324,15 @@ def _grounding(
                 author_email=blamed.author_email,
                 author_date=blamed.author_date,
                 commit_summary=blamed.summary,
+                committer_name=blamed.committer_name,
+                committer_email=blamed.committer_email,
+                author_matches_committer=blamed.author_matches_committer,
+                co_authors=blamed.co_authors,
+                history_rewrite_signals=blamed.history_rewrite_signals,
+                moved_by_blame=blamed.moved_by_blame,
+                copied_by_blame=blamed.copied_by_blame,
+                origin_path=blamed.origin_path,
+                origin_line=blamed.origin_line,
             )
         )
     if not authored or authored[0].line != line:

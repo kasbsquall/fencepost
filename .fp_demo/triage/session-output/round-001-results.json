@@ -1,0 +1,636 @@
+{
+  "duration_seconds": 12.282071127000108,
+  "infrastructure_errors": [],
+  "results": {
+    "strict-086eee6e74bf01f0-attempt-01": {
+      "mutant": {
+        "duration_seconds": 0.8588325299999724,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_clamp_percent_preserves_int_subclass_at_inclusive_upper_bound():\n        class Percent(int):\n            pass\n    \n        value = Percent(100)\n>       assert analytics.clamp_percent(value) is value\nE       assert 100 is 100\nE        +  where 100 = <function clamp_percent at 0x7ae4a7f00180>(100)\nE        +    where <function clamp_percent at 0x7ae4a7f00180> = analytics.clamp_percent\n\n.fencepost-generated-0016/test_adversarial.py:9: AssertionError",
+          "kind": "failure",
+          "message": "assert 100 is 100\n +  where 100 = <function clamp_percent at 0x7ae4a7f00180>(100)\n +    where <function clamp_percent at 0x7ae4a7f00180> = analytics.clamp_percent",
+          "nodeid": ".fencepost-generated-0016.test_adversarial::test_clamp_percent_preserves_int_subclass_at_inclusive_upper_bound"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______ test_clamp_percent_preserves_int_subclass_at_inclusive_upper_bound ______\n\n    def test_clamp_percent_preserves_int_subclass_at_inclusive_upper_bound():\n        class Percent(int):\n            pass\n    \n        value = Percent(100)\n>       assert analytics.clamp_percent(value) is value\nE       assert 100 is 100\nE        +  where 100 = <function clamp_percent at 0x7ae4a7f00180>(100)\nE        +    where <function clamp_percent at 0x7ae4a7f00180> = analytics.clamp_percent\n\n.fencepost-generated-0016/test_adversarial.py:9: AssertionError\n----- generated xml file: /work/jobs/triage-0016-cusd1a31/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0016/test_adversarial.py::test_clamp_percent_preserves_int_subclass_at_inclusive_upper_bound\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.9347550940001383,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0016-cusd1a31/original/junit.xml ----\n1 passed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-1d2de104b4e2ea87-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.009613242000114,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_awards_a_at_exactly_ninety():\n>       assert analytics.letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0002/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+          "nodeid": ".fencepost-generated-0002.test_adversarial::test_letter_grade_awards_a_at_exactly_ninety"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_letter_grade_awards_a_at_exactly_ninety _________________\n\n    def test_letter_grade_awards_a_at_exactly_ninety():\n>       assert analytics.letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0002/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0002-dr1wnqu4/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0002/test_adversarial.py::test_letter_grade_awards_a_at_exactly_ninety\n1 failed in 0.04s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 1.0088302319998093,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0002-dr1wnqu4/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-2e231a949dfe891d-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.0084752819998357,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_score_89_is_below_the_a_threshold():\n>       assert analytics.letter_grade(89) == \"B\"\nE       AssertionError: assert 'A' == 'B'\nE         \nE         - B\nE         + A\n\n.fencepost-generated-0001/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'A' == 'B'\n  \n  - B\n  + A",
+          "nodeid": ".fencepost-generated-0001.test_adversarial::test_score_89_is_below_the_a_threshold"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n____________________ test_score_89_is_below_the_a_threshold ____________________\n\n    def test_score_89_is_below_the_a_threshold():\n>       assert analytics.letter_grade(89) == \"B\"\nE       AssertionError: assert 'A' == 'B'\nE         \nE         - B\nE         + A\n\n.fencepost-generated-0001/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0001-g4yzp1ob/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0001/test_adversarial.py::test_score_89_is_below_the_a_threshold\n1 failed in 0.04s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.9972573649999958,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0001-g4yzp1ob/original/junit.xml ----\n1 passed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-2e3d6e7b8bdac2ad-attempt-01": {
+      "mutant": {
+        "duration_seconds": 0.8495027259998551,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_clamp_percent_clamps_first_integer_above_upper_bound():\n>       assert analytics.clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = <function clamp_percent at 0x7c473d758180>(101)\nE        +    where <function clamp_percent at 0x7c473d758180> = analytics.clamp_percent\n\n.fencepost-generated-0017/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "assert 101 == 100\n +  where 101 = <function clamp_percent at 0x7c473d758180>(101)\n +    where <function clamp_percent at 0x7c473d758180> = analytics.clamp_percent",
+          "nodeid": ".fencepost-generated-0017.test_adversarial::test_clamp_percent_clamps_first_integer_above_upper_bound"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________ test_clamp_percent_clamps_first_integer_above_upper_bound ___________\n\n    def test_clamp_percent_clamps_first_integer_above_upper_bound():\n>       assert analytics.clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = <function clamp_percent at 0x7c473d758180>(101)\nE        +    where <function clamp_percent at 0x7c473d758180> = analytics.clamp_percent\n\n.fencepost-generated-0017/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0017-4klnttw0/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0017/test_adversarial.py::test_clamp_percent_clamps_first_integer_above_upper_bound\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.9197755960001359,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0017-4klnttw0/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-44bc84979be41b9d-attempt-01": {
+      "mutant": {
+        "duration_seconds": 0.8407674190000307,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert analytics.clamp_percent(0.5) == 0.5\nE       assert 0 == 0.5\nE        +  where 0 = <function clamp_percent at 0x7f7ada2e8180>(0.5)\nE        +    where <function clamp_percent at 0x7f7ada2e8180> = analytics.clamp_percent\n\n.fencepost-generated-0014/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "assert 0 == 0.5\n +  where 0 = <function clamp_percent at 0x7f7ada2e8180>(0.5)\n +    where <function clamp_percent at 0x7f7ada2e8180> = analytics.clamp_percent",
+          "nodeid": ".fencepost-generated-0014.test_adversarial::test_clamp_percent_preserves_positive_fraction_below_one"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_clamp_percent_preserves_positive_fraction_below_one ___________\n\n    def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert analytics.clamp_percent(0.5) == 0.5\nE       assert 0 == 0.5\nE        +  where 0 = <function clamp_percent at 0x7f7ada2e8180>(0.5)\nE        +    where <function clamp_percent at 0x7f7ada2e8180> = analytics.clamp_percent\n\n.fencepost-generated-0014/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0014-iao__5x9/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0014/test_adversarial.py::test_clamp_percent_preserves_positive_fraction_below_one\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.8776716400000169,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0014-iao__5x9/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-67c52a2840605244-attempt-01": {
+      "mutant": {
+        "duration_seconds": 0.8479772740001863,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_clamp_percent_preserves_a_nonnegative_boundary_object():\n        class Boundary:\n            def __lt__(self, other):\n                assert other == 0\n                return False\n    \n            def __le__(self, other):\n                assert other == 0\n                return True\n    \n            def __gt__(self, other):\n                assert other == 100\n                return False\n    \n        value = Boundary()\n>       assert analytics.clamp_percent(value) is value\nE       assert 0 is <test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>\nE        +  where 0 = <function clamp_percent at 0x769589184180>(<test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>)\nE        +    where <function clamp_percent at 0x769589184180> = analytics.clamp_percent\n\n.fencepost-generated-0012/test_adversarial.py:19: AssertionError",
+          "kind": "failure",
+          "message": "assert 0 is <test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>\n +  where 0 = <function clamp_percent at 0x769589184180>(<test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>)\n +    where <function clamp_percent at 0x769589184180> = analytics.clamp_percent",
+          "nodeid": ".fencepost-generated-0012.test_adversarial::test_clamp_percent_preserves_a_nonnegative_boundary_object"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________ test_clamp_percent_preserves_a_nonnegative_boundary_object __________\n\n    def test_clamp_percent_preserves_a_nonnegative_boundary_object():\n        class Boundary:\n            def __lt__(self, other):\n                assert other == 0\n                return False\n    \n            def __le__(self, other):\n                assert other == 0\n                return True\n    \n            def __gt__(self, other):\n                assert other == 100\n                return False\n    \n        value = Boundary()\n>       assert analytics.clamp_percent(value) is value\nE       assert 0 is <test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>\nE        +  where 0 = <function clamp_percent at 0x769589184180>(<test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>)\nE        +    where <function clamp_percent at 0x769589184180> = analytics.clamp_percent\n\n.fencepost-generated-0012/test_adversarial.py:19: AssertionError\n----- generated xml file: /work/jobs/triage-0012-mk37q_g_/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0012/test_adversarial.py::test_clamp_percent_preserves_a_nonnegative_boundary_object\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.8748204540002007,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0012-mk37q_g_/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-75b9f689f32ac45a-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.3510725940000157,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_includes_70_in_c_range():\n>       assert analytics.letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0006/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+          "nodeid": ".fencepost-generated-0006.test_adversarial::test_letter_grade_includes_70_in_c_range"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________ test_letter_grade_includes_70_in_c_range ___________________\n\n    def test_letter_grade_includes_70_in_c_range():\n>       assert analytics.letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0006/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0006-fizicaqw/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0006/test_adversarial.py::test_letter_grade_includes_70_in_c_range\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.9186579849999816,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0006-fizicaqw/original/junit.xml ----\n1 passed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-764a18c525e359d6-attempt-01": {
+      "mutant": {
+        "duration_seconds": 0.8400316780000594,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_percentile_uses_hundred_as_denominator():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x73a7bf71c220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x73a7bf71c220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "assert 30 == 20\n +  where 30 = <function percentile at 0x73a7bf71c220>([10, 20, 30], 66)\n +    where <function percentile at 0x73a7bf71c220> = analytics.percentile",
+          "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_as_denominator"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_percentile_uses_hundred_as_denominator __________________\n\n    def test_percentile_uses_hundred_as_denominator():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x73a7bf71c220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x73a7bf71c220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0019-57sr1vb8/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_uses_hundred_as_denominator\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.9068848389999857,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-57sr1vb8/original/junit.xml ----\n1 passed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-7d45e006f2ec7b27-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.1497252550000212,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_assigns_d_at_exactly_sixty():\n>       assert letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0011/test_adversarial.py:7: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+          "nodeid": ".fencepost-generated-0011.test_adversarial::test_letter_grade_assigns_d_at_exactly_sixty"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_letter_grade_assigns_d_at_exactly_sixty _________________\n\n    def test_letter_grade_assigns_d_at_exactly_sixty():\n>       assert letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0011/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0011-dzs3kjkp/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0011/test_adversarial.py::test_letter_grade_assigns_d_at_exactly_sixty\n1 failed in 0.04s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.989836017000016,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0011-dzs3kjkp/original/junit.xml ----\n1 passed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-86e0917e5c6bf1d8-attempt-01": {
+      "mutant": {
+        "duration_seconds": 0.9725100099999509,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_at_a_cutoff_is_a():\n>       assert analytics.letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+          "nodeid": ".fencepost-generated-0000.test_adversarial::test_letter_grade_at_a_cutoff_is_a"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________________ test_letter_grade_at_a_cutoff_is_a ______________________\n\n    def test_letter_grade_at_a_cutoff_is_a():\n>       assert analytics.letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0000-hoi7f0e_/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0000/test_adversarial.py::test_letter_grade_at_a_cutoff_is_a\n1 failed in 0.04s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 1.012069727999915,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-hoi7f0e_/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-8e3bb3b74b5e7623-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.1773381780001273,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_includes_70_in_c_range():\n>       assert analytics.letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+          "nodeid": ".fencepost-generated-0008.test_adversarial::test_letter_grade_includes_70_in_c_range"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________ test_letter_grade_includes_70_in_c_range ___________________\n\n    def test_letter_grade_includes_70_in_c_range():\n>       assert analytics.letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0008-vdmpywb2/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0008/test_adversarial.py::test_letter_grade_includes_70_in_c_range\n1 failed in 0.04s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.982589149999967,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0008-vdmpywb2/original/junit.xml ----\n1 passed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-92261c57ed4e3d56-attempt-01": {
+      "mutant": {
+        "duration_seconds": 0.8495206579998467,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_clamp_percent_preserves_float_at_inclusive_upper_bound():\n        value = 100.0\n        result = analytics.clamp_percent(value)\n    \n>       assert result is value\nE       assert 100 is 100.0\n\n.fencepost-generated-0015/test_adversarial.py:8: AssertionError",
+          "kind": "failure",
+          "message": "assert 100 is 100.0",
+          "nodeid": ".fencepost-generated-0015.test_adversarial::test_clamp_percent_preserves_float_at_inclusive_upper_bound"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________ test_clamp_percent_preserves_float_at_inclusive_upper_bound __________\n\n    def test_clamp_percent_preserves_float_at_inclusive_upper_bound():\n        value = 100.0\n        result = analytics.clamp_percent(value)\n    \n>       assert result is value\nE       assert 100 is 100.0\n\n.fencepost-generated-0015/test_adversarial.py:8: AssertionError\n----- generated xml file: /work/jobs/triage-0015-ytxwlwlq/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0015/test_adversarial.py::test_clamp_percent_preserves_float_at_inclusive_upper_bound\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.8598473559998183,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0015-ytxwlwlq/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-9e215f782bcfc8e3-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.1820260530000724,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_includes_score_60_in_d_range():\n>       assert letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:7: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+          "nodeid": ".fencepost-generated-0009.test_adversarial::test_letter_grade_includes_score_60_in_d_range"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________ test_letter_grade_includes_score_60_in_d_range ________________\n\n    def test_letter_grade_includes_score_60_in_d_range():\n>       assert letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0009-2mrvvrpy/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0009/test_adversarial.py::test_letter_grade_includes_score_60_in_d_range\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.9779525179999382,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0009-2mrvvrpy/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-ab756a31efd05a69-attempt-01": {
+      "mutant": {
+        "duration_seconds": 0.8643052089998946,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_clamp_percent_clamps_fraction_just_below_zero():\n>       assert clamp_percent(-0.5) == 0\nE       assert -0.5 == 0\nE        +  where -0.5 = clamp_percent(-0.5)\n\n.fencepost-generated-0013/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "assert -0.5 == 0\n +  where -0.5 = clamp_percent(-0.5)",
+          "nodeid": ".fencepost-generated-0013.test_adversarial::test_clamp_percent_clamps_fraction_just_below_zero"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________ test_clamp_percent_clamps_fraction_just_below_zero ______________\n\n    def test_clamp_percent_clamps_fraction_just_below_zero():\n>       assert clamp_percent(-0.5) == 0\nE       assert -0.5 == 0\nE        +  where -0.5 = clamp_percent(-0.5)\n\n.fencepost-generated-0013/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0013-r2nu5woh/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0013/test_adversarial.py::test_clamp_percent_clamps_fraction_just_below_zero\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.8693583579999995,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0013-r2nu5woh/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-bb49d21e0537bf13-attempt-01": {
+      "mutant": {
+        "duration_seconds": 0.8614927180001359,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_percentile_uses_true_division_before_integer_conversion():\n>       assert analytics.percentile([10, 20], _DivisionSensitivePercent()) == 20\nE       assert 10 == 20\nE        +  where 10 = <function percentile at 0x7bc628ff02c0>([10, 20], <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20>)\nE        +    where <function percentile at 0x7bc628ff02c0> = analytics.percentile\nE        +    and   <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20> = _DivisionSensitivePercent()\n\n.fencepost-generated-0018/test_adversarial.py:33: AssertionError",
+          "kind": "failure",
+          "message": "assert 10 == 20\n +  where 10 = <function percentile at 0x7bc628ff02c0>([10, 20], <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20>)\n +    where <function percentile at 0x7bc628ff02c0> = analytics.percentile\n +    and   <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20> = _DivisionSensitivePercent()",
+          "nodeid": ".fencepost-generated-0018.test_adversarial::test_percentile_uses_true_division_before_integer_conversion"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________ test_percentile_uses_true_division_before_integer_conversion _________\n\n    def test_percentile_uses_true_division_before_integer_conversion():\n>       assert analytics.percentile([10, 20], _DivisionSensitivePercent()) == 20\nE       assert 10 == 20\nE        +  where 10 = <function percentile at 0x7bc628ff02c0>([10, 20], <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20>)\nE        +    where <function percentile at 0x7bc628ff02c0> = analytics.percentile\nE        +    and   <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20> = _DivisionSensitivePercent()\n\n.fencepost-generated-0018/test_adversarial.py:33: AssertionError\n----- generated xml file: /work/jobs/triage-0018-dctojb9z/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0018/test_adversarial.py::test_percentile_uses_true_division_before_integer_conversion\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.904687499000147,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-dctojb9z/original/junit.xml ----\n1 passed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-bc57b02d4b5d32a1-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.000126659999978,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_80_is_b():\n>       assert letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0003/test_adversarial.py:7: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+          "nodeid": ".fencepost-generated-0003.test_adversarial::test_letter_grade_80_is_b"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________________________ test_letter_grade_80_is_b ___________________________\n\n    def test_letter_grade_80_is_b():\n>       assert letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0003/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0003-acqx9lor/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0003/test_adversarial.py::test_letter_grade_80_is_b\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 1.0319764469998063,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0003-acqx9lor/original/junit.xml ----\n1 passed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-ce1508b29bd64233-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.3570772919999854,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_assigns_b_at_inclusive_lower_boundary():\n>       assert analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+          "nodeid": ".fencepost-generated-0005.test_adversarial::test_letter_grade_assigns_b_at_inclusive_lower_boundary"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_letter_grade_assigns_b_at_inclusive_lower_boundary ____________\n\n    def test_letter_grade_assigns_b_at_inclusive_lower_boundary():\n>       assert analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0005-8s57tj0i/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0005/test_adversarial.py::test_letter_grade_assigns_b_at_inclusive_lower_boundary\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.9383451870000954,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0005-8s57tj0i/original/junit.xml ----\n1 passed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-db66414d596970b4-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.16820497599997,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_score_59_is_failing_not_a_d():\n>       assert analytics.letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'D' == 'F'\n  \n  - F\n  + D",
+          "nodeid": ".fencepost-generated-0010.test_adversarial::test_score_59_is_failing_not_a_d"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______________________ test_score_59_is_failing_not_a_d _______________________\n\n    def test_score_59_is_failing_not_a_d():\n>       assert analytics.letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0010-gblj110t/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0010/test_adversarial.py::test_score_59_is_failing_not_a_d\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.9677633849998983,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0010-gblj110t/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-dbb83dad668b1b68-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.380228112000168,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_score_69_is_a_d_not_a_c():\n>       assert letter_grade(69) == \"D\"\nE       AssertionError: assert 'C' == 'D'\nE         \nE         - D\nE         + C\n\n.fencepost-generated-0007/test_adversarial.py:7: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'C' == 'D'\n  \n  - D\n  + C",
+          "nodeid": ".fencepost-generated-0007.test_adversarial::test_score_69_is_a_d_not_a_c"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________________ test_score_69_is_a_d_not_a_c _________________________\n\n    def test_score_69_is_a_d_not_a_c():\n>       assert letter_grade(69) == \"D\"\nE       AssertionError: assert 'C' == 'D'\nE         \nE         - D\nE         + C\n\n.fencepost-generated-0007/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0007-hf0m6mnk/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0007/test_adversarial.py::test_score_69_is_a_d_not_a_c\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.8976859839999634,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0007-hf0m6mnk/original/junit.xml ----\n1 passed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-de6e7433e88c46a6-attempt-01": {
+      "mutant": {
+        "duration_seconds": 1.3968041870000434,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_score_79_is_a_c_not_a_b():\n>       assert analytics.letter_grade(79) == \"C\"\nE       AssertionError: assert 'B' == 'C'\nE         \nE         - C\nE         + B\n\n.fencepost-generated-0004/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'B' == 'C'\n  \n  - C\n  + B",
+          "nodeid": ".fencepost-generated-0004.test_adversarial::test_score_79_is_a_c_not_a_b"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________________ test_score_79_is_a_c_not_a_b _________________________\n\n    def test_score_79_is_a_c_not_a_b():\n>       assert analytics.letter_grade(79) == \"C\"\nE       AssertionError: assert 'B' == 'C'\nE         \nE         - C\nE         + B\n\n.fencepost-generated-0004/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0004-6flm3i0d/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0004/test_adversarial.py::test_score_79_is_a_c_not_a_b\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.930494347000149,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0004-6flm3i0d/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    },
+    "strict-ebad6149cee857c9-attempt-01": {
+      "mutant": {
+        "duration_seconds": 0.9355795290000515,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_percentile_at_100_returns_largest_score():\n>       assert percentile([8, 1, 5], 100) == 8\n\n.fencepost-generated-0020/test_adversarial.py:7: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [8, 1, 5], p = 100\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n        k = int(len(ordered) * p / 100)\n        if k > len(ordered):\n            k = len(ordered) - 1\n>       return ordered[k]\nE       IndexError: list index out of range\n\ngradebook/analytics.py:38: IndexError",
+          "kind": "failure",
+          "message": "IndexError: list index out of range",
+          "nodeid": ".fencepost-generated-0020.test_adversarial::test_percentile_at_100_returns_largest_score"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_percentile_at_100_returns_largest_score _________________\n\n    def test_percentile_at_100_returns_largest_score():\n>       assert percentile([8, 1, 5], 100) == 8\n\n.fencepost-generated-0020/test_adversarial.py:7: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [8, 1, 5], p = 100\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n        k = int(len(ordered) * p / 100)\n        if k > len(ordered):\n            k = len(ordered) - 1\n>       return ordered[k]\nE       IndexError: list index out of range\n\ngradebook/analytics.py:38: IndexError\n----- generated xml file: /work/jobs/triage-0020-i46pl74o/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0020/test_adversarial.py::test_percentile_at_100_returns_largest_score\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.7207883510000102,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0020-i46pl74o/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    }
+  }
+}

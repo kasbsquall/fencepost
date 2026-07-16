@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 269.5159999999996,
+  "input_tokens": 278011,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 8962,
+  "provider": "codex-cli",
+  "response_id": "019f6c75-c7cc-7752-8b45-732e72e77ca7",
+  "source": "import pytest\nimport gradebook.analytics\n\n\ndef test_percentile_clamps_infinite_percentage_to_last_score():\n    assert gradebook.analytics.percentile([10, 20, 30], 1e309) == 30",
+  "targeted_behavior": "An infinite percentage is clamped to the 100th percentile before index calculation."
+}

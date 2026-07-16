@@ -326,6 +326,18 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     assert report.question_mutant_count == 20
     assert report.not_questioned_mutant_count == 1
     assert report.conversation_count == 3
+    assert report.attribution_summary is not None
+    assert report.attribution_summary.method == "git blame -M -C -C -w --line-porcelain"
+    assert report.attribution_summary.limitation
+    assert all(
+        line.commit
+        and isinstance(line.author_matches_committer, bool)
+        and isinstance(line.co_authors, tuple)
+        and isinstance(line.moved_by_blame, bool)
+        and isinstance(line.copied_by_blame, bool)
+        for place in report.places
+        for line in place.grounding.authored_lines
+    )
     assert report.function_groups[0].qualified_function_name == "percentile"
     assert "commit_claim" in report.function_groups[0].ranking_signals
     assert "commit_evidence_overlap" in report.function_groups[0].ranking_signals
@@ -355,6 +367,23 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
         "total_mutants": 51,
     }
     assert report_payload["conversation_count"] == 3
+    assert report_payload["attribution_summary"]["method"] == (
+        "git blame -M -C -C -w --line-porcelain"
+    )
+    assert report_payload["attribution_summary"]["limitation"]
+    assert all(
+        {
+            "commit",
+            "author_matches_committer",
+            "co_authors",
+            "moved_by_blame",
+            "copied_by_blame",
+            "origin_path",
+            "origin_line",
+        }.issubset(line)
+        for place in report_payload["places"]
+        for line in place["grounding"]["authored_lines"]
+    )
     assert report_payload["function_groups"][0][
         "qualified_function_name"
     ] == "percentile"

@@ -1,0 +1,55 @@
+{
+  "candidate": {
+    "after": "-1",
+    "anchor": {
+      "column": 11,
+      "end_column": 12,
+      "end_line": 27,
+      "line": 27
+    },
+    "ast_path": [
+      {
+        "field": "body",
+        "index": 2
+      },
+      {
+        "field": "body",
+        "index": 1
+      },
+      {
+        "field": "test",
+        "index": null
+      },
+      {
+        "field": "comparators",
+        "index": 0
+      }
+    ],
+    "before": "0",
+    "id": "ab756a31efd05a69",
+    "kind": "numeric_boundary",
+    "parameters": [
+      [
+        "direction",
+        "-1"
+      ]
+    ],
+    "path": "gradebook/analytics.py",
+    "source_segment": "0"
+  },
+  "execution": {
+    "duration_seconds": 1.1224577939999563,
+    "exit_code": 0,
+    "failing_tests": [],
+    "status": "survived",
+    "stderr": "",
+    "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0021-2f4cmy5y/junit.xml ------------\n10 passed in 0.01s\n",
+    "timed_out": false
+  },
+  "generated_anchor": {
+    "column": 11,
+    "end_column": 13,
+    "end_line": 25,
+    "line": 25
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.390999999999622,
+  "input_tokens": 12875,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 133,
+  "provider": "codex-cli",
+  "response_id": "019f6c6e-f645-7c70-8567-4a70aa58b48b",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_assigns_d_at_exactly_sixty():\n    assert letter_grade(60) == \"D\"",
+  "targeted_behavior": "The score of exactly 60 is the inclusive lower bound for a D."
+}

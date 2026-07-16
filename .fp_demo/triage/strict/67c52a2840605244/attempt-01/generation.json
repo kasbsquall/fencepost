@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 16.42200000000048,
+  "input_tokens": 12653,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 491,
+  "provider": "codex-cli",
+  "response_id": "019f6c6f-1719-7e60-bca1-e852f5d2e871",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_a_nonnegative_boundary_object():\n    class Boundary:\n        def __lt__(self, other):\n            assert other == 0\n            return False\n\n        def __le__(self, other):\n            assert other == 0\n            return True\n\n        def __gt__(self, other):\n            assert other == 100\n            return False\n\n    value = Boundary()\n    assert analytics.clamp_percent(value) is value",
+  "targeted_behavior": "At a custom boundary object, strict `< 0` must preserve the original object while mutated `<= 0` replaces it with integer zero."
+}

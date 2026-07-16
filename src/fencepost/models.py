@@ -64,6 +64,12 @@ class PathStep:
 
 
 @dataclass(frozen=True)
+class AttributionIdentity:
+    name: str
+    email: str
+
+
+@dataclass(frozen=True)
 class BlameLine:
     path: str
     line: int
@@ -73,6 +79,58 @@ class BlameLine:
     author_date: str
     summary: str
     is_student: bool
+    committer_name: str = ""
+    committer_email: str = ""
+    author_matches_committer: bool = True
+    co_authors: tuple[AttributionIdentity, ...] = ()
+    history_rewrite_signals: tuple[str, ...] = ()
+    moved_by_blame: bool = False
+    copied_by_blame: bool = False
+    origin_path: str | None = None
+    origin_line: int | None = None
+
+    @property
+    def solely_student_attributed(self) -> bool:
+        return self.is_student and not self.co_authors
+
+
+@dataclass(frozen=True)
+class AttributionCommit:
+    commit: str
+    author_name: str
+    author_email: str
+    committer_name: str
+    committer_email: str
+    author_matches_committer: bool
+    co_authors: tuple[AttributionIdentity, ...]
+    history_rewrite_signals: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class AttributionExclusion:
+    path: str
+    line: int
+    commit: str
+    reason: str
+    co_authors: tuple[AttributionIdentity, ...]
+
+
+@dataclass(frozen=True)
+class AttributionSummary:
+    method: str
+    limitation: str
+    analyzed_line_count: int
+    student_attributed_line_count: int
+    solely_student_attributed_line_count: int
+    coauthored_excluded_line_count: int
+    moved_line_count: int
+    copied_line_count: int
+    commit_count: int
+    author_committer_mismatch_commit_count: int
+    history_rewrite_signal_commit_count: int
+    repository_history_signals: tuple[str, ...]
+    commits: tuple[AttributionCommit, ...]
+    artifact_ref: str
 
 
 @dataclass(frozen=True)
@@ -293,6 +351,15 @@ class AuthoredSourceLine:
     author_email: str
     author_date: str
     commit_summary: str
+    committer_name: str = ""
+    committer_email: str = ""
+    author_matches_committer: bool = True
+    co_authors: tuple[AttributionIdentity, ...] = ()
+    history_rewrite_signals: tuple[str, ...] = ()
+    moved_by_blame: bool = False
+    copied_by_blame: bool = False
+    origin_path: str | None = None
+    origin_line: int | None = None
 
 
 @dataclass(frozen=True)
@@ -533,6 +600,7 @@ class FencepostReport:
     complete: bool
     repository_path: str | None = None
     run_started_at: str | None = None
+    attribution_summary: AttributionSummary | None = None
 
 
 @dataclass(frozen=True)

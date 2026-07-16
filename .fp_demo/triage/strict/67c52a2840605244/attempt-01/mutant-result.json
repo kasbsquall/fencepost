@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.8479772740001863,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_clamp_percent_preserves_a_nonnegative_boundary_object():\n        class Boundary:\n            def __lt__(self, other):\n                assert other == 0\n                return False\n    \n            def __le__(self, other):\n                assert other == 0\n                return True\n    \n            def __gt__(self, other):\n                assert other == 100\n                return False\n    \n        value = Boundary()\n>       assert analytics.clamp_percent(value) is value\nE       assert 0 is <test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>\nE        +  where 0 = <function clamp_percent at 0x769589184180>(<test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>)\nE        +    where <function clamp_percent at 0x769589184180> = analytics.clamp_percent\n\n.fencepost-generated-0012/test_adversarial.py:19: AssertionError",
+    "kind": "failure",
+    "message": "assert 0 is <test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>\n +  where 0 = <function clamp_percent at 0x769589184180>(<test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>)\n +    where <function clamp_percent at 0x769589184180> = analytics.clamp_percent",
+    "nodeid": ".fencepost-generated-0012.test_adversarial::test_clamp_percent_preserves_a_nonnegative_boundary_object"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________ test_clamp_percent_preserves_a_nonnegative_boundary_object __________\n\n    def test_clamp_percent_preserves_a_nonnegative_boundary_object():\n        class Boundary:\n            def __lt__(self, other):\n                assert other == 0\n                return False\n    \n            def __le__(self, other):\n                assert other == 0\n                return True\n    \n            def __gt__(self, other):\n                assert other == 100\n                return False\n    \n        value = Boundary()\n>       assert analytics.clamp_percent(value) is value\nE       assert 0 is <test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>\nE        +  where 0 = <function clamp_percent at 0x769589184180>(<test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>)\nE        +    where <function clamp_percent at 0x769589184180> = analytics.clamp_percent\n\n.fencepost-generated-0012/test_adversarial.py:19: AssertionError\n----- generated xml file: /work/jobs/triage-0012-mk37q_g_/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0012/test_adversarial.py::test_clamp_percent_preserves_a_nonnegative_boundary_object\n1 failed in 0.02s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

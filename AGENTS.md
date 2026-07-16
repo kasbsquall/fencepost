@@ -20,9 +20,16 @@ Fencepost asks has a ground truth we obtained by running code.
 ## The mechanism
 
 1. **Attribute.** `git blame -M -C -C -w` over the student's repo. Keep only
-   lines the student authored. Instructor scaffold is out of scope. Move/copy
-   detection matters: grounding a question in a line the student did not write
-   destroys credibility instantly.
+   lines Git attributes solely to the student: a final student-authored commit
+   with no `Co-authored-by:` trailer. Instructor scaffold and detected
+   co-authored lines are out of scope for probes; retain exclusions and their
+   reasons in the artifact. Record author/committer agreement, co-author
+   trailers, and whether the authoritative blame result depended on `-M` move
+   or `-C` copy detection. These are evidence signals, not proof of keyboard
+   authorship: blame cannot see pair programming, a partner pushing, squash
+   merges, rebases, or a copied patch. The report must say this plainly. Move/
+   copy detection still matters: grounding a question in a line the student did
+   not write destroys credibility instantly.
 
 2. **Select.** Of those lines, keep the ones covered by the student's own tests.
    An uncovered line has nothing to survive.

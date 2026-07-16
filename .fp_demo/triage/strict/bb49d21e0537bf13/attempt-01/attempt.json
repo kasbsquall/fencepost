@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 84.01600000000053,
+    "input_tokens": 69906,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 3113,
+    "provider": "codex-cli",
+    "response_id": "019f6c70-5092-7673-bcfb-b1185998921b",
+    "source": "import gradebook.analytics as analytics\n\n\nclass _DivisionSensitiveProduct:\n    def __truediv__(self, divisor):\n        assert divisor == 100\n        return 1\n\n    def __floordiv__(self, divisor):\n        assert divisor == 100\n        return 0\n\n\nclass _DivisionSensitivePercent:\n    def __lt__(self, other):\n        return False\n\n    def __le__(self, other):\n        return False\n\n    def __gt__(self, other):\n        return other == 0\n\n    def __ge__(self, other):\n        return other == 0\n\n    def __rmul__(self, other):\n        assert other == 2\n        return _DivisionSensitiveProduct()\n\n\ndef test_percentile_uses_true_division_before_integer_conversion():\n    assert analytics.percentile([10, 20], _DivisionSensitivePercent()) == 20",
+    "targeted_behavior": "A comparison-compatible numeric object makes true division and floor division produce different percentile indices after clamping."
+  },
+  "mutant": {
+    "duration_seconds": 0.8614927180001359,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_percentile_uses_true_division_before_integer_conversion():\n>       assert analytics.percentile([10, 20], _DivisionSensitivePercent()) == 20\nE       assert 10 == 20\nE        +  where 10 = <function percentile at 0x7bc628ff02c0>([10, 20], <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20>)\nE        +    where <function percentile at 0x7bc628ff02c0> = analytics.percentile\nE        +    and   <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20> = _DivisionSensitivePercent()\n\n.fencepost-generated-0018/test_adversarial.py:33: AssertionError",
+      "kind": "failure",
+      "message": "assert 10 == 20\n +  where 10 = <function percentile at 0x7bc628ff02c0>([10, 20], <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20>)\n +    where <function percentile at 0x7bc628ff02c0> = analytics.percentile\n +    and   <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20> = _DivisionSensitivePercent()",
+      "nodeid": ".fencepost-generated-0018.test_adversarial::test_percentile_uses_true_division_before_integer_conversion"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________ test_percentile_uses_true_division_before_integer_conversion _________\n\n    def test_percentile_uses_true_division_before_integer_conversion():\n>       assert analytics.percentile([10, 20], _DivisionSensitivePercent()) == 20\nE       assert 10 == 20\nE        +  where 10 = <function percentile at 0x7bc628ff02c0>([10, 20], <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20>)\nE        +    where <function percentile at 0x7bc628ff02c0> = analytics.percentile\nE        +    and   <test_adversarial._DivisionSensitivePercent object at 0x7bc6292e5b20> = _DivisionSensitivePercent()\n\n.fencepost-generated-0018/test_adversarial.py:33: AssertionError\n----- generated xml file: /work/jobs/triage-0018-dctojb9z/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0018/test_adversarial.py::test_percentile_uses_true_division_before_integer_conversion\n1 failed in 0.03s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.904687499000147,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-dctojb9z/original/junit.xml ----\n1 passed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

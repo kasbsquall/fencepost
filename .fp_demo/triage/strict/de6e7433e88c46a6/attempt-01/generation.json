@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.717999999999847,
+  "input_tokens": 12879,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 130,
+  "provider": "codex-cli",
+  "response_id": "019f6c6d-ff40-7901-98f0-347d39c3ffe3",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_score_79_is_a_c_not_a_b():\n    assert analytics.letter_grade(79) == \"C\"",
+  "targeted_behavior": "At the changed lower boundary, 79 remains a C in the original implementation but becomes B in the mutant."
+}

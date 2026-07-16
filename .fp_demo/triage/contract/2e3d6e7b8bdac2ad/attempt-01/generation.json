@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.717999999999847,
+  "input_tokens": 13071,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 210,
+  "provider": "codex-cli",
+  "response_id": "019f6c74-f4cd-7610-bb41-7a7797bf463c",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_clamps_101_to_100():\n    assert analytics.clamp_percent(101) == 100",
+  "targeted_behavior": "Values just above 100 must be clamped to 100; 101 is the boundary witness."
+}

@@ -1,0 +1,38 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 12.469000000000051,
+    "input_tokens": 13174,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 392,
+    "provider": "codex-cli",
+    "response_id": "019f6c75-1abe-75a0-a34d-c6ecef416308",
+    "source": "import pytest\nimport gradebook.analytics\n\n\ndef test_percentile_fractional_percent_uses_true_division_before_truncation():\n    scores = [10, 20, 30, 40, 50, 60, 70]\n    assert gradebook.analytics.percentile(scores, 57.14285714285715) == 50",
+    "targeted_behavior": "Use a fractional percentile whose multiplication/division result crosses an index boundary differently under true division versus floor division."
+  },
+  "mutant": {
+    "duration_seconds": 0.698649603000149,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0018-wr1jfqjb/mutant/junit.xml -----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.7003273210000316,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-wr1jfqjb/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "NOT_DISTINGUISHED",
+  "valid_attempt_number": 1
+}

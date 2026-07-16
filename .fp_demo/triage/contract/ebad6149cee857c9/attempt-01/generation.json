@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 11.5,
+  "input_tokens": 13141,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 329,
+  "provider": "codex-cli",
+  "response_id": "019f6c75-76f1-7043-bd64-9161921c0b5f",
+  "source": "from gradebook.analytics import percentile\n\n\ndef test_percentile_at_100_returns_highest_score():\n    assert percentile([10, 20, 30], 100) == 30",
+  "targeted_behavior": "At p=100, the computed index equals the list length; the original clamps it to the final valid index while the mutant raises IndexError."
+}

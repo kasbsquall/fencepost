@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.8407674190000307,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert analytics.clamp_percent(0.5) == 0.5\nE       assert 0 == 0.5\nE        +  where 0 = <function clamp_percent at 0x7f7ada2e8180>(0.5)\nE        +    where <function clamp_percent at 0x7f7ada2e8180> = analytics.clamp_percent\n\n.fencepost-generated-0014/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "assert 0 == 0.5\n +  where 0 = <function clamp_percent at 0x7f7ada2e8180>(0.5)\n +    where <function clamp_percent at 0x7f7ada2e8180> = analytics.clamp_percent",
+    "nodeid": ".fencepost-generated-0014.test_adversarial::test_clamp_percent_preserves_positive_fraction_below_one"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_clamp_percent_preserves_positive_fraction_below_one ___________\n\n    def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert analytics.clamp_percent(0.5) == 0.5\nE       assert 0 == 0.5\nE        +  where 0 = <function clamp_percent at 0x7f7ada2e8180>(0.5)\nE        +    where <function clamp_percent at 0x7f7ada2e8180> = analytics.clamp_percent\n\n.fencepost-generated-0014/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0014-iao__5x9/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0014/test_adversarial.py::test_clamp_percent_preserves_positive_fraction_below_one\n1 failed in 0.02s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

@@ -1,0 +1,9 @@
+{
+  "generation_duration_seconds": 11.765000000000327,
+  "input_tokens": 14539,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 349,
+  "provider": "codex-cli",
+  "question_text": "How can a divisor of 99 cause percentile to return the next higher score instead of the intended one for a percentage like 66, and why?",
+  "response_id": "019f6c7e-7e3b-7ec3-bc41-c658b2d17dc6"
+}

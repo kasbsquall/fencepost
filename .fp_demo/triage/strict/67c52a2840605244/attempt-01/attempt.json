@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 16.42200000000048,
+    "input_tokens": 12653,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 491,
+    "provider": "codex-cli",
+    "response_id": "019f6c6f-1719-7e60-bca1-e852f5d2e871",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_a_nonnegative_boundary_object():\n    class Boundary:\n        def __lt__(self, other):\n            assert other == 0\n            return False\n\n        def __le__(self, other):\n            assert other == 0\n            return True\n\n        def __gt__(self, other):\n            assert other == 100\n            return False\n\n    value = Boundary()\n    assert analytics.clamp_percent(value) is value",
+    "targeted_behavior": "At a custom boundary object, strict `< 0` must preserve the original object while mutated `<= 0` replaces it with integer zero."
+  },
+  "mutant": {
+    "duration_seconds": 0.8479772740001863,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_clamp_percent_preserves_a_nonnegative_boundary_object():\n        class Boundary:\n            def __lt__(self, other):\n                assert other == 0\n                return False\n    \n            def __le__(self, other):\n                assert other == 0\n                return True\n    \n            def __gt__(self, other):\n                assert other == 100\n                return False\n    \n        value = Boundary()\n>       assert analytics.clamp_percent(value) is value\nE       assert 0 is <test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>\nE        +  where 0 = <function clamp_percent at 0x769589184180>(<test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>)\nE        +    where <function clamp_percent at 0x769589184180> = analytics.clamp_percent\n\n.fencepost-generated-0012/test_adversarial.py:19: AssertionError",
+      "kind": "failure",
+      "message": "assert 0 is <test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>\n +  where 0 = <function clamp_percent at 0x769589184180>(<test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>)\n +    where <function clamp_percent at 0x769589184180> = analytics.clamp_percent",
+      "nodeid": ".fencepost-generated-0012.test_adversarial::test_clamp_percent_preserves_a_nonnegative_boundary_object"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________ test_clamp_percent_preserves_a_nonnegative_boundary_object __________\n\n    def test_clamp_percent_preserves_a_nonnegative_boundary_object():\n        class Boundary:\n            def __lt__(self, other):\n                assert other == 0\n                return False\n    \n            def __le__(self, other):\n                assert other == 0\n                return True\n    \n            def __gt__(self, other):\n                assert other == 100\n                return False\n    \n        value = Boundary()\n>       assert analytics.clamp_percent(value) is value\nE       assert 0 is <test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>\nE        +  where 0 = <function clamp_percent at 0x769589184180>(<test_adversarial.test_clamp_percent_preserves_a_nonnegative_boundary_object.<locals>.Boundary object at 0x769589703800>)\nE        +    where <function clamp_percent at 0x769589184180> = analytics.clamp_percent\n\n.fencepost-generated-0012/test_adversarial.py:19: AssertionError\n----- generated xml file: /work/jobs/triage-0012-mk37q_g_/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0012/test_adversarial.py::test_clamp_percent_preserves_a_nonnegative_boundary_object\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.8748204540002007,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0012-mk37q_g_/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

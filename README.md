@@ -111,7 +111,7 @@ cat .fp_run/report/report.md     # or the markdown rendering
 
 ```bash
 pytest tests/integration    # 2 Docker gates, no model calls
-pytest tests --ignore=tests/integration   # 53 unit tests, no Docker
+pytest tests --ignore=tests/integration   # 66 unit tests, no Docker
 ```
 
 ## The sample data
@@ -126,7 +126,7 @@ On this fixture: 51 eligible mutants → 30 killed by the student's own suite �
 
 ## How Codex and GPT-5.6 were used
 
-**Codex wrote the engine.** All 5,874 lines across 15 modules, over 10 commits, in one Codex session (`gpt-5.6-terra` for mechanical work, `gpt-5.6-sol` for design and the hard reasoning). The spec (`AGENTS.md`), the demo fixture, this README, and the video are the human's.
+**Codex wrote the engine.** As measured at the final project commit: 8,120 lines across 18 modules and 18 commits, in one Codex session (`gpt-5.6-terra` for mechanical work, `gpt-5.6-sol` for design and the hard reasoning). The spec (`AGENTS.md`), the demo fixture, this README, and the video are the human's.
 
 **Codex is also *inside* the product.** Stage 5 and stage 6 shell out to `codex exec -m gpt-5.6-terra` with structured output to generate adversarial tests and probe questions at runtime. The credential stays host-only; only the generated test string crosses into the sandbox. Codex is not just the tool that built Fencepost — it is the agent that runs it.
 

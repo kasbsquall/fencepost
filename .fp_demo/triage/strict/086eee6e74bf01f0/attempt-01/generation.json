@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 18.686999999999898,
+  "input_tokens": 12645,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 322,
+  "provider": "codex-cli",
+  "response_id": "019f6c6f-e7bc-7f13-a5bf-c59ceacc5e9f",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_int_subclass_at_inclusive_upper_bound():\n    class Percent(int):\n        pass\n\n    value = Percent(100)\n    assert analytics.clamp_percent(value) is value",
+  "targeted_behavior": "At the 100 boundary, the original preserves an int-subclass input while the mutant replaces it with a plain int."
+}

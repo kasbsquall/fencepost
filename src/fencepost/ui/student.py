@@ -92,6 +92,38 @@ def _source_grounding(place: Mapping[str, Any]) -> str:
     summary = first.get("commit_summary")
     if summary:
         provenance.append(f'“{_text(summary)}”')
+    if "author_matches_committer" in first:
+        provenance.append(
+            "author and committer match"
+            if first.get("author_matches_committer") is True
+            else "author and committer differ"
+        )
+    if "co_authors" in first:
+        coauthors = [
+            _mapping(item).get("email")
+            for item in _sequence(first.get("co_authors"))
+            if _mapping(item).get("email")
+        ]
+        provenance.append(
+            "co-author trailer: " + ", ".join(_text(value) for value in coauthors)
+            if coauthors
+            else "no co-author trailer"
+        )
+    if "moved_by_blame" in first or "copied_by_blame" in first:
+        matches = []
+        if first.get("moved_by_blame") is True:
+            matches.append("-M move match")
+        if first.get("copied_by_blame") is True:
+            matches.append("-C copy match")
+        provenance.append(
+            ", ".join(matches) if matches else "no -M/-C match detected"
+        )
+        origin_path = first.get("origin_path")
+        origin_line = first.get("origin_line")
+        if matches and origin_path and origin_line is not None:
+            provenance.append(
+                f"blame origin <code>{_text(origin_path)}:{_text(origin_line)}</code>"
+            )
     source_lines = []
     for authored_line in authored:
         number = authored_line.get("line")
@@ -106,7 +138,7 @@ def _source_grounding(place: Mapping[str, Any]) -> str:
         )
     return f"""
 <section class="probe-grounding" aria-labelledby="grounding-heading">
-  <p class="eyebrow" id="grounding-heading">Code you authored</p>
+  <p class="eyebrow" id="grounding-heading">Code Git attributes to your commit</p>
   {f'<p class="probe-location">{location}</p>' if location else ''}
   {f'<p class="probe-provenance">{" · ".join(provenance)}</p>' if provenance else ''}
   {f'<pre class="source-block"><code>{chr(10).join(source_lines)}</code></pre>' if source_lines else ''}
@@ -124,7 +156,7 @@ def render_probe_start(report: Mapping[str, Any], *, total: int, token: str) -> 
     body = f"""
 <section class="probe-intro probe-panel">
   <p class="eyebrow">A conversation about your code</p>
-  <h1>{_text(count)} questions about code you wrote.</h1>
+  <h1>{_text(count)} questions about code Git attributes to your commits.</h1>
   <p class="probe-lead">{suite_sentence}These questions are about behaviour your tests do not check.</p>
   <p>There is no score and no time limit. Your instructor sees your answers and the same evidence you will see.</p>
   <form method="post" action="/begin">{_csrf(token)}<button class="probe-button" type="submit">Begin</button></form>

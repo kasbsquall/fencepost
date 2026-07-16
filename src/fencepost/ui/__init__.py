@@ -205,11 +205,43 @@ def _source_section(grounding: Mapping[str, Any]) -> str:
         summary = line.get("commit_summary")
         if summary:
             pieces.append(_text(summary))
+        if "author_matches_committer" in line:
+            pieces.append(
+                "author and committer match"
+                if line.get("author_matches_committer") is True
+                else "author and committer differ"
+            )
+        if "co_authors" in line:
+            coauthors = [
+                _mapping(item).get("email")
+                for item in _sequence(line.get("co_authors"))
+                if _mapping(item).get("email")
+            ]
+            pieces.append(
+                "co-author trailer: " + ", ".join(_text(item) for item in coauthors)
+                if coauthors
+                else "no co-author trailer"
+            )
+        if "moved_by_blame" in line or "copied_by_blame" in line:
+            origin = []
+            if line.get("moved_by_blame") is True:
+                origin.append("-M move match")
+            if line.get("copied_by_blame") is True:
+                origin.append("-C copy match")
+            pieces.append(
+                ", ".join(origin) if origin else "no -M/-C match detected"
+            )
+            origin_path = line.get("origin_path")
+            origin_line = line.get("origin_line")
+            if origin and origin_path and origin_line is not None:
+                pieces.append(
+                    f"blame origin {_code(f'{origin_path}:{origin_line}')}"
+                )
         if pieces:
             provenance.append(f"<li>{' · '.join(pieces)}</li>")
     return f"""
 <section class="authored-source">
-  <p class="step-label"><span>1</span> Student-authored source</p>
+  <p class="step-label"><span>1</span> Source Git attributes to this commit</p>
   {f'<ul class="provenance">{"".join(provenance)}</ul>' if provenance else ''}
   {f'<pre class="source-block"><code>{chr(10).join(source_lines)}</code></pre>' if source_lines else ''}
 </section>""".strip()
@@ -513,7 +545,10 @@ def _coverage_section(report: Mapping[str, Any]) -> str:
         return ""
     parts = []
     if isinstance(covered, int) and isinstance(total, int):
-        parts.append(f"Their suite executes <strong>{covered} of {total}</strong> mutatable lines they authored.")
+        parts.append(
+            f"Their suite executes <strong>{covered} of {total}</strong> mutatable lines "
+            "Git attributes to them."
+        )
     if isinstance(rate, (int, float)) and not isinstance(rate, bool):
         parts.append(f"Coverage: <strong>{rate:.0%}</strong>.")
     if sufficient is False:
@@ -526,6 +561,85 @@ def _coverage_section(report: Mapping[str, Any]) -> str:
             )
     class_name = "coverage-context coverage-low" if sufficient is False else "coverage-context"
     return f'<aside class="{class_name}"><p class="eyebrow">Authored-line coverage</p><p>{" ".join(parts)}</p></aside>'
+
+
+def _attribution_context(report: Mapping[str, Any]) -> str:
+    summary = _mapping(report.get("attribution_summary"))
+    limitation = summary.get("limitation")
+    if not summary or not limitation:
+        return ""
+    facts = []
+    excluded = summary.get("coauthored_excluded_line_count")
+    if isinstance(excluded, int) and not isinstance(excluded, bool):
+        suffix = "line" if excluded == 1 else "lines"
+        facts.append(
+            f'<li><span class="data-value">{excluded}</span> student-attributed {suffix} '
+            "excluded because the commit carries a co-author trailer.</li>"
+        )
+    mismatches = summary.get("author_committer_mismatch_commit_count")
+    if isinstance(mismatches, int) and not isinstance(mismatches, bool):
+        suffix = "commit" if mismatches == 1 else "commits"
+        facts.append(
+            f'<li><span class="data-value">{mismatches}</span> analyzed {suffix} '
+            "where author and committer differ.</li>"
+        )
+    moved = summary.get("moved_line_count")
+    copied = summary.get("copied_line_count")
+    if isinstance(moved, int) and isinstance(copied, int):
+        facts.append(
+            f'<li><span class="data-value">{moved}</span> -M move match'
+            f'{"es" if moved != 1 else ""}; <span class="data-value">{copied}</span> '
+            f'-C copy match{"es" if copied != 1 else ""}.</li>'
+        )
+    repository_signals = [
+        _text(value.replace("_", " "))
+        for value in _sequence(summary.get("repository_history_signals"))
+        if isinstance(value, str)
+    ]
+    if repository_signals:
+        facts.append(
+            "<li>Repository history signals: "
+            + ", ".join(repository_signals)
+            + ".</li>"
+        )
+    commit_rows = []
+    for item in (_mapping(value) for value in _sequence(summary.get("commits"))):
+        commit = item.get("commit")
+        if not commit:
+            continue
+        detail = []
+        author = item.get("author_email") or item.get("author_name")
+        committer = item.get("committer_email") or item.get("committer_name")
+        if author:
+            detail.append(f"author {_text(author)}")
+        if committer:
+            detail.append(f"committer {_text(committer)}")
+        coauthors = [
+            _mapping(value).get("email")
+            for value in _sequence(item.get("co_authors"))
+            if _mapping(value).get("email")
+        ]
+        if coauthors:
+            detail.append(
+                "co-author trailer " + ", ".join(_text(value) for value in coauthors)
+            )
+        signals = [
+            value.replace("_", " ")
+            for value in _sequence(item.get("history_rewrite_signals"))
+            if isinstance(value, str)
+        ]
+        if signals:
+            detail.append("signals " + ", ".join(_text(value) for value in signals))
+        rendered = f'{_code(str(commit)[:7])}'
+        if detail:
+            rendered += ": " + "; ".join(detail)
+        commit_rows.append(f"<li>{rendered}</li>")
+    return f"""<section class="attribution-context" aria-labelledby="attribution-heading">
+  <div class="section-intro"><p class="eyebrow">Attribution limits</p><h2 id="attribution-heading">What Git can and cannot tell us</h2></div>
+  <p>{_text(limitation)}</p>
+  {f'<ul>{"".join(facts)}</ul>' if facts else ''}
+  {f'<details class="attribution-commits">{_inline_disclosure("Inspect analyzed commit signals")}<ul>{"".join(commit_rows)}</ul></details>' if commit_rows else ''}
+</section>"""
 
 
 def _instructor_headline(report: Mapping[str, Any]) -> tuple[str, str]:
@@ -544,7 +658,7 @@ def _instructor_headline(report: Mapping[str, Any]) -> tuple[str, str]:
         if isinstance(covered, int) and isinstance(authored, int):
             headline = (
                 f"{student}'s {test_phrase}, but they execute {covered} of {authored} "
-                "mutatable lines they wrote."
+                "mutatable lines Git attributes to them."
             )
         else:
             headline = f"{student}'s {test_phrase}, but coverage is too low to assess."
@@ -563,7 +677,7 @@ def _instructor_headline(report: Mapping[str, Any]) -> tuple[str, str]:
     detail = []
     if isinstance(total, int) and isinstance(killed, int):
         detail.append(
-            f"We made {total} small changes to code they wrote; their tests caught {killed}."
+            f"We made {total} small changes to code Git attributes to them; their tests caught {killed}."
         )
     if isinstance(survived, int) and isinstance(fair, int):
         detail.append(
@@ -860,6 +974,7 @@ def render_report_document(report: Mapping[str, Any]) -> str:
     </section>
     {_mutation_flow(report)}
     {_coverage_section(report)}
+    {_attribution_context(report)}
     {_function_outcomes(report)}
     <section class="shielded" aria-labelledby="shielded-heading">
       <div class="section-intro"><p class="eyebrow">Evidence of restraint</p><h2 id="shielded-heading">Deliberately not asked</h2><p>We keep technical distinctions visible for audit without turning them into unfair student questions.</p></div>

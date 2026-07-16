@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 14.17199999999957,
+  "input_tokens": 13073,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 464,
+  "provider": "codex-cli",
+  "response_id": "019f6c73-eb56-7bd1-bf33-82e59edeae51",
+  "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_preserves_negative_zero():\n    assert str(gradebook.analytics.clamp_percent(-0.0)) == \"-0.0\"",
+  "targeted_behavior": "Preserve the negative-zero float value at the inclusive lower boundary; the original returns -0.0 while the mutant replaces it with integer 0."
+}

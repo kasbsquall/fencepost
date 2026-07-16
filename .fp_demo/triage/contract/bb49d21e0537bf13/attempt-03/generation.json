@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 236.95300000000043,
+  "input_tokens": 227918,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 7899,
+  "provider": "codex-cli",
+  "response_id": "019f6c79-eabb-7130-bddd-1b56c11b607b",
+  "source": "import pytest\nimport gradebook.analytics\n\n\ndef test_percentile_fractional_percentage_selects_the_expected_rank():\n    assert gradebook.analytics.percentile([10, 20, 30, 40, 50], 59.99999999999999) == 30",
+  "targeted_behavior": "Fractional percentage ranking at a true-division boundary."
+}

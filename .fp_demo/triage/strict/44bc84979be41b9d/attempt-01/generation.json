@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 12.20299999999952,
+  "input_tokens": 12648,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 186,
+  "provider": "codex-cli",
+  "response_id": "019f6c6f-7c5f-7ff3-8be1-7e37d741f918",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_positive_fraction_below_one():\n    assert analytics.clamp_percent(0.5) == 0.5",
+  "targeted_behavior": "Values in the valid fractional interval [0, 1) must be returned unchanged, not clamped to zero."
+}

@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 11.17199999999957,
+  "input_tokens": 12721,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 313,
+  "provider": "codex-cli",
+  "response_id": "019f6c71-c5fa-7c62-893d-dcf68cdf0c31",
+  "source": "import pytest\n\nfrom gradebook.analytics import percentile\n\n\ndef test_percentile_at_100_returns_largest_score():\n    assert percentile([8, 1, 5], 100) == 8",
+  "targeted_behavior": "At p=100, the computed index equals the score count; the original clamps it to the last valid index while the mutant raises IndexError."
+}

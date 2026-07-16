@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 11.125,
+  "input_tokens": 13165,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 290,
+  "provider": "codex-cli",
+  "response_id": "019f6c75-4b68-7f21-b46c-148df9962acd",
+  "source": "from gradebook.analytics import percentile\n\n\ndef test_percentile_uses_hundred_based_rank_for_three_values():\n    assert percentile([10, 20, 30], 66) == 20",
+  "targeted_behavior": "Percentile rank calculation at p=66 for three ordered values must use a denominator of 100, selecting the middle value rather than the final value."
+}

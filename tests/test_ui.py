@@ -98,6 +98,45 @@ def _fixture_report(tmp_path):
 def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None:
     report_path = _fixture_report(tmp_path)
     report = load_report(report_path)
+    authored_line = report["places"][0]["grounding"]["authored_lines"][0]
+    authored_line.update(
+        {
+            "committer_name": "Course Bot",
+            "committer_email": "bot@example.edu",
+            "author_matches_committer": False,
+            "co_authors": [{"name": "Sam Partner", "email": "sam@example.edu"}],
+            "history_rewrite_signals": ["author_committer_identity_mismatch"],
+            "moved_by_blame": True,
+            "copied_by_blame": False,
+            "origin_path": "pkg/analytics.py",
+            "origin_line": 2,
+        }
+    )
+    report["attribution_summary"] = {
+        "method": "git blame -M -C -C -w --line-porcelain",
+        "limitation": (
+            "Git blame attributes lines to the commit history it can trace, not to "
+            "the person who was at the keyboard."
+        ),
+        "coauthored_excluded_line_count": 1,
+        "author_committer_mismatch_commit_count": 1,
+        "moved_line_count": 1,
+        "copied_line_count": 0,
+        "repository_history_signals": ["shallow_repository"],
+        "commits": [
+            {
+                "commit": "fixture-commit",
+                "author_email": "student@example.edu",
+                "committer_email": "bot@example.edu",
+                "co_authors": [
+                    {"name": "Sam Partner", "email": "sam@example.edu"}
+                ],
+                "history_rewrite_signals": [
+                    "author_committer_identity_mismatch"
+                ],
+            }
+        ],
+    }
     document = render_report_document(report)
     parsed = _DocumentFacts()
     parsed.feed(document)
@@ -105,7 +144,7 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
 
     _assert_headline_facts(report, visible)
     assert "Authored-line coverage" in visible
-    assert "Their suite executes 1 of 1 mutatable lines they authored." in visible
+    assert "Their suite executes 1 of 1 mutatable lines Git attributes to them." in visible
     assert "What their tests already protect" in visible
     assert "Worth discussing" in visible
     assert "STRICT equivalent rate" not in visible
@@ -118,6 +157,14 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
     assert "assert False" in visible
     assert "Full source diff" in visible
     assert "Execution evidence used for this assessment" in visible
+    assert "What Git can and cannot tell us" in visible
+    assert "person who was at the keyboard" in visible
+    assert "1 student-attributed line excluded because the commit carries a co-author trailer." in visible
+    assert "1 analyzed commit where author and committer differ." in visible
+    assert "Inspect analyzed commit signals" in visible
+    assert "co-author trailer: sam@example.edu" in visible
+    assert "-M move match" in visible
+    assert "blame origin pkg/analytics.py:2" in visible
     assert "suite-output" not in document
     assert parsed.tags.count("details") >= 2
     assert "script" not in parsed.tags
@@ -267,6 +314,7 @@ def test_low_authored_line_coverage_is_not_rendered_as_a_clean_report(tmp_path) 
     parsed = _DocumentFacts()
     parsed.feed(document)
     assert "Lazy Student's 1 tests pass, but they execute 1 of 4" in parsed.visible_text
+    assert "mutatable lines Git attributes to them." in parsed.visible_text
     assert "Fencepost cannot assess understanding of code their tests never run." in parsed.visible_text
     assert "Coverage: 25%" in parsed.visible_text
     assert "Question generation is inconclusive" in parsed.visible_text

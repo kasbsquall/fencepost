@@ -11,6 +11,7 @@ from typing import Mapping, Sequence
 
 from .models import (
     AuthoredLineCoverage,
+    AttributionSummary,
     ContractShieldedReportItem,
     FencepostReport,
     FunctionAssessment,
@@ -60,6 +61,7 @@ def build_report(
     artifact_dir: Path,
     repository_path: str | None = None,
     run_started_at: str | None = None,
+    attribution_summary: AttributionSummary | None = None,
 ) -> FencepostReport:
     """Create the UI-ready JSON contract and its instructor-facing Markdown view."""
     context_by_id = {
@@ -169,6 +171,7 @@ def build_report(
         complete=triage.triage_complete and probe.complete,
         repository_path=repository_path,
         run_started_at=run_started_at,
+        attribution_summary=attribution_summary,
     )
     report_root = artifact_dir / "report"
     _write_json(report_root / "report.json", report)
@@ -432,8 +435,8 @@ def render_report_markdown(report: FencepostReport) -> str:
                 (
                     f"{_prose(subject)}'s {tests} pass, but they execute "
                     f"{coverage.covered_authored_mutatable_line_count} of "
-                    f"{coverage.authored_mutatable_line_count} mutatable lines they "
-                    "wrote. Fencepost cannot assess understanding of code their tests "
+                    f"{coverage.authored_mutatable_line_count} mutatable lines Git "
+                    "attributes to them. Fencepost cannot assess understanding of code their tests "
                     "never run."
                 ),
                 "",
@@ -446,7 +449,7 @@ def render_report_markdown(report: FencepostReport) -> str:
                 "",
                 (
                     f"We made {report.mutation_summary.total_mutants} small changes "
-                    "to code they wrote; their tests caught "
+                    "to code Git attributes to them; their tests caught "
                     f"{report.mutation_summary.killed_by_submitted_tests}. Of the "
                     f"{report.mutation_summary.survived_submitted_tests} changes they "
                     f"missed, {report.question_mutant_count} are fair to discuss. "
@@ -470,6 +473,29 @@ def render_report_markdown(report: FencepostReport) -> str:
             "",
             f"Analyzed repository commit: {_code_span(report.repository_commit)}.",
             "",
+        ]
+    )
+    if report.attribution_summary is not None:
+        attribution = report.attribution_summary
+        lines.extend(
+            [
+                "## What Git can and cannot tell us",
+                "",
+                _prose(attribution.limitation),
+                "",
+                (
+                    f"{attribution.coauthored_excluded_line_count} student-attributed "
+                    "line(s) were excluded because their commit carries a co-author trailer. "
+                    f"{attribution.author_committer_mismatch_commit_count} analyzed commit(s) "
+                    "have different author and committer identities. "
+                    f"Git reported {attribution.moved_line_count} -M move match(es) and "
+                    f"{attribution.copied_line_count} -C copy match(es)."
+                ),
+                "",
+            ]
+        )
+    lines.extend(
+        [
             "## What their tests already protect",
             "",
         ]
@@ -550,7 +576,18 @@ def render_report_markdown(report: FencepostReport) -> str:
             site = places[site_id]
             attribution = "; ".join(
                 f"line {line.line}, commit {line.commit[:7]} on {line.author_date} "
-                f"({line.commit_summary})"
+                f"({line.commit_summary}); "
+                f"author/committer {'match' if line.author_matches_committer else 'differ'}; "
+                f"co-author trailer {'present' if line.co_authors else 'absent'}; "
+                f"-M {'match' if line.moved_by_blame else 'no match'}; "
+                f"-C {'match' if line.copied_by_blame else 'no match'}"
+                + (
+                    f"; blame origin {line.origin_path}:{line.origin_line}"
+                    if (line.moved_by_blame or line.copied_by_blame)
+                    and line.origin_path
+                    and line.origin_line is not None
+                    else ""
+                )
                 for line in site.grounding.authored_lines
             )
             lines.extend(

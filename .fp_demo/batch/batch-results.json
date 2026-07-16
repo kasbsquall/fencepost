@@ -1,0 +1,536 @@
+{
+  "aborted_all_broken": false,
+  "duration_seconds": 13.292975823999996,
+  "results": {
+    "086eee6e74bf01f0": {
+      "duration_seconds": 0.9430822149998903,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0026-7_8v22z9/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "0ae08414d2fa0b1a": {
+      "duration_seconds": 0.9712786249999681,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_top_n"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.........F                                                               [100%]\n=================================== FAILURES ===================================\n__________________________________ test_top_n __________________________________\n\n    def test_top_n():\n>       assert top_n([50, 90, 70, 60], 2) == [90, 70]\nE       assert [90] == [90, 70]\nE         \nE         Right contains one more item: 70\nE         Use -v to get more diff\n\ntests/test_analytics.py:43: AssertionError\n------------ generated xml file: /work/jobs/0049-hbfn0zke/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_top_n - assert [90] == [90, 70]\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "1d2de104b4e2ea87": {
+      "duration_seconds": 0.976310398999999,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0002-ymmjlnfb/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "2af10139d54f0607": {
+      "duration_seconds": 1.1260871890000317,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_letter_grade_b"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..F.......                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_letter_grade_b ______________________________\n\n    def test_letter_grade_b():\n>       assert letter_grade(85) == \"B\"\nE       AssertionError: assert None == 'B'\nE        +  where None = letter_grade(85)\n\ntests/test_analytics.py:13: AssertionError\n------------ generated xml file: /work/jobs/0008-8j8dtvmm/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_letter_grade_b - AssertionError: assert ...\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "2c4b47824429bb06": {
+      "duration_seconds": 1.0815932659999135,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_rank_middle"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......F..                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert 1 == 2\nE        +  where 1 = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n------------ generated xml file: /work/jobs/0041-tn_fjadb/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert 1 == 2\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "2e231a949dfe891d": {
+      "duration_seconds": 0.9890321999999969,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0001-mtpzxsqb/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "2e3d6e7b8bdac2ad": {
+      "duration_seconds": 0.9158524380000017,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0027-0bhm4twi/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "2eb35dc0c375b819": {
+      "duration_seconds": 0.970478930000013,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_clamp_percent_outside_interval"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n......F...                                                               [100%]\n=================================== FAILURES ===================================\n_____________________ test_clamp_percent_outside_interval ______________________\n\n    def test_clamp_percent_outside_interval():\n>       assert clamp_percent(-5) == 0\nE       assert 1 == 0\nE        +  where 1 = clamp_percent(-5)\n\ntests/test_analytics.py:29: AssertionError\n------------ generated xml file: /work/jobs/0024-kuuv3wac/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_clamp_percent_outside_interval - assert ...\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "32cc5e262da8e932": {
+      "duration_seconds": 0.9346959679999145,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_percentile_median",
+        "tests.test_analytics::test_percentile_low"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n....FF....                                                               [100%]\n=================================== FAILURES ===================================\n____________________________ test_percentile_median ____________________________\n\n    def test_percentile_median():\n>       assert percentile([10, 20, 30, 40, 50], 50) == 30\nE       assert 10 == 30\nE        +  where 10 = percentile([10, 20, 30, 40, 50], 50)\n\ntests/test_analytics.py:21: AssertionError\n_____________________________ test_percentile_low ______________________________\n\n    def test_percentile_low():\n>       assert percentile([10, 20, 30, 40, 50], 20) == 20\nE       assert 10 == 20\nE        +  where 10 = percentile([10, 20, 30, 40, 50], 20)\n\ntests/test_analytics.py:25: AssertionError\n------------ generated xml file: /work/jobs/0032-zu40fmk3/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_percentile_median - assert 10 == 30\nFAILED tests/test_analytics.py::test_percentile_low - assert 10 == 20\n2 failed, 8 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "44bc84979be41b9d": {
+      "duration_seconds": 1.098376925000025,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0022-et_8qa_d/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "4e6be8c9edc861b8": {
+      "duration_seconds": 1.1807895389999885,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_letter_grade_f"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\nF.........                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_letter_grade_f ______________________________\n\n    def test_letter_grade_f():\n>       assert letter_grade(12) == \"F\"\nE       AssertionError: assert '' == 'F'\nE         \nE         - F\n\ntests/test_analytics.py:5: AssertionError\n------------ generated xml file: /work/jobs/0019-to9jyvlc/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_letter_grade_f - AssertionError: assert ...\n1 failed, 9 passed in 0.04s\n",
+      "timed_out": false
+    },
+    "505c45e3e9f96d41": {
+      "duration_seconds": 1.0194602870000153,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_letter_grade_a"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.F........                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_letter_grade_a ______________________________\n\n    def test_letter_grade_a():\n>       assert letter_grade(95) == \"A\"\nE       AssertionError: assert None == 'A'\nE        +  where None = letter_grade(95)\n\ntests/test_analytics.py:9: AssertionError\n------------ generated xml file: /work/jobs/0003-p_ropiiq/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_letter_grade_a - AssertionError: assert ...\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "62dda762106518d3": {
+      "duration_seconds": 0.9757448990000057,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_clamp_percent_outside_interval"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n......F...                                                               [100%]\n=================================== FAILURES ===================================\n_____________________ test_clamp_percent_outside_interval ______________________\n\n    def test_clamp_percent_outside_interval():\n        assert clamp_percent(-5) == 0\n        assert clamp_percent(50) == 50\n>       assert clamp_percent(120) == 100\nE       assert 101 == 100\nE        +  where 101 = clamp_percent(120)\n\ntests/test_analytics.py:31: AssertionError\n------------ generated xml file: /work/jobs/0029-3z0jnanc/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_clamp_percent_outside_interval - assert ...\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "63527d5c054444d3": {
+      "duration_seconds": 0.9844241580000244,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_top_n"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.........F                                                               [100%]\n=================================== FAILURES ===================================\n__________________________________ test_top_n __________________________________\n\n    def test_top_n():\n>       assert top_n([50, 90, 70, 60], 2) == [90, 70]\nE       assert [90, 70, 60] == [90, 70]\nE         \nE         Left contains one more item: 60\nE         Use -v to get more diff\n\ntests/test_analytics.py:43: AssertionError\n------------ generated xml file: /work/jobs/0050-uzcuqm3j/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_top_n - assert [90, 70, 60] == [90, 70]\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "67c52a2840605244": {
+      "duration_seconds": 1.1151290939999399,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0020-rm2u76x1/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "6ed3e152fc22e94b": {
+      "duration_seconds": 0.9837115510000558,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_percentile_median",
+        "tests.test_analytics::test_percentile_low",
+        "tests.test_analytics::test_clamp_percent_outside_interval"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.02s\n\n....FFF...                                                               [100%]\n=================================== FAILURES ===================================\n____________________________ test_percentile_median ____________________________\n\n    def test_percentile_median():\n>       assert percentile([10, 20, 30, 40, 50], 50) == 30\n\ntests/test_analytics.py:21: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [10, 20, 30, 40, 50], p = None\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n>       k = int(len(ordered) * p / 100)\nE       TypeError: unsupported operand type(s) for *: 'int' and 'NoneType'\n\ngradebook/analytics.py:35: TypeError\n_____________________________ test_percentile_low ______________________________\n\n    def test_percentile_low():\n>       assert percentile([10, 20, 30, 40, 50], 20) == 20\n\ntests/test_analytics.py:25: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [10, 20, 30, 40, 50], p = None\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n>       k = int(len(ordered) * p / 100)\nE       TypeError: unsupported operand type(s) for *: 'int' and 'NoneType'\n\ngradebook/analytics.py:35: TypeError\n_____________________ test_clamp_percent_outside_interval ______________________\n\n    def test_clamp_percent_outside_interval():\n>       assert clamp_percent(-5) == 0\nE       assert None == 0\nE        +  where None = clamp_percent(-5)\n\ntests/test_analytics.py:29: AssertionError\n------------ generated xml file: /work/jobs/0030-k4j91opx/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_percentile_median - TypeError: unsupport...\nFAILED tests/test_analytics.py::test_percentile_low - TypeError: unsupported ...\nFAILED tests/test_analytics.py::test_clamp_percent_outside_interval - assert ...\n3 failed, 7 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "75b9f689f32ac45a": {
+      "duration_seconds": 1.0658685989999412,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0010-69rzs3pe/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "75fb9798120ff606": {
+      "duration_seconds": 1.0377215949999936,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_letter_grade_c"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n...F......                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_letter_grade_c ______________________________\n\n    def test_letter_grade_c():\n>       assert letter_grade(72) == \"C\"\nE       AssertionError: assert None == 'C'\nE        +  where None = letter_grade(72)\n\ntests/test_analytics.py:17: AssertionError\n------------ generated xml file: /work/jobs/0013-ixuugqnc/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_letter_grade_c - AssertionError: assert ...\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "764a18c525e359d6": {
+      "duration_seconds": 0.9501381189999165,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0033-g8beutcj/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "7bbb8ba1b450cc0e": {
+      "duration_seconds": 0.9365584760000729,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_rank_middle",
+        "tests.test_analytics::test_rank_highest"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......FF.                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert 1 == 2\nE        +  where 1 = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n______________________________ test_rank_highest _______________________________\n\n    def test_rank_highest():\n>       assert rank([90, 80, 70], 90) == 1\nE       assert 0 == 1\nE        +  where 0 = rank([90, 80, 70], 90)\n\ntests/test_analytics.py:39: AssertionError\n------------ generated xml file: /work/jobs/0045-73c8_qjq/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert 1 == 2\nFAILED tests/test_analytics.py::test_rank_highest - assert 0 == 1\n2 failed, 8 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "7d45e006f2ec7b27": {
+      "duration_seconds": 1.146235615999899,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0017-shmzh3f5/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "847ad53c8ea6a479": {
+      "duration_seconds": 0.9685284020000609,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_percentile_median",
+        "tests.test_analytics::test_percentile_low"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n....FF....                                                               [100%]\n=================================== FAILURES ===================================\n____________________________ test_percentile_median ____________________________\n\n    def test_percentile_median():\n>       assert percentile([10, 20, 30, 40, 50], 50) == 30\nE       assert None == 30\nE        +  where None = percentile([10, 20, 30, 40, 50], 50)\n\ntests/test_analytics.py:21: AssertionError\n_____________________________ test_percentile_low ______________________________\n\n    def test_percentile_low():\n>       assert percentile([10, 20, 30, 40, 50], 20) == 20\nE       assert None == 20\nE        +  where None = percentile([10, 20, 30, 40, 50], 20)\n\ntests/test_analytics.py:25: AssertionError\n------------ generated xml file: /work/jobs/0036-tl2ctiqc/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_percentile_median - assert None == 30\nFAILED tests/test_analytics.py::test_percentile_low - assert None == 20\n2 failed, 8 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "855aea364aae6807": {
+      "duration_seconds": 1.0408576319999838,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_letter_grade_a"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.02s\n\n.F........                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_letter_grade_a ______________________________\n\n    def test_letter_grade_a():\n>       assert letter_grade(95) == \"A\"\nE       AssertionError: assert '' == 'A'\nE         \nE         - A\n\ntests/test_analytics.py:9: AssertionError\n------------ generated xml file: /work/jobs/0004-fg1iyvof/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_letter_grade_a - AssertionError: assert ...\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "86e0917e5c6bf1d8": {
+      "duration_seconds": 1.0483863660000452,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0000-1ceej30p/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "8e3bb3b74b5e7623": {
+      "duration_seconds": 1.0116665839999541,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0012-5e_j_vul/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "92261c57ed4e3d56": {
+      "duration_seconds": 0.915382367999996,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0025-3dq3qjwt/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "941c284d967c452c": {
+      "duration_seconds": 0.9215936120000379,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_rank_middle",
+        "tests.test_analytics::test_rank_highest"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......FF.                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert 3 == 2\nE        +  where 3 = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n______________________________ test_rank_highest _______________________________\n\n    def test_rank_highest():\n>       assert rank([90, 80, 70], 90) == 1\nE       assert 2 == 1\nE        +  where 2 = rank([90, 80, 70], 90)\n\ntests/test_analytics.py:39: AssertionError\n------------ generated xml file: /work/jobs/0046-bd9ttwb3/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert 3 == 2\nFAILED tests/test_analytics.py::test_rank_highest - assert 2 == 1\n2 failed, 8 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "95ac936c86584039": {
+      "duration_seconds": 1.1856314450000127,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_letter_grade_f"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\nF.........                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_letter_grade_f ______________________________\n\n    def test_letter_grade_f():\n>       assert letter_grade(12) == \"F\"\nE       AssertionError: assert None == 'F'\nE        +  where None = letter_grade(12)\n\ntests/test_analytics.py:5: AssertionError\n------------ generated xml file: /work/jobs/0018-pabo8bm8/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_letter_grade_f - AssertionError: assert ...\n1 failed, 9 passed in 0.04s\n",
+      "timed_out": false
+    },
+    "9d5857fbb6465c68": {
+      "duration_seconds": 0.9496852639999815,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_rank_middle",
+        "tests.test_analytics::test_rank_highest"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......FF.                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert 1 == 2\nE        +  where 1 = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n______________________________ test_rank_highest _______________________________\n\n    def test_rank_highest():\n>       assert rank([90, 80, 70], 90) == 1\nE       assert 0 == 1\nE        +  where 0 = rank([90, 80, 70], 90)\n\ntests/test_analytics.py:39: AssertionError\n------------ generated xml file: /work/jobs/0037-39s0s089/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert 1 == 2\nFAILED tests/test_analytics.py::test_rank_highest - assert 0 == 1\n2 failed, 8 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "9e215f782bcfc8e3": {
+      "duration_seconds": 0.9702776300000551,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0015-ie8r2htx/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "9fb2edec42bf3a2d": {
+      "duration_seconds": 0.9513706630000343,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_top_n"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.........F                                                               [100%]\n=================================== FAILURES ===================================\n__________________________________ test_top_n __________________________________\n\n    def test_top_n():\n>       assert top_n([50, 90, 70, 60], 2) == [90, 70]\nE       assert [50, 60] == [90, 70]\nE         \nE         At index 0 diff: 50 != 90\nE         Use -v to get more diff\n\ntests/test_analytics.py:43: AssertionError\n------------ generated xml file: /work/jobs/0047-e_gcmhbu/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_top_n - assert [50, 60] == [90, 70]\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "a4241f6232376acc": {
+      "duration_seconds": 1.001039903999981,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_letter_grade_c"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n...F......                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_letter_grade_c ______________________________\n\n    def test_letter_grade_c():\n>       assert letter_grade(72) == \"C\"\nE       AssertionError: assert '' == 'C'\nE         \nE         - C\n\ntests/test_analytics.py:17: AssertionError\n------------ generated xml file: /work/jobs/0014-vhmpwa8i/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_letter_grade_c - AssertionError: assert ...\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "a4c4bbd18113ba33": {
+      "duration_seconds": 0.9207479130000138,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_percentile_low"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.....F....                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_percentile_low ______________________________\n\n    def test_percentile_low():\n>       assert percentile([10, 20, 30, 40, 50], 20) == 20\nE       assert 10 == 20\nE        +  where 10 = percentile([10, 20, 30, 40, 50], 20)\n\ntests/test_analytics.py:25: AssertionError\n------------ generated xml file: /work/jobs/0034-am_x1tpu/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_percentile_low - assert 10 == 20\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "ab756a31efd05a69": {
+      "duration_seconds": 1.1224577939999563,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0021-2f4cmy5y/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "b3112711c383143f": {
+      "duration_seconds": 0.9598498730000529,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_clamp_percent_outside_interval"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n......F...                                                               [100%]\n=================================== FAILURES ===================================\n_____________________ test_clamp_percent_outside_interval ______________________\n\n    def test_clamp_percent_outside_interval():\n        assert clamp_percent(-5) == 0\n        assert clamp_percent(50) == 50\n>       assert clamp_percent(120) == 100\nE       assert 99 == 100\nE        +  where 99 = clamp_percent(120)\n\ntests/test_analytics.py:31: AssertionError\n------------ generated xml file: /work/jobs/0028-nkgfabhw/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_clamp_percent_outside_interval - assert ...\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "b3e125ba44e50163": {
+      "duration_seconds": 1.0788021649999564,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_rank_middle"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......F..                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert 3 == 2\nE        +  where 3 = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n------------ generated xml file: /work/jobs/0042-pwxwbps2/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert 3 == 2\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "bb49d21e0537bf13": {
+      "duration_seconds": 0.966815151999981,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0031-vwu7igiv/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "bc57b02d4b5d32a1": {
+      "duration_seconds": 0.981273635999969,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0005-rnm37uar/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "cce784bd5b2c3eca": {
+      "duration_seconds": 1.1124744449999753,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_clamp_percent_outside_interval"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.02s\n\n......F...                                                               [100%]\n=================================== FAILURES ===================================\n_____________________ test_clamp_percent_outside_interval ______________________\n\n    def test_clamp_percent_outside_interval():\n>       assert clamp_percent(-5) == 0\nE       assert -1 == 0\nE        +  where -1 = clamp_percent(-5)\n\ntests/test_analytics.py:29: AssertionError\n------------ generated xml file: /work/jobs/0023-_pviek61/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_clamp_percent_outside_interval - assert ...\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "cd38c10fd5fc49d0": {
+      "duration_seconds": 1.116557682000007,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_letter_grade_b"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..F.......                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_letter_grade_b ______________________________\n\n    def test_letter_grade_b():\n>       assert letter_grade(85) == \"B\"\nE       AssertionError: assert '' == 'B'\nE         \nE         - B\n\ntests/test_analytics.py:13: AssertionError\n------------ generated xml file: /work/jobs/0009-mznq4uuj/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_letter_grade_b - AssertionError: assert ...\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "ce1508b29bd64233": {
+      "duration_seconds": 1.0263155360000837,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0007-so1mhpbk/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "d4065ad3a9ce3349": {
+      "duration_seconds": 0.9733048550000376,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_top_n"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.........F                                                               [100%]\n=================================== FAILURES ===================================\n__________________________________ test_top_n __________________________________\n\n    def test_top_n():\n>       assert top_n([50, 90, 70, 60], 2) == [90, 70]\nE       assert None == [90, 70]\nE        +  where None = top_n([50, 90, 70, 60], 2)\n\ntests/test_analytics.py:43: AssertionError\n------------ generated xml file: /work/jobs/0048-ft9uadnk/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_top_n - assert None == [90, 70]\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "d914afb970dae1a0": {
+      "duration_seconds": 1.1193396290000237,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_rank_middle"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......F..                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert 0 == 2\nE        +  where 0 = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n------------ generated xml file: /work/jobs/0040-ejj48ucb/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert 0 == 2\n1 failed, 9 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "db66414d596970b4": {
+      "duration_seconds": 1.1588234589999047,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0016-u520wvzp/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "dbb83dad668b1b68": {
+      "duration_seconds": 1.064442498999938,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0011-ko43xom5/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "dc1c21e77d6e08da": {
+      "duration_seconds": 1.1421593580000717,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_rank_middle",
+        "tests.test_analytics::test_rank_highest"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......FF.                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert None == 2\nE        +  where None = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n______________________________ test_rank_highest _______________________________\n\n    def test_rank_highest():\n>       assert rank([90, 80, 70], 90) == 1\nE       assert None == 1\nE        +  where None = rank([90, 80, 70], 90)\n\ntests/test_analytics.py:39: AssertionError\n------------ generated xml file: /work/jobs/0043-1pw71idi/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert None == 2\nFAILED tests/test_analytics.py::test_rank_highest - assert None == 1\n2 failed, 8 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "de6e7433e88c46a6": {
+      "duration_seconds": 1.0211758409999447,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0006-54pwgzx6/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "eaa225f04acd42d1": {
+      "duration_seconds": 0.9406042729999626,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_rank_middle",
+        "tests.test_analytics::test_rank_highest"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.02s\n\n.......FF.                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert 0 == 2\nE        +  where 0 = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n______________________________ test_rank_highest _______________________________\n\n    def test_rank_highest():\n>       assert rank([90, 80, 70], 90) == 1\nE       assert -1 == 1\nE        +  where -1 = rank([90, 80, 70], 90)\n\ntests/test_analytics.py:39: AssertionError\n------------ generated xml file: /work/jobs/0044-auofflo7/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert 0 == 2\nFAILED tests/test_analytics.py::test_rank_highest - assert -1 == 1\n2 failed, 8 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "ebad6149cee857c9": {
+      "duration_seconds": 0.9477279760000101,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0035-hitvsy8o/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "f378ec7094626217": {
+      "duration_seconds": 0.9603906379999216,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_rank_middle",
+        "tests.test_analytics::test_rank_highest"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......FF.                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert 3 == 2\nE        +  where 3 = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n______________________________ test_rank_highest _______________________________\n\n    def test_rank_highest():\n>       assert rank([90, 80, 70], 90) == 1\nE       assert 2 == 1\nE        +  where 2 = rank([90, 80, 70], 90)\n\ntests/test_analytics.py:39: AssertionError\n------------ generated xml file: /work/jobs/0038-ismkklrv/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert 3 == 2\nFAILED tests/test_analytics.py::test_rank_highest - assert 2 == 1\n2 failed, 8 passed in 0.03s\n",
+      "timed_out": false
+    },
+    "f3ac7e0b2ed11dcc": {
+      "duration_seconds": 0.9493264800000816,
+      "exit_code": 1,
+      "failing_tests": [
+        "tests.test_analytics::test_rank_middle",
+        "tests.test_analytics::test_rank_highest"
+      ],
+      "status": "killed",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......FF.                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert 3 == 2\nE        +  where 3 = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n______________________________ test_rank_highest _______________________________\n\n    def test_rank_highest():\n>       assert rank([90, 80, 70], 90) == 1\nE       assert 2 == 1\nE        +  where 2 = rank([90, 80, 70], 90)\n\ntests/test_analytics.py:39: AssertionError\n------------ generated xml file: /work/jobs/0039-zpoai4fq/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert 3 == 2\nFAILED tests/test_analytics.py::test_rank_highest - assert 2 == 1\n2 failed, 8 passed in 0.03s\n",
+      "timed_out": false
+    }
+  }
+}

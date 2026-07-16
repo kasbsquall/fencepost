@@ -1,0 +1,132 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 16.70299999999952,
+        "input_tokens": 13306,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 131,
+        "provider": "codex-cli",
+        "response_id": "019f6c73-6143-71c1-bcf8-94cfb5c86420",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_assigns_d_at_inclusive_lower_boundary():\n    assert analytics.letter_grade(60) == 'D'",
+        "targeted_behavior": "The inclusive lower boundary for a D grade: exactly 60 must produce 'D'."
+      },
+      "mutant": {
+        "duration_seconds": 0.78993014699995,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_assigns_d_at_inclusive_lower_boundary():\n>       assert analytics.letter_grade(60) == 'D'\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+          "nodeid": ".fencepost-generated-0009.test_adversarial::test_letter_grade_assigns_d_at_inclusive_lower_boundary"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_letter_grade_assigns_d_at_inclusive_lower_boundary ____________\n\n    def test_letter_grade_assigns_d_at_inclusive_lower_boundary():\n>       assert analytics.letter_grade(60) == 'D'\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0009-igpz3al8/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0009/test_adversarial.py::test_letter_grade_assigns_d_at_inclusive_lower_boundary\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.735527718999947,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0009-igpz3al8/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_letter_grade_assigns_d_at_inclusive_lower_boundary():\n>       assert analytics.letter_grade(60) == 'D'\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+    "nodeid": ".fencepost-generated-0009.test_adversarial::test_letter_grade_assigns_d_at_inclusive_lower_boundary"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mode": "CONTRACT",
+  "mutant": {
+    "candidate": {
+      "after": "Gt",
+      "anchor": {
+        "column": 9,
+        "end_column": 20,
+        "end_line": 19,
+        "line": 19
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "GtE",
+      "id": "9e215f782bcfc8e3",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "score >= 60"
+    },
+    "execution": {
+      "duration_seconds": 0.9702776300000551,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0015-ie8r2htx/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 9,
+      "end_column": 19,
+      "end_line": 18,
+      "line": 18
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 16.70299999999952,
+    "input_tokens": 13306,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 131,
+    "provider": "codex-cli",
+    "response_id": "019f6c73-6143-71c1-bcf8-94cfb5c86420",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_assigns_d_at_inclusive_lower_boundary():\n    assert analytics.letter_grade(60) == 'D'",
+    "targeted_behavior": "The inclusive lower boundary for a D grade: exactly 60 must produce 'D'."
+  }
+}

@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 
 import pytest
 
 from fencepost.models import (
     BlameLine,
+    AttributionIdentity,
     ExecutionResult,
     MutantResult,
     MutationCandidate,
@@ -81,7 +83,7 @@ def test_authored_line_coverage_counts_unique_mutatable_source_lines() -> None:
         }
     }
 
-    eligible, coverage, functions = _candidate_inventory(
+    eligible, coverage, functions, exclusions = _candidate_inventory(
         (source,), blame, {source.path: (2,)}
     )
 
@@ -92,3 +94,19 @@ def test_authored_line_coverage_counts_unique_mutatable_source_lines() -> None:
     assert coverage.sufficient_for_assessment is False
     assert eligible
     assert set(functions.values()) == {"f"}
+    assert exclusions == ()
+
+    coauthored = {
+        source.path: dict(blame[source.path])
+    }
+    coauthored[source.path][2] = replace(
+        coauthored[source.path][2],
+        co_authors=(AttributionIdentity(name="Partner", email="partner@example.edu"),),
+    )
+    excluded_eligible, excluded_coverage, _, exclusions = _candidate_inventory(
+        (source,), coauthored, {source.path: (2,)}
+    )
+    assert all(item.candidate.anchor.line != 2 for item in excluded_eligible)
+    assert excluded_coverage.authored_mutatable_line_count == 2
+    assert exclusions[0].reason == "co_authored_commit"
+    assert exclusions[0].co_authors[0].email == "partner@example.edu"

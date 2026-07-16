@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 9.094000000000051,
+    "input_tokens": 13069,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 194,
+    "provider": "codex-cli",
+    "response_id": "019f6c74-d154-7120-8cc5-e6cf37bfa634",
+    "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_preserves_fraction_just_below_upper_bound():\n    assert gradebook.analytics.clamp_percent(99.5) == 99.5",
+    "targeted_behavior": "A percentage strictly below the inclusive upper bound (99.5) must be returned unchanged."
+  },
+  "mutant": {
+    "duration_seconds": 0.7162205439999525,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_clamp_percent_preserves_fraction_just_below_upper_bound():\n>       assert gradebook.analytics.clamp_percent(99.5) == 99.5\nE       AssertionError: assert 100 == 99.5\nE        +  where 100 = <function clamp_percent at 0x7cd011eec040>(99.5)\nE        +    where <function clamp_percent at 0x7cd011eec040> = <module 'gradebook.analytics' from '/work/jobs/triage-0016-5zimpfpb/mutant/tree/gradebook/analytics.py'>.clamp_percent\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0016-5zimpfpb/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0016/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 100 == 99.5\n +  where 100 = <function clamp_percent at 0x7cd011eec040>(99.5)\n +    where <function clamp_percent at 0x7cd011eec040> = <module 'gradebook.analytics' from '/work/jobs/triage-0016-5zimpfpb/mutant/tree/gradebook/analytics.py'>.clamp_percent\n +      where <module 'gradebook.analytics' from '/work/jobs/triage-0016-5zimpfpb/mutant/tree/gradebook/analytics.py'> = gradebook.analytics",
+      "nodeid": ".fencepost-generated-0016.test_adversarial::test_clamp_percent_preserves_fraction_just_below_upper_bound"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________ test_clamp_percent_preserves_fraction_just_below_upper_bound _________\n\n    def test_clamp_percent_preserves_fraction_just_below_upper_bound():\n>       assert gradebook.analytics.clamp_percent(99.5) == 99.5\nE       AssertionError: assert 100 == 99.5\nE        +  where 100 = <function clamp_percent at 0x7cd011eec040>(99.5)\nE        +    where <function clamp_percent at 0x7cd011eec040> = <module 'gradebook.analytics' from '/work/jobs/triage-0016-5zimpfpb/mutant/tree/gradebook/analytics.py'>.clamp_percent\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0016-5zimpfpb/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0016/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0016-5zimpfpb/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0016/test_adversarial.py::test_clamp_percent_preserves_fraction_just_below_upper_bound\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.7038717140001154,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0016-5zimpfpb/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

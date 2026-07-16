@@ -1,0 +1,176 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 12.469000000000051,
+        "input_tokens": 13174,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 392,
+        "provider": "codex-cli",
+        "response_id": "019f6c75-1abe-75a0-a34d-c6ecef416308",
+        "source": "import pytest\nimport gradebook.analytics\n\n\ndef test_percentile_fractional_percent_uses_true_division_before_truncation():\n    scores = [10, 20, 30, 40, 50, 60, 70]\n    assert gradebook.analytics.percentile(scores, 57.14285714285715) == 50",
+        "targeted_behavior": "Use a fractional percentile whose multiplication/division result crosses an index boundary differently under true division versus floor division."
+      },
+      "mutant": {
+        "duration_seconds": 0.698649603000149,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0018-wr1jfqjb/mutant/junit.xml -----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.7003273210000316,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-wr1jfqjb/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "NOT_DISTINGUISHED",
+      "valid_attempt_number": 1
+    },
+    {
+      "attempt": 2,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 269.5159999999996,
+        "input_tokens": 278011,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 8962,
+        "provider": "codex-cli",
+        "response_id": "019f6c75-c7cc-7752-8b45-732e72e77ca7",
+        "source": "import pytest\nimport gradebook.analytics\n\n\ndef test_percentile_clamps_infinite_percentage_to_last_score():\n    assert gradebook.analytics.percentile([10, 20, 30], 1e309) == 30",
+        "targeted_behavior": "An infinite percentage is clamped to the 100th percentile before index calculation."
+      },
+      "mutant": {
+        "duration_seconds": 0.5799302089999401,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-njmxj397/mutant/junit.xml -----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.5710640780000631,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-njmxj397/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "NOT_DISTINGUISHED",
+      "valid_attempt_number": 2
+    },
+    {
+      "attempt": 3,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 236.95300000000043,
+        "input_tokens": 227918,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 7899,
+        "provider": "codex-cli",
+        "response_id": "019f6c79-eabb-7130-bddd-1b56c11b607b",
+        "source": "import pytest\nimport gradebook.analytics\n\n\ndef test_percentile_fractional_percentage_selects_the_expected_rank():\n    assert gradebook.analytics.percentile([10, 20, 30, 40, 50], 59.99999999999999) == 30",
+        "targeted_behavior": "Fractional percentage ranking at a true-division boundary."
+      },
+      "mutant": {
+        "duration_seconds": 0.5594239330000619,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-j_rs3az0/mutant/junit.xml -----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.5735167620000539,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-j_rs3az0/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "NOT_DISTINGUISHED",
+      "valid_attempt_number": 3
+    }
+  ],
+  "attempts_used": 3,
+  "failure_evidence": null,
+  "invalid_attempts": 0,
+  "label": "PROBABLE_EQUIVALENT",
+  "mode": "CONTRACT",
+  "mutant": {
+    "candidate": {
+      "after": "FloorDiv",
+      "anchor": {
+        "column": 12,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        }
+      ],
+      "before": "Div",
+      "id": "bb49d21e0537bf13",
+      "kind": "arithmetic",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "len(ordered) * p / 100"
+    },
+    "execution": {
+      "duration_seconds": 0.966815151999981,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0031-vwu7igiv/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 12,
+      "end_column": 35,
+      "end_line": 35,
+      "line": 35
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 3,
+  "winning_test": null
+}

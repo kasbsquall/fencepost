@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 84.01600000000053,
+  "input_tokens": 69906,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 3113,
+  "provider": "codex-cli",
+  "response_id": "019f6c70-5092-7673-bcfb-b1185998921b",
+  "source": "import gradebook.analytics as analytics\n\n\nclass _DivisionSensitiveProduct:\n    def __truediv__(self, divisor):\n        assert divisor == 100\n        return 1\n\n    def __floordiv__(self, divisor):\n        assert divisor == 100\n        return 0\n\n\nclass _DivisionSensitivePercent:\n    def __lt__(self, other):\n        return False\n\n    def __le__(self, other):\n        return False\n\n    def __gt__(self, other):\n        return other == 0\n\n    def __ge__(self, other):\n        return other == 0\n\n    def __rmul__(self, other):\n        assert other == 2\n        return _DivisionSensitiveProduct()\n\n\ndef test_percentile_uses_true_division_before_integer_conversion():\n    assert analytics.percentile([10, 20], _DivisionSensitivePercent()) == 20",
+  "targeted_behavior": "A comparison-compatible numeric object makes true division and floor division produce different percentile indices after clamping."
+}

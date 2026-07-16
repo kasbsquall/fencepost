@@ -1,0 +1,128 @@
+{
+  "artifact_refs": [
+    "mutants/8e3bb3b74b5e7623/result.json",
+    "triage/contract/8e3bb3b74b5e7623/attempt-01/attempt.json",
+    "probe/sites/site-e9ca52d5674048c6/mutants/8e3bb3b74b5e7623.json"
+  ],
+  "evidence": {
+    "adversarial_test": {
+      "generation_duration_seconds": 11.734000000000378,
+      "input_tokens": 13301,
+      "model": "gpt-5.6-terra",
+      "output_tokens": 137,
+      "provider": "codex-cli",
+      "response_id": "019f6c73-3314-7f23-b155-a4cd60b4040e",
+      "source": "import gradebook.analytics\n\n\ndef test_letter_grade_includes_70_in_c_range():\n    assert gradebook.analytics.letter_grade(70) == 'C'",
+      "targeted_behavior": "The inclusive C-grade boundary must classify a score of 70 as 'C'."
+    },
+    "failing_assertion": {
+      "detail": "def test_letter_grade_includes_70_in_c_range():\n>       assert gradebook.analytics.letter_grade(70) == 'C'\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+      "nodeid": ".fencepost-generated-0008.test_adversarial::test_letter_grade_includes_70_in_c_range"
+    },
+    "mutant_execution": {
+      "duration_seconds": 0.8121273840001777,
+      "exit_code": 1,
+      "failure": {
+        "detail": "def test_letter_grade_includes_70_in_c_range():\n>       assert gradebook.analytics.letter_grade(70) == 'C'\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+        "nodeid": ".fencepost-generated-0008.test_adversarial::test_letter_grade_includes_70_in_c_range"
+      },
+      "status": "failed",
+      "stderr": "",
+      "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________ test_letter_grade_includes_70_in_c_range ___________________\n\n    def test_letter_grade_includes_70_in_c_range():\n>       assert gradebook.analytics.letter_grade(70) == 'C'\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0008-fmbhe9mg/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0008/test_adversarial.py::test_letter_grade_includes_70_in_c_range\n1 failed in 0.02s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "original_execution": {
+      "duration_seconds": 0.718489499000043,
+      "exit_code": 0,
+      "failure": null,
+      "status": "passed",
+      "stderr": "",
+      "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0008-fmbhe9mg/original/junit.xml ----\n1 passed in 0.01s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "triage_artifact_ref": "triage/contract/8e3bb3b74b5e7623/attempt-01/attempt.json"
+  },
+  "module_path": "gradebook.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "71",
+      "anchor": {
+        "column": 18,
+        "end_column": 20,
+        "end_line": 17,
+        "line": 17
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "70",
+      "id": "8e3bb3b74b5e7623",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "70"
+    },
+    "execution": {
+      "duration_seconds": 1.0116665839999541,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0012-5e_j_vul/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 18,
+      "end_column": 20,
+      "end_line": 16,
+      "line": 16
+    }
+  },
+  "mutant_id": "8e3bb3b74b5e7623",
+  "mutated_function": "def letter_grade(score):\n    \"\"\"Return the letter grade for a numeric score.\n\n    A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n    \"\"\"\n    if score >= 90:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 71:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'",
+  "mutation": {
+    "mutated_segment": "71",
+    "original_segment": "70",
+    "unified_diff": "--- original\n+++ mutant\n@@ -4,12 +4,12 @@\n     A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n     \"\"\"\n     if score >= 90:\n-        return \"A\"\n+        return 'A'\n     elif score >= 80:\n-        return \"B\"\n-    elif score >= 70:\n-        return \"C\"\n+        return 'B'\n+    elif score >= 71:\n+        return 'C'\n     elif score >= 60:\n-        return \"D\"\n+        return 'D'\n     else:\n-        return \"F\"\n+        return 'F'"
+  },
+  "original_function": "def letter_grade(score):\n    \"\"\"Return the letter grade for a numeric score.\n\n    A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n    \"\"\"\n    if score >= 90:\n        return \"A\"\n    elif score >= 80:\n        return \"B\"\n    elif score >= 70:\n        return \"C\"\n    elif score >= 60:\n        return \"D\"\n    else:\n        return \"F\"",
+  "qualified_function_name": "letter_grade",
+  "submitted_suite_artifact_ref": "mutants/8e3bb3b74b5e7623/result.json",
+  "submitted_suite_tests_passed": 10
+}
