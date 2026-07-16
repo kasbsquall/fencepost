@@ -336,7 +336,7 @@ def _handler(
                                     total=total,
                                     token=session.token,
                                     validation_message=(
-                                        "Write an answer, or choose â€œI donâ€™t knowâ€ "
+                                        'Write an answer, or choose "I don\'t know" '
                                         "to continue."
                                     ),
                                 ),

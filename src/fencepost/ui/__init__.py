@@ -325,7 +325,7 @@ def _suite_state(mutant: Mapping[str, Any]) -> str:
     return f"""
 <section class="run-state run-state-pass" aria-label="Student test suite passed">
   <div>
-    <p class="state-result"><span>{_text(label)}</span> <strong>— {_text(outcome)}</strong></p>
+    <p class="state-result"><span>{_text(label)}</span> <strong>- {_text(outcome)}</strong></p>
     {f'<p class="artifact-ref">{_code(artifact)}</p>' if artifact else ''}
   </div>
 </section>""".strip()
@@ -823,7 +823,7 @@ def _headline_flow(report: Mapping[str, Any]) -> str:
     for kind, noun, count in segments:
         label = f'<span class="data-value">{count}</span> {_text(noun)}'
         if kind == "withheld":
-            label = f'<a href="#withheld">{label} — see why</a>'
+            label = f'<a href="#withheld">{label} - see why</a>'
         legend.append(
             f'<span><i class="legend-swatch flow-{kind}" aria-hidden="true"></i>{label}</span>'
         )
@@ -1166,7 +1166,7 @@ def _hero_evidence(report: Mapping[str, Any]) -> str:
     summary = first.get("commit_summary")
     priority = (
         f'<p class="priority-claim">Their commit says &quot;{_text(summary)}&quot; '
-        "— and their tests never checked it.</p>"
+        "- and their tests never checked it.</p>"
         if summary and "commit_claim" in signals
         else ""
     )
@@ -1302,7 +1302,7 @@ def render_method_document(report: Mapping[str, Any]) -> str:
     {f'<section class="rates" aria-label="Equivalent mutant rates">{rates}</section>' if rates else ''}
     {f'<p class="contract-limitation"><strong>CONTRACT limitation.</strong> {_text(limitation)}</p>' if limitation else ''}
     <section class="method-copy"><h2>Coverage precondition</h2><p>Fencepost measures the unique student-authored lines that contain mutation sites and were executed by the submitted suite. {f"At least {minimum:.0%} must be covered before the report presents zero findings as assessable." if isinstance(minimum, (int, float)) and not isinstance(minimum, bool) else "A run below the configured threshold is marked as not assessable."}</p></section>
-    <section class="method-copy"><h2>Two lenses, both retained</h2><p><strong>STRICT</strong> permits every distinction Python can express. <strong>CONTRACT</strong> admits only plain-caller evidence and drives student questions. Technical or pedagogically inappropriate witnesses are retained under “Deliberately not asked,” never silently deleted.</p></section>
+    <section class="method-copy"><h2>Two lenses, both retained</h2><p><strong>STRICT</strong> permits every distinction Python can express. <strong>CONTRACT</strong> admits only plain-caller evidence and drives student questions. Technical or pedagogically inappropriate witnesses are retained under &quot;Deliberately not asked,&quot; never silently deleted.</p></section>
     <section class="method-copy"><h2>Execution trail</h2><p>Fencepost combines AST mutation, Git-blame attribution, Docker sandbox execution, and dual-mode equivalence triage. GPT-5.6 generates adversarial tests inside the product; it phrases tests and questions, while executed results remain the ground truth.</p></section>
   </main>
 </body>

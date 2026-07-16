@@ -91,7 +91,7 @@ def _source_grounding(place: Mapping[str, Any]) -> str:
         provenance.append(f'<time datetime="{_text(date)}">{_text(date)}</time>')
     summary = first.get("commit_summary")
     if summary:
-        provenance.append(f'“{_text(summary)}”')
+        provenance.append(f'&quot;{_text(summary)}&quot;')
     if "author_matches_committer" in first:
         provenance.append(
             "author and committer match"
@@ -192,7 +192,7 @@ def render_probe_question(
     {f'<p class="probe-choice-message" role="status">{_text(validation_message)}</p>' if validation_message else ''}
     <div class="probe-commit-actions">
       <button class="probe-button" type="submit" name="commitment" value="answer">Submit answer</button>
-      <button class="probe-button probe-button-secondary" type="submit" name="commitment" value="unknown">I donâ€™t know</button>
+      <button class="probe-button probe-button-secondary" type="submit" name="commitment" value="unknown">I don't know</button>
     </div>
     <p class="probe-choice-note">Either choice records your response before the evidence is shown.</p>
   </form>

@@ -14,8 +14,17 @@ from fencepost.serve import create_server
 from fencepost.ui import (
     load_report,
     render_artifact_page,
+    render_landing_document,
     render_method_document,
     render_report_document,
+)
+from fencepost.ui.student import (
+    render_probe_between,
+    render_probe_end,
+    render_probe_error,
+    render_probe_question,
+    render_probe_reveal,
+    render_probe_start,
 )
 from tests.fakes import FixtureComprehensionProbeAgent
 from tests.test_probe import _records_with_two_gaps_at_one_site
@@ -40,6 +49,18 @@ class _DocumentFacts(HTMLParser):
     @property
     def visible_text(self) -> str:
         return " ".join("".join(self.text).split())
+
+
+def _assert_no_mojibake(*documents: str) -> None:
+    """Guard what users see, not the source encoding that produced it."""
+    signatures = (
+        chr(0x00E2) + chr(0x20AC),  # broken UTF-8 punctuation prefix
+        chr(0x00C2),                 # a stray Â prefix
+        chr(0x00EF) + chr(0x00BB) + chr(0x00BF),  # a visible UTF-8 BOM
+    )
+    for document in documents:
+        for signature in signatures:
+            assert signature not in document
 
 
 def _assert_headline_facts(report, visible: str) -> None:
@@ -94,6 +115,34 @@ def _fixture_report(tmp_path):
         artifact_dir=tmp_path,
     )
     return tmp_path / "report" / "report.json"
+
+
+def test_every_rendered_view_is_free_of_utf8_mojibake(tmp_path) -> None:
+    report = load_report(_fixture_report(tmp_path))
+    place = report["places"][0]
+    documents = (
+        render_landing_document(
+            report,
+            artifact_dir=tmp_path,
+            probe_url="http://127.0.0.1:8766/",
+        ),
+        render_report_document(report),
+        render_method_document(report),
+        render_probe_start(report, total=1, token="test-token"),
+        render_probe_question(place, index=0, total=1, token="test-token"),
+        render_probe_reveal(
+            place,
+            answer="I don't know",
+            index=0,
+            total=1,
+            token="test-token",
+            previous_index=None,
+        ),
+        render_probe_between(index=0, total=1, next_url="/end"),
+        render_probe_end(total=1, token="test-token"),
+        render_probe_error("That question does not exist."),
+    )
+    _assert_no_mojibake(*documents)
 
 
 def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None:
