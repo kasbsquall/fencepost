@@ -12,6 +12,7 @@ from .adversarial import CodexCliStructuredClient, CodexCliStructuredError
 from .models import (
     AuthoredSourceLine,
     BlameLine,
+    FailureEvidence,
     GeneratedProbeGrade,
     GeneratedProbeQuestion,
     ProbeAssessment,
@@ -324,7 +325,6 @@ def _evidence(pair, candidate_id: str) -> ProbeExecutionEvidence:
         or winning.original.status != "passed"
         or winning.mutant is None
         or winning.mutant.status not in {"failed", "timed_out"}
-        or winning.mutant.failure is None
         or pair.contract.winning_test is None
     ):
         raise ValueError(
@@ -333,11 +333,20 @@ def _evidence(pair, candidate_id: str) -> ProbeExecutionEvidence:
     artifact_ref = (
         f"triage/contract/{candidate_id}/attempt-{winning.attempt:02d}/attempt.json"
     )
+    failure = winning.mutant.failure or FailureEvidence(
+        nodeid="<mutant-timeout>",
+        kind="timeout",
+        message=(
+            f"mutant exceeded the adversarial test timeout after "
+            f"{winning.mutant.duration_seconds:.3f}s"
+        ),
+        detail=winning.mutant.stderr,
+    )
     return ProbeExecutionEvidence(
         adversarial_test=pair.contract.winning_test,
         original_execution=winning.original,
         mutant_execution=winning.mutant,
-        failing_assertion=winning.mutant.failure,
+        failing_assertion=failure,
         triage_artifact_ref=artifact_ref,
     )
 

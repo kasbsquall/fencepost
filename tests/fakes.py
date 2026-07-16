@@ -249,7 +249,12 @@ class FixtureComprehensionProbeAgent:
     def grade_answer(self, request):
         self.grade_requests.append(request)
         failure = request.evidence.failing_assertion
-        verdict = "INSUFFICIENT" if not request.answer.strip() else "PARTIAL"
+        normalized = request.answer.strip().casefold()
+        verdict = (
+            "INSUFFICIENT"
+            if normalized in {"", "i don't know", "insufficient"}
+            else "PARTIAL"
+        )
         return GeneratedProbeGrade(
             verdict=verdict,
             feedback=(

@@ -265,7 +265,7 @@ def test_probe_targets_contract_gaps_and_grades_with_execution_citation(tmp_path
         contexts,
         blame=blame,
         agent=agent,
-        answers={"contract-gap": "The exact boundary now returns false."},
+        answers={"contract-gap": "I don't know"},
         artifact_dir=tmp_path,
     )
 
@@ -282,6 +282,7 @@ def test_probe_targets_contract_gaps_and_grades_with_execution_citation(tmp_path
     result = summary.results[0]
     assert result.status == "GRADED"
     assert result.assessment is not None
+    assert result.assessment.verdict == "INSUFFICIENT"
     assert result.assessment.citations
     citation = result.assessment.citations[0]
     assert citation.message == result.evidence.failing_assertion.message

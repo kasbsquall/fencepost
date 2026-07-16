@@ -212,6 +212,14 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
         and item.evidence.mutant_execution.status in {"failed", "timed_out"}
         for item in probe.results
     )
+    assert all(
+        item.grounding.authored_lines
+        and all(
+            line.commit and line.author_date != "unknown"
+            for line in item.grounding.authored_lines
+        )
+        for item in probe.results
+    )
     graded = [item for item in probe.results if item.assessment is not None]
     assert len(graded) == 1
     for item in graded:
