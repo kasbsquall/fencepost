@@ -1,0 +1,371 @@
+"""Stages 1-4 orchestration: attribute, select, mutate, execute."""
+
+from __future__ import annotations
+
+import json
+import os
+import statistics
+import tempfile
+import time
+from dataclasses import dataclass
+from pathlib import Path
+
+from .models import (
+    AnalysisResult,
+    BlameLine,
+    ExecutionResult,
+    MutantResult,
+    MutationCandidate,
+    RunConfig,
+    json_value,
+)
+from .mutation import (
+    GeneratedMutation,
+    MutationError,
+    enumerate_candidates,
+    generate_mutation,
+)
+from .repository import (
+    RepositoryError,
+    SourceFile,
+    blame_file,
+    extract_archive,
+    load_source_files,
+    resolve_commit,
+)
+from .sandbox import DockerSandbox, SandboxError
+
+
+class PipelineError(RuntimeError):
+    pass
+
+
+@dataclass(frozen=True)
+class _EligibleCandidate:
+    candidate: MutationCandidate
+    source: SourceFile
+
+
+def _project_root() -> Path:
+    return Path(__file__).resolve().parents[2]
+
+
+def _write_json(path: Path, value: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(json_value(value), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _blame_index(
+    repo: Path, commit: str, sources: tuple[SourceFile, ...], student_email: str
+) -> dict[str, dict[int, BlameLine]]:
+    return {
+        source.path: {
+            line.line: line
+            for line in blame_file(repo, commit, source.path, student_email)
+        }
+        for source in sources
+    }
+
+
+def _eligible_candidates(
+    sources: tuple[SourceFile, ...],
+    blame: dict[str, dict[int, BlameLine]],
+    covered_lines: dict[str, tuple[int, ...]],
+) -> tuple[_EligibleCandidate, ...]:
+    eligible: list[_EligibleCandidate] = []
+    for source in sources:
+        covered = set(covered_lines.get(source.path, ()))
+        attributed = blame[source.path]
+        try:
+            candidates = enumerate_candidates(source.text, source.path)
+        except SyntaxError as exc:
+            raise PipelineError(f"cannot parse {source.path}: {exc}") from exc
+        for candidate in candidates:
+            line = attributed.get(candidate.anchor.line)
+            if line is not None and line.is_student and candidate.anchor.line in covered:
+                eligible.append(_EligibleCandidate(candidate=candidate, source=source))
+    return tuple(eligible)
+
+
+def _mutant_timeout(config: RunConfig, baseline_duration: float) -> float:
+    return min(
+        config.mutant_timeout_cap_seconds,
+        max(5.0, (4.0 * baseline_duration) + 2.0),
+    )
+
+
+def _mutant_workers(config: RunConfig) -> int:
+    cpu_limit = max(1, (os.cpu_count() or 2) - 1)
+    if config.mutant_workers is None:
+        return min(4, cpu_limit)
+    if config.mutant_workers < 1:
+        raise PipelineError("mutant worker count must be at least 1")
+    return min(config.mutant_workers, cpu_limit)
+
+
+def _broken_generation(candidate: MutationCandidate, error: Exception) -> MutantResult:
+    from .models import SourceSpan
+
+    return MutantResult(
+        candidate=candidate,
+        generated_anchor=SourceSpan(0, 0, 0, 0),
+        execution=ExecutionResult(
+            status="broken",
+            exit_code=None,
+            duration_seconds=0.0,
+            stdout="",
+            stderr=f"mutant generation failed: {error}",
+        ),
+    )
+
+
+def _raise_if_initial_mutants_all_broken(
+    artifact_dir: Path, results: list[MutantResult], candidate_count: int
+) -> None:
+    """Stop a uniformly broken run before it executes the remaining batch."""
+    probe_size = min(5, candidate_count)
+    if len(results) != probe_size or not all(
+        result.execution.status == "broken" for result in results
+    ):
+        return
+    _write_json(
+        artifact_dir / "all-broken.json",
+        {
+            "error": f"The first {probe_size} eligible mutants were all broken.",
+            "diagnostic": (
+                "Broken mutants indicate an invalid operator or execution harness, "
+                "not a student comprehension finding. The run was stopped before "
+                "executing every candidate."
+            ),
+            "attempted_mutants": probe_size,
+            "eligible_mutants": candidate_count,
+            "median_mutant_seconds": statistics.median(
+                result.execution.duration_seconds for result in results
+            ),
+        },
+    )
+    raise PipelineError(
+        f"the first {probe_size} eligible mutants were all broken; "
+        "inspect all-broken.json because the mutation operator or sandbox harness is wrong"
+    )
+
+
+def run_analysis(config: RunConfig) -> AnalysisResult:
+    """Run stages 1-4 and persist a self-contained run artifact.
+
+    The submitted pytest suite is run exactly as submitted.  Blame only filters
+    the source lines eligible to mutate; it does not filter tests by authorship.
+
+    Deliberate first-build limitation: projects requiring student-controlled
+    dependency installation (for example ``requirements.txt``) are unsupported.
+    The sandbox contains only the Python standard library, pytest, and coverage.
+    """
+    started = time.monotonic()
+    repo = config.repo.resolve()
+    artifact_dir = config.artifact_dir.resolve()
+    if artifact_dir.exists():
+        if any(artifact_dir.iterdir()):
+            raise PipelineError(f"artifact directory must be empty: {artifact_dir}")
+    else:
+        artifact_dir.mkdir(parents=True)
+
+    try:
+        commit = resolve_commit(repo, config.commit)
+        sources = load_source_files(repo, commit)
+        blame = _blame_index(repo, commit, sources, config.student_email)
+    except RepositoryError as exc:
+        raise PipelineError(str(exc)) from exc
+
+    workers = _mutant_workers(config)
+    _write_json(
+        artifact_dir / "run.json",
+        {
+            "commit": commit,
+            "student_email": config.student_email,
+            "image": config.image,
+            "mutant_workers": workers,
+            "scope": {
+                "supported": (
+                    "Committed Python projects whose tests use only the standard library and pytest; "
+                    "repository-root, conventional src/, and direct __init__.py package roots are importable."
+                ),
+                "unsupported": (
+                    "Installing student-controlled dependencies or package metadata such as requirements.txt, "
+                    "pyproject dependencies, setup.py, and custom build/import layouts outside detected roots."
+                ),
+            },
+            "sources": [
+                {"path": source.path, "sha256": source.sha256}
+                for source in sources
+            ],
+            "blame": blame,
+        },
+    )
+
+    sandbox = DockerSandbox(config.image, _project_root(), config.build_image)
+    try:
+        sandbox.ensure_image()
+    except SandboxError as exc:
+        raise PipelineError(str(exc)) from exc
+
+    with tempfile.TemporaryDirectory(prefix="fencepost-") as temporary:
+        temp_root = Path(temporary)
+        baseline_tree = temp_root / "baseline-tree"
+        try:
+            extract_archive(repo, commit, baseline_tree)
+            baseline = sandbox.baseline(
+                baseline_tree,
+                artifact_dir / "baseline",
+                config.baseline_timeout_seconds,
+            )
+        except (RepositoryError, SandboxError) as exc:
+            raise PipelineError(str(exc)) from exc
+
+        covered = {
+            path: lines
+            for path, lines in baseline.covered_lines.items()
+            if path in {source.path for source in sources}
+        }
+        try:
+            sandbox.preflight(
+                baseline_tree,
+                artifact_dir / "preflight",
+                _mutant_timeout(config, baseline.execution.duration_seconds),
+            )
+        except SandboxError as exc:
+            raise PipelineError(str(exc)) from exc
+        eligible = _eligible_candidates(sources, blame, covered)
+        _write_json(
+            artifact_dir / "selection.json",
+            {
+                "covered_lines": covered,
+                "eligible_candidates": [item.candidate for item in eligible],
+            },
+        )
+
+        timeout = _mutant_timeout(config, baseline.execution.duration_seconds)
+        batch_input = temp_root / "batch-input"
+        batch_sources = batch_input / "sources"
+        batch_sources.mkdir(parents=True)
+        prepared: dict[str, tuple[_EligibleCandidate, GeneratedMutation]] = {}
+        generation_failures: dict[str, MutantResult] = {}
+        batch_manifest: list[dict[str, str]] = []
+
+        for item in eligible:
+            candidate = item.candidate
+            mutant_dir = artifact_dir / "mutants" / candidate.id
+            mutant_dir.mkdir(parents=True, exist_ok=True)
+            try:
+                generated = generate_mutation(item.source.text, candidate)
+            except (MutationError, SyntaxError, ValueError) as exc:
+                result = _broken_generation(candidate, exc)
+                generation_failures[candidate.id] = result
+                _write_json(mutant_dir / "result.json", result)
+                continue
+
+            source_file = f"{candidate.id}.py"
+            (batch_sources / source_file).write_text(generated.source, encoding="utf-8")
+            (mutant_dir / "mutated.py").write_text(generated.source, encoding="utf-8")
+            (mutant_dir / "original.py").write_text(item.source.text, encoding="utf-8")
+            prepared[candidate.id] = (item, generated)
+            batch_manifest.append(
+                {
+                    "id": candidate.id,
+                    "path": candidate.path,
+                    "source_file": source_file,
+                }
+            )
+
+        _write_json(
+            batch_input / "manifest.json",
+            {
+                "workers": workers,
+                "timeout_seconds": timeout,
+                "import_roots": sandbox.import_roots(baseline_tree),
+                "mutants": batch_manifest,
+            },
+        )
+        if batch_manifest:
+            try:
+                batch_run = sandbox.batch(
+                    baseline_tree,
+                    batch_input,
+                    artifact_dir / "batch",
+                    mutant_count=len(batch_manifest),
+                    per_mutant_timeout=timeout,
+                    workers=workers,
+                )
+            except SandboxError as exc:
+                raise PipelineError(str(exc)) from exc
+            batch_executions = batch_run.results
+            batch_duration = batch_run.container_duration_seconds
+        else:
+            batch_executions = {}
+            batch_duration = 0.0
+
+        mutant_results: list[MutantResult] = []
+        for item in eligible:
+            candidate = item.candidate
+            if candidate.id in generation_failures:
+                result = generation_failures[candidate.id]
+            elif candidate.id in batch_executions:
+                _, generated = prepared[candidate.id]
+                result = MutantResult(
+                    candidate=candidate,
+                    generated_anchor=generated.generated_anchor,
+                    execution=batch_executions[candidate.id],
+                )
+                _write_json(
+                    artifact_dir / "mutants" / candidate.id / "result.json", result
+                )
+            elif batch_manifest and batch_run.aborted_all_broken:
+                break
+            else:
+                raise PipelineError(
+                    f"batch result is missing eligible mutant {candidate.id}"
+                )
+            mutant_results.append(result)
+            _raise_if_initial_mutants_all_broken(
+                artifact_dir, mutant_results, len(eligible)
+            )
+
+        if batch_manifest and batch_run.aborted_all_broken:
+            raise PipelineError(
+                "mutant batch aborted after uniformly broken initial results; "
+                "inspect batch/batch-results.json"
+            )
+
+    result = AnalysisResult(
+        repo=repo,
+        commit=commit,
+        baseline_duration_seconds=baseline.execution.duration_seconds,
+        covered_lines=covered,
+        mutant_results=tuple(mutant_results),
+        mutant_workers=workers,
+        batch_duration_seconds=batch_duration,
+        elapsed_seconds=time.monotonic() - started,
+        artifact_dir=artifact_dir,
+    )
+    _write_json(artifact_dir / "summary.json", result)
+    if result.mutant_count and all(
+        mutant.execution.status == "broken" for mutant in result.mutant_results
+    ):
+        _write_json(
+            artifact_dir / "all-broken.json",
+            {
+                "error": "Every eligible mutant was broken.",
+                "diagnostic": (
+                    "Broken mutants indicate an invalid operator or execution harness, "
+                    "not a student comprehension finding."
+                ),
+                "mutant_count": result.mutant_count,
+                "median_mutant_seconds": statistics.median(
+                    mutant.execution.duration_seconds for mutant in result.mutant_results
+                ),
+            },
+        )
+        raise PipelineError(
+            f"all {result.mutant_count} eligible mutants were broken; "
+            "inspect all-broken.json because the mutation operator or sandbox harness is wrong"
+        )
+    return result

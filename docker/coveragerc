@@ -1,0 +1,7 @@
+[run]
+relative_files = True
+branch = False
+
+[report]
+omit =
+    */site-packages/*

@@ -100,6 +100,14 @@ commits. The student's 9 tests all pass. Known ground truth in that repo:
 Use this repo as the fixture. If Fencepost cannot reproduce the classifications
 above, it is wrong.
 
+Note on the `score >= 60` boundary: the only test that reaches that line is
+`test_letter_grade_f`, which comes from the instructor's starter commit. The
+student's own tests all return before it. This is deliberate and must not be
+"fixed" in the fixture. It encodes the rule: **blame filters what we mutate, not
+which tests we run**. Attribution answers "did the student write this code", and
+the suite runs exactly as submitted. Filtering the test suite by authorship would
+drop this mutant and would also be conceptually wrong.
+
 ## Division of labour
 
 Codex builds the engine (stages 1-7) and the interfaces. The spec, the demo
