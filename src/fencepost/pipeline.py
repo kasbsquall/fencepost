@@ -64,6 +64,11 @@ def _write_json(path: Path, value: object) -> None:
 def _summary_payload(result: AnalysisResult) -> dict[str, object]:
     payload = json_value(result)
     triage = result.triage
+    cost_note = (
+        "Each real adversarial generation is a separate model call. A full run can "
+        "take several minutes and consume the configured provider's usage allowance; "
+        "use triage_attempts and max_survivors to bound a demonstration run."
+    )
     if triage is None:
         payload.update(
             {
@@ -76,6 +81,11 @@ def _summary_payload(result: AnalysisResult) -> dict[str, object]:
                 "unresolved_count": 0,
                 "equivalent_rate": None,
                 "triage_complete": False,
+                "selected_survivor_count": 0,
+                "generator_call_count": 0,
+                "generator_wall_clock_seconds": 0.0,
+                "triage_wall_clock_seconds": 0.0,
+                "triage_cost_note": cost_note,
             }
         )
     else:
@@ -87,6 +97,11 @@ def _summary_payload(result: AnalysisResult) -> dict[str, object]:
                 "unresolved_count": triage.unresolved_count,
                 "equivalent_rate": triage.equivalent_rate,
                 "triage_complete": triage.triage_complete,
+                "selected_survivor_count": triage.selected_survivor_count,
+                "generator_call_count": triage.generator_call_count,
+                "generator_wall_clock_seconds": triage.generator_wall_clock_seconds,
+                "triage_wall_clock_seconds": triage.triage_wall_clock_seconds,
+                "triage_cost_note": cost_note,
             }
         )
     return payload

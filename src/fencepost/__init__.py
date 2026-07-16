@@ -2,6 +2,7 @@
 
 from .adversarial import (
     AdversarialTestGenerator,
+    CodexCliAdversarialTestGenerator,
     OpenAIAdversarialTestGenerator,
 )
 from .models import AnalysisResult, RunConfig, TriageConfig
@@ -10,6 +11,7 @@ from .pipeline import run_analysis
 __all__ = [
     "AdversarialTestGenerator",
     "AnalysisResult",
+    "CodexCliAdversarialTestGenerator",
     "OpenAIAdversarialTestGenerator",
     "RunConfig",
     "TriageConfig",

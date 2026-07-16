@@ -7,7 +7,11 @@ import os
 import statistics
 from pathlib import Path
 
-from .adversarial import AdversarialGeneratorError, OpenAIAdversarialTestGenerator
+from .adversarial import (
+    AdversarialGeneratorError,
+    CodexCliAdversarialTestGenerator,
+    OpenAIAdversarialTestGenerator,
+)
 from .models import RunConfig, TriageConfig
 from .pipeline import PipelineError, run_analysis
 
@@ -21,7 +25,9 @@ def _parser() -> argparse.ArgumentParser:
         epilog=(
             "Scope: committed projects using only the standard library and pytest. "
             "Fencepost adds the repository root, conventional src/, and detected top-level packages to PYTHONPATH; "
-            "it does not install requirements.txt, pyproject, or setup.py dependencies, or support custom build layouts."
+            "it does not install requirements.txt, pyproject, or setup.py dependencies, or support custom build layouts. "
+            "Real triage makes one model call per generated test, can take several minutes, and consumes the selected "
+            "provider's usage allowance; use --triage-attempts and --max-survivors-triaged to bound a demo."
         ),
     )
     parser.add_argument("repo", type=Path, help="Committed student Git repository")
@@ -40,12 +46,24 @@ def _parser() -> argparse.ArgumentParser:
         help="Require the runner image to already exist",
     )
     parser.add_argument(
+        "--generator",
+        choices=("codex", "openai", "fake"),
+        default="codex",
+        help="Adversarial-test generator (default: codex with ChatGPT authentication)",
+    )
+    parser.add_argument(
         "--adversarial-model",
-        default=os.environ.get("FENCEPOST_ADVERSARIAL_MODEL"),
+        default=os.environ.get("FENCEPOST_ADVERSARIAL_MODEL", "gpt-5.6-terra"),
         help=(
-            "OpenAI model for adversarial test generation "
-            "(or FENCEPOST_ADVERSARIAL_MODEL)"
+            "Exact provider model slug (default: gpt-5.6-terra; "
+            "or FENCEPOST_ADVERSARIAL_MODEL)"
         ),
+    )
+    parser.add_argument(
+        "--generator-timeout",
+        type=float,
+        default=300.0,
+        help="Per-generation Codex CLI timeout in seconds (default: 300)",
     )
     parser.add_argument(
         "--triage-attempts",
@@ -60,11 +78,40 @@ def _parser() -> argparse.ArgumentParser:
         help="Consecutive invalid-on-original retry limit (default: 3)",
     )
     parser.add_argument(
+        "--max-survivors-triaged",
+        type=int,
+        help=(
+            "Triages only the first N survivors; the rest are visibly UNRESOLVED "
+            "(default: all)"
+        ),
+    )
+    parser.add_argument(
         "--skip-triage",
         action="store_true",
         help="Run only stages 1-4 without model calls",
     )
     return parser
+
+
+def _build_generator(args):
+    if args.generator == "codex":
+        if args.adversarial_model == "gpt-5.6":
+            raise ValueError(
+                "ChatGPT-auth Codex rejects 'gpt-5.6'; use gpt-5.6-terra or gpt-5.6-sol"
+            )
+        return CodexCliAdversarialTestGenerator(
+            model=args.adversarial_model,
+            timeout_seconds=args.generator_timeout,
+        )
+    if args.generator == "openai":
+        return OpenAIAdversarialTestGenerator(model=args.adversarial_model)
+    try:
+        from tests.fakes import FixtureAdversarialTestGenerator
+    except ImportError as exc:
+        raise AdversarialGeneratorError(
+            "the fake generator is available only from a Fencepost source checkout"
+        ) from exc
+    return FixtureAdversarialTestGenerator()
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -85,17 +132,14 @@ def main(argv: list[str] | None = None) -> int:
         build_image=not args.no_build_image,
     )
     try:
-        generator = (
-            None
-            if args.skip_triage
-            else OpenAIAdversarialTestGenerator(model=args.adversarial_model)
-        )
+        generator = None if args.skip_triage else _build_generator(args)
         triage_config = (
             None
             if args.skip_triage
             else TriageConfig(
                 valid_attempts=args.triage_attempts,
                 invalid_retry_limit=args.invalid_retries,
+                max_survivors=args.max_survivors_triaged,
             )
         )
         result = run_analysis(
@@ -127,10 +171,18 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(
             f"triage: survivors={triage.total_survivors} "
+            f"selected={triage.selected_survivor_count} "
             f"real_gap={triage.real_gap_count} "
             f"probable_equivalent={triage.probable_equivalent_count} "
             f"unresolved={triage.unresolved_count} "
             f"equivalent_rate={rate} complete={triage.triage_complete}"
+        )
+        print(
+            f"generation: calls={triage.generator_call_count} "
+            f"model_wall={triage.generator_wall_clock_seconds:.2f}s "
+            f"triage_wall={triage.triage_wall_clock_seconds:.2f}s; "
+            "each call has Codex startup/model latency and consumes ChatGPT usage "
+            "when --generator codex is selected"
         )
     print(f"artifact: {result.artifact_dir}")
     return 0 if result.triage is None or result.triage.triage_complete else 3

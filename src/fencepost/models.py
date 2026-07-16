@@ -37,6 +37,7 @@ class TriageConfig:
     valid_attempts: int = 3
     invalid_retry_limit: int = 3
     test_timeout_seconds: float = 10.0
+    max_survivors: int | None = None
 
 
 @dataclass(frozen=True)
@@ -197,6 +198,7 @@ class SurvivorTriageResult:
 @dataclass(frozen=True)
 class TriageSummary:
     total_survivors: int
+    selected_survivor_count: int
     real_gap_count: int
     probable_equivalent_count: int
     unresolved_count: int
@@ -205,6 +207,9 @@ class TriageSummary:
     total_attempts: int
     valid_attempts: int
     invalid_original_attempts: int
+    generator_call_count: int
+    generator_wall_clock_seconds: float
+    triage_wall_clock_seconds: float
     results: tuple[SurvivorTriageResult, ...]
 
 

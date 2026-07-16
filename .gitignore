@@ -28,3 +28,6 @@ Thumbs.db
 
 .fp_out/
 .pytest-tmp/
+.fp_probe/
+.fp_real/
+.pytest-unit-local/

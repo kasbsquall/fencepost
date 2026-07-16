@@ -141,7 +141,9 @@ class FailingGenerator:
         raise AdversarialGeneratorError("model unavailable")
 
 
-def _triage(tmp_path, contexts, scripts, *, generator=None, sandbox=None):
+def _triage(
+    tmp_path, contexts, scripts, *, generator=None, sandbox=None, config=None
+):
     baseline = tmp_path / "baseline"
     baseline.mkdir()
     return triage_survivors(
@@ -150,7 +152,8 @@ def _triage(tmp_path, contexts, scripts, *, generator=None, sandbox=None):
         sandbox=sandbox or FakeSandbox(scripts),
         baseline_tree=baseline,
         artifact_dir=tmp_path / "artifact",
-        config=TriageConfig(valid_attempts=3, invalid_retry_limit=3),
+        config=config
+        or TriageConfig(valid_attempts=3, invalid_retry_limit=3),
         workers=2,
     )
 
@@ -293,3 +296,30 @@ def test_generator_failure_is_unresolved_never_equivalent(tmp_path) -> None:
     assert "model unavailable" in result.unresolved_reason
     assert summary.probable_equivalent_count == 0
     assert summary.equivalent_rate is None
+    assert summary.generator_call_count == 1
+
+
+def test_survivor_cap_is_visible_as_unresolved_and_bounds_calls(tmp_path) -> None:
+    selected = _context("selected-mutant")
+    capped = _context("capped-mutant")
+    summary = _triage(
+        tmp_path,
+        [selected, capped],
+        {"selected-mutant": ["DISTINGUISHED"]},
+        config=TriageConfig(
+            valid_attempts=3,
+            invalid_retry_limit=3,
+            max_survivors=1,
+        ),
+    )
+
+    assert summary.total_survivors == 2
+    assert summary.selected_survivor_count == 1
+    assert summary.real_gap_count == 1
+    assert summary.unresolved_count == 1
+    assert summary.generator_call_count == 1
+    capped_result = next(
+        item for item in summary.results if item.mutant.candidate.id == "capped-mutant"
+    )
+    assert capped_result.label == "UNRESOLVED"
+    assert "maximum survivors" in capped_result.unresolved_reason

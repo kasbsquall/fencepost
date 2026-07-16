@@ -5,6 +5,7 @@ from __future__ import annotations
 import ast
 import difflib
 import json
+import time
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 from typing import Sequence
@@ -51,6 +52,8 @@ class _SurvivorState:
     valid_attempts: int = 0
     invalid_attempts: int = 0
     consecutive_invalid_attempts: int = 0
+    generator_calls: int = 0
+    generator_wall_clock_seconds: float = 0.0
     terminal: SurvivorTriageResult | None = None
 
 
@@ -235,7 +238,11 @@ def _persist_terminal(artifact_dir: Path, result: SurvivorTriageResult) -> None:
 
 
 def _summary(
-    states: Sequence[_SurvivorState], *, triage_complete: bool
+    states: Sequence[_SurvivorState],
+    *,
+    triage_complete: bool,
+    selected_survivor_count: int,
+    triage_wall_clock_seconds: float,
 ) -> TriageSummary:
     results = tuple(state.terminal for state in states if state.terminal is not None)
     real_gaps = sum(result.label == "REAL_GAP" for result in results)
@@ -245,6 +252,7 @@ def _summary(
     rate = equivalents / decided if triage_complete and decided else None
     return TriageSummary(
         total_survivors=len(states),
+        selected_survivor_count=selected_survivor_count,
         real_gap_count=real_gaps,
         probable_equivalent_count=equivalents,
         unresolved_count=unresolved,
@@ -253,6 +261,11 @@ def _summary(
         total_attempts=sum(state.generation_attempts for state in states),
         valid_attempts=sum(state.valid_attempts for state in states),
         invalid_original_attempts=sum(state.invalid_attempts for state in states),
+        generator_call_count=sum(state.generator_calls for state in states),
+        generator_wall_clock_seconds=sum(
+            state.generator_wall_clock_seconds for state in states
+        ),
+        triage_wall_clock_seconds=triage_wall_clock_seconds,
         results=results,
     )
 
@@ -267,18 +280,41 @@ def triage_survivors(
     config: TriageConfig,
     workers: int,
 ) -> TriageSummary:
+    triage_started = time.monotonic()
     if config.valid_attempts < 1:
         raise ValueError("valid attempt budget must be at least 1")
     if config.invalid_retry_limit < 1:
         raise ValueError("invalid retry limit must be at least 1")
     if config.test_timeout_seconds <= 0:
         raise ValueError("triage test timeout must be positive")
+    if config.max_survivors is not None and config.max_survivors < 1:
+        raise ValueError("maximum survivors triaged must be at least 1")
 
     states = [_SurvivorState(context=context) for context in survivors]
-    for state in states:
+    selected_survivor_count = (
+        len(states)
+        if config.max_survivors is None
+        else min(len(states), config.max_survivors)
+    )
+    for index, state in enumerate(states):
         _persist_context(artifact_dir, state.context)
+        if index >= selected_survivor_count:
+            state.terminal = _terminal_result(
+                state,
+                "UNRESOLVED",
+                unresolved_reason=(
+                    "not selected because the configured maximum survivors "
+                    f"triaged is {config.max_survivors}"
+                ),
+            )
+            _persist_terminal(artifact_dir, state.terminal)
     if not states:
-        summary = _summary(states, triage_complete=True)
+        summary = _summary(
+            states,
+            triage_complete=True,
+            selected_survivor_count=0,
+            triage_wall_clock_seconds=time.monotonic() - triage_started,
+        )
         _write_json(artifact_dir / "triage" / "summary.json", summary)
         return summary
 
@@ -320,6 +356,8 @@ def triage_survivors(
                         unified_diff=state.context.unified_diff,
                         prior_attempts=tuple(state.feedback),
                     )
+                    state.generator_calls += 1
+                    generation_started = time.monotonic()
                     try:
                         generated = generator.generate(request)
                     except AdversarialGeneratorError as exc:
@@ -331,6 +369,10 @@ def triage_survivors(
                         )
                         _persist_terminal(artifact_dir, state.terminal)
                         continue
+                    finally:
+                        state.generator_wall_clock_seconds += (
+                            time.monotonic() - generation_started
+                        )
                     job_id = (
                         f"{state.context.mutant.candidate.id}"
                         f"-attempt-{state.generation_attempts:02d}"
@@ -430,6 +472,11 @@ def triage_survivors(
                 )
                 _persist_terminal(artifact_dir, state.terminal)
 
-    summary = _summary(states, triage_complete=triage_complete)
+    summary = _summary(
+        states,
+        triage_complete=triage_complete,
+        selected_survivor_count=selected_survivor_count,
+        triage_wall_clock_seconds=time.monotonic() - triage_started,
+    )
     _write_json(artifact_dir / "triage" / "summary.json", summary)
     return summary
