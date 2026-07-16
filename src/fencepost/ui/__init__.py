@@ -125,12 +125,14 @@ def _logo(*, linked: bool = True) -> str:
     closing = "</a>" if linked else "</span>"
     return f"""
 {opening}
-  <svg class="brand-mark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-    <rect x="12" y="30" width="9" height="54" rx="2" fill="currentColor"/>
-    <rect x="30" y="30" width="9" height="54" rx="2" fill="currentColor"/>
-    <rect class="brand-post-offset" x="48" y="44" width="9" height="40" rx="2" fill="currentColor"/>
-    <rect x="66" y="30" width="9" height="54" rx="2" fill="currentColor"/>
-    <rect x="84" y="30" width="9" height="54" rx="2" fill="currentColor"/>
+  <svg class="brand-mark" viewBox="0 0 120 100" fill="none" aria-hidden="true">
+    <rect class="brand-rail" x="5" y="43" width="110" height="7" fill="currentColor"/>
+    <rect class="brand-rail" x="5" y="66" width="110" height="7" fill="currentColor"/>
+    <rect x="9" y="18" width="8" height="70" rx="2" fill="currentColor"/>
+    <rect x="33" y="18" width="8" height="70" rx="2" fill="currentColor"/>
+    <rect class="brand-post-offset" x="57" y="38" width="8" height="62" rx="2" fill="currentColor"/>
+    <rect x="81" y="18" width="8" height="70" rx="2" fill="currentColor"/>
+    <rect x="105" y="18" width="8" height="70" rx="2" fill="currentColor"/>
   </svg>
   <span class="wordmark"><span>fence</span><span class="wordmark-post">post</span></span>
 {closing}""".strip()
@@ -937,35 +939,44 @@ def _hero_evidence(report: Mapping[str, Any]) -> str:
     mutation = _mapping(mutant.get("mutation"))
     evidence = _mapping(mutant.get("evidence"))
     change = _change_line(mutation)
-    suite = _suite_state(mutant)
+    submitted_execution = _mapping(
+        _mapping(mutant.get("mutant")).get("execution")
+    )
+    if submitted_execution.get("status") != "survived":
+        return ""
+    submitted_count = mutant.get("submitted_suite_tests_passed")
+    submitted_label = (
+        f"Their {submitted_count} tests"
+        if isinstance(submitted_count, int)
+        and not isinstance(submitted_count, bool)
+        else "Their submitted tests"
+    )
     hero_failure = dict(_mapping(evidence.get("failing_assertion")))
     if hero_failure.get("message") is None:
         return ""
-    hero_failure.pop("detail", None)
-    failure = _failure_section(
-        {
-            "failing_assertion": hero_failure,
-            "mutant_execution": evidence.get("mutant_execution"),
-        }
-    )
+    failed_execution = _mapping(evidence.get("mutant_execution"))
     source = _source_section(grounding)
-    if not source or not change or not suite or not failure:
+    if not source or not change:
         return ""
-    question = _mapping(place.get("question")).get("question_text")
     return f"""<article class="hero-evidence" aria-label="Top-ranked execution evidence">
-  <header class="hero-evidence-header">
-    <p class="eyebrow">Top-ranked execution evidence</p>
-    {f'<p class="hero-question">{_text(question)}</p>' if question else ''}
-  </header>
   <div class="hero-source">{source}</div>
   <section class="hero-change">
     <p class="step-label"><span>2</span> Change considered</p>
     <div class="change-line">{change}</div>
   </section>
-  <div class="hero-results">
-    <div><p class="step-label"><span>3</span> Submitted tests</p>{suite}</div>
-    {failure}
-  </div>
+  <p class="hero-pass-line" aria-label="Submitted test suite passed">
+    {_icon("check", "hero-status-icon")}
+    <span>{_text(submitted_label)} <strong>— passed</strong></span>
+  </p>
+  <section class="hero-failure" aria-label="Adversarial test failed on changed code">
+    {_icon("cross", "hero-status-icon")}
+    <div>
+      <p class="step-label">Result on changed code</p>
+      {f'<p class="state-result">{_text(failed_execution.get("status"))}</p>' if failed_execution.get('status') is not None else ''}
+      {f'<p class="failure-node">{_code(hero_failure.get("nodeid"))}</p>' if hero_failure.get('nodeid') else ''}
+      <pre class="hero-failure-message"><code>{_text(hero_failure.get("message"))}</code></pre>
+    </div>
+  </section>
 </article>"""
 
 

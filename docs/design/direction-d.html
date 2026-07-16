@@ -1,0 +1,126 @@
+<meta charset="utf-8"><title>D — synthesis</title>
+<style>
+:root{
+  --bg:#0B0C0E; --panel:#131519; --sunk:#0E1013; --line:#252930;
+  --ink:#EDEFF2; --dim:#9BA3AF; --faint:#6B7280;
+  --pass:#3DD68C; --fail:#FF6B6B;
+  --pass-bg:rgba(61,214,140,.10); --fail-bg:rgba(255,107,107,.10);
+  --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1020px;margin:0 auto;padding:0 28px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.mark{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:14px;font-weight:600;letter-spacing:-.02em}
+.mark svg{width:19px;height:19px}
+.nav{display:flex;gap:3px}
+.nav a{font-family:var(--mono);font-size:12px;color:var(--faint);padding:5px 10px;border-radius:6px;text-decoration:none}
+.nav a[aria-current]{background:var(--panel);color:var(--ink)}
+
+/* HEADLINE — the thesis. no name, no badge. */
+.head{padding:56px 0 30px}
+h1{font-size:clamp(30px,4vw,46px);line-height:1.1;letter-spacing:-.035em;font-weight:650;max-width:20ch}
+h1 em{font-style:normal;color:var(--faint)}
+.sub{margin-top:18px;color:var(--dim);max-width:64ch;font-size:16px}
+.sub b{color:var(--ink);font-family:var(--mono);font-size:15px;font-weight:600}
+/* the name lives HERE, in metadata, not in the headline */
+.meta{margin-top:18px;font-family:var(--mono);font-size:11.5px;color:var(--faint);display:flex;gap:8px;flex-wrap:wrap}
+.meta span:not(:last-child)::after{content:" ·";margin-left:8px}
+
+.flow{display:flex;gap:3px;margin-top:26px;max-width:560px;height:7px}
+.flow span{border-radius:99px}
+.legend{display:flex;gap:18px;margin-top:11px;font-family:var(--mono);font-size:11px;color:var(--faint);flex-wrap:wrap}
+.legend i{width:7px;height:7px;border-radius:2px;display:inline-block;margin-right:6px}
+.legend a{color:var(--dim);text-underline-offset:3px}
+
+/* THE QUESTION is the hero */
+.card{margin-top:42px;border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+.card-h{display:flex;align-items:baseline;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--faint)}
+.card-h .k{letter-spacing:.11em;text-transform:uppercase;color:var(--dim)}
+.card-h .r{margin-left:auto}
+.q{padding:26px 18px 8px;font-size:21px;line-height:1.45;letter-spacing:-.015em;max-width:62ch}
+.q code{font-family:var(--mono);font-size:18px;background:var(--sunk);padding:2px 6px;border-radius:4px;border:1px solid var(--line)}
+.prov{padding:0 18px 20px;font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+.prov b{color:var(--dim);font-weight:400}
+
+/* the diff — kept: both judges said it reads correctly */
+.diff{font-family:var(--mono);font-size:13px;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:46px 20px 1fr;align-items:baseline}
+.row .n{color:var(--faint);text-align:right;padding:4px 10px 4px 0;user-select:none}
+.row .s{text-align:center;color:var(--faint)}
+.row .c{padding:4px 12px;white-space:pre}
+.row.del{background:var(--fail-bg)} .row.del .s{color:var(--fail)} .row.del .c{color:#FFD9D9}
+.row.add{background:var(--pass-bg)} .row.add .s{color:var(--pass)} .row.add .c{color:#D2F7E4}
+.row.add .n{color:transparent}
+
+/* run states — equal rank, but NO ci glyphs on a person. quoted evidence. */
+.runs{border-top:1px solid var(--line);padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.run{display:flex;align-items:baseline;gap:10px;font-family:var(--mono);font-size:13px}
+.run .who{color:var(--dim);min-width:210px}
+.run .verb{font-weight:600}
+.run .t{margin-left:auto;color:var(--faint);font-size:11px}
+.run.ok .verb{color:var(--pass)} .run.no .verb{color:var(--fail)}
+.quote{margin:2px 0 0;border-left:2px solid var(--fail);background:var(--sunk);padding:12px 14px;border-radius:0 6px 6px 0}
+.quote pre{font-family:var(--mono);font-size:13px;white-space:pre-wrap;color:var(--ink)}
+.quote .cap{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+
+/* withheld — promoted, not a grey dot */
+.withheld{margin-top:14px;border:1px dashed var(--line);border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:baseline}
+.withheld .lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.withheld p{color:var(--dim);font-size:14px;max-width:70ch}
+.withheld b{color:var(--ink)}
+</style>
+<div class="wrap">
+  <div class="top">
+    <span class="mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M2 8h20M2 16h20" stroke="currentColor" stroke-width="1.5"/><path d="M6 3v18M12 3v18M18 3v18" stroke="currentColor" stroke-width="1.5"/><path d="M12 9v18" stroke="#FF6B6B" stroke-width="2.6"/></svg>
+      fence<span style="color:#FF6B6B">post</span>
+    </span>
+    <span class="nav"><a aria-current="page">Report</a><a>Student</a><a>Method</a></span>
+  </div>
+
+  <div class="head">
+    <h1>Ten tests pass. <em>Three functions say nothing.</em></h1>
+    <p class="sub">We made <b>51</b> small changes to code Git attributes to this student. Their own tests caught <b>30</b>. Of the <b>21</b> they missed, <b>20</b> are fair to discuss. We withheld <b>1</b>.</p>
+    <p class="meta"><span>Diego Ramos</span><span>commit 3a93a3e</span><span>CS2 · assignment 3</span><span>2026-07-16</span></p>
+    <div class="flow">
+      <span style="background:var(--pass);flex:30"></span>
+      <span style="background:var(--fail);flex:20"></span>
+      <span style="background:var(--faint);flex:1"></span>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--pass)"></i>30 caught by their tests</span>
+      <span><i style="background:var(--fail)"></i>20 worth discussing</span>
+      <span><i style="background:var(--faint)"></i><a href="#w">1 withheld — see why</a></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span class="k">Start here</span><span>percentile</span><span class="r">1 of 8 · ranked by evidence</span></div>
+    <p class="q">What grade should <code>letter_grade</code> return at the A/B cutoff, and why does including or excluding that boundary change the result?</p>
+    <p class="prov">line 38 · commit <b>dceec68</b> · 2026-07-09 · <b>"implement percentile"</b> — their own commit says they fixed this</p>
+
+    <div class="diff">
+      <div class="row"><span class="n">37</span><span class="s"></span><span class="c">    ordered = sorted(scores)</span></div>
+      <div class="row del"><span class="n">38</span><span class="s">−</span><span class="c">    k = int(len(ordered) * p / 100)</span></div>
+      <div class="row add"><span class="n">38</span><span class="s">+</span><span class="c">    k = int(len(ordered) * p / 99)</span></div>
+      <div class="row"><span class="n">39</span><span class="s"></span><span class="c">    if k >= len(ordered):</span></div>
+    </div>
+
+    <div class="runs">
+      <div class="run ok"><span class="who">Their submitted suite</span><span class="verb">passed</span><span class="t">10 tests · 0.05s</span></div>
+      <div class="run no"><span class="who">Test written by GPT-5.6</span><span class="verb">failed</span><span class="t">sandboxed · no network</span></div>
+      <div class="quote">
+        <p class="cap">What it printed</p>
+        <pre>assert 30 == 20
+ +  where 30 = percentile([10, 20, 30], 66)</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="withheld" id="w">
+    <span class="lab">Deliberately<br>not asked</span>
+    <p>We found a way to break one more change — but only by feeding the function a fake object no real caller would write. That isn't a fair question, so we dropped it. <b>The evidence is kept for audit.</b></p>
+  </div>
+</div>

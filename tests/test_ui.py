@@ -174,6 +174,11 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
     assert "Their 10 tests" in hero
     assert "assert False" in hero
     assert "<details" not in hero
+    assert 'class="hero-pass-line"' in hero
+    assert 'class="hero-failure"' in hero
+    assert "run-state-pass" not in hero
+    assert "hero-results" not in hero
+    assert document.count('class="brand-rail"') == 2
     assert document.index('<article class="hero-evidence"') < document.index(
         '<section class="mutation-flow"'
     )
