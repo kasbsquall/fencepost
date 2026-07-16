@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fixture-fake",
+    "response_id": null,
+    "source": "from gradebook.analytics import letter_grade\n\ndef test_letter_grade_numeric_boundary_60_61():\n    assert letter_grade(60) == 'D'\n",
+    "targeted_behavior": "letter_grade threshold literal 60 -> 61"
+  },
+  "mutant": {
+    "duration_seconds": 0.6998668149999503,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_letter_grade_numeric_boundary_60_61():\n>       assert letter_grade(60) == 'D'\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0011/test_adversarial.py:4: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+      "nodeid": ".fencepost-generated-0011.test_adversarial::test_letter_grade_numeric_boundary_60_61"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________ test_letter_grade_numeric_boundary_60_61 ___________________\n\n    def test_letter_grade_numeric_boundary_60_61():\n>       assert letter_grade(60) == 'D'\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0011/test_adversarial.py:4: AssertionError\n----- generated xml file: /work/jobs/triage-0011-0t270vpq/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0011/test_adversarial.py::test_letter_grade_numeric_boundary_60_61\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.7205028089999814,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0011-0t270vpq/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

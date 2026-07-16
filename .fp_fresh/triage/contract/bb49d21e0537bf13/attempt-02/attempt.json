@@ -1,0 +1,38 @@
+{
+  "attempt": 2,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fixture-fake",
+    "response_id": null,
+    "source": "from gradebook.analytics import percentile\n\ndef test_plain_percentile_index():\n    assert percentile([10, 20, 30], 50) == 20\n",
+    "targeted_behavior": "plain numeric percentile index"
+  },
+  "mutant": {
+    "duration_seconds": 0.5660187980000728,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-d_u1ru0_/mutant/junit.xml -----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.6203535770000599,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-d_u1ru0_/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "NOT_DISTINGUISHED",
+  "valid_attempt_number": 1
+}

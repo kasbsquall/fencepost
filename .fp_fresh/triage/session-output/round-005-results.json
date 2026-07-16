@@ -1,0 +1,31 @@
+{
+  "duration_seconds": 1.2282918189999918,
+  "infrastructure_errors": [],
+  "results": {
+    "contract-bb49d21e0537bf13-attempt-04": {
+      "mutant": {
+        "duration_seconds": 0.5867725169999858,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-wi2qbq72/mutant/junit.xml -----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.5752239430000827,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-wi2qbq72/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "NOT_DISTINGUISHED"
+    }
+  }
+}

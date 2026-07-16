@@ -1,0 +1,116 @@
+{
+  "artifact_refs": [
+    "mutants/ebad6149cee857c9/result.json",
+    "triage/contract/ebad6149cee857c9/attempt-01/attempt.json",
+    "probe/sites/site-75bdf49c9de4c8db/mutants/ebad6149cee857c9.json"
+  ],
+  "evidence": {
+    "adversarial_test": {
+      "generation_duration_seconds": 0.0,
+      "input_tokens": null,
+      "model": null,
+      "output_tokens": null,
+      "provider": "fixture-fake",
+      "response_id": null,
+      "source": "from gradebook.analytics import percentile\n\ndef test_percentile_one_hundred_returns_maximum():\n    assert percentile([10, 20, 30], 100) == 30\n",
+      "targeted_behavior": "percentile at the upper endpoint"
+    },
+    "failing_assertion": {
+      "detail": "def test_percentile_one_hundred_returns_maximum():\n>       assert percentile([10, 20, 30], 100) == 30\n\n.fencepost-generated-0019/test_adversarial.py:4: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [10, 20, 30], p = 100\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n        k = int(len(ordered) * p / 100)\n        if k > len(ordered):\n            k = len(ordered) - 1\n>       return ordered[k]\nE       IndexError: list index out of range\n\ngradebook/analytics.py:38: IndexError",
+      "kind": "failure",
+      "message": "IndexError: list index out of range",
+      "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_one_hundred_returns_maximum"
+    },
+    "mutant_execution": {
+      "duration_seconds": 0.916448005999996,
+      "exit_code": 1,
+      "failure": {
+        "detail": "def test_percentile_one_hundred_returns_maximum():\n>       assert percentile([10, 20, 30], 100) == 30\n\n.fencepost-generated-0019/test_adversarial.py:4: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [10, 20, 30], p = 100\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n        k = int(len(ordered) * p / 100)\n        if k > len(ordered):\n            k = len(ordered) - 1\n>       return ordered[k]\nE       IndexError: list index out of range\n\ngradebook/analytics.py:38: IndexError",
+        "kind": "failure",
+        "message": "IndexError: list index out of range",
+        "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_one_hundred_returns_maximum"
+      },
+      "status": "failed",
+      "stderr": "",
+      "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_percentile_one_hundred_returns_maximum __________________\n\n    def test_percentile_one_hundred_returns_maximum():\n>       assert percentile([10, 20, 30], 100) == 30\n\n.fencepost-generated-0019/test_adversarial.py:4: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [10, 20, 30], p = 100\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n        k = int(len(ordered) * p / 100)\n        if k > len(ordered):\n            k = len(ordered) - 1\n>       return ordered[k]\nE       IndexError: list index out of range\n\ngradebook/analytics.py:38: IndexError\n----- generated xml file: /work/jobs/triage-0019-fxgg_74y/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_one_hundred_returns_maximum\n1 failed in 0.03s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "original_execution": {
+      "duration_seconds": 0.7425080110000408,
+      "exit_code": 0,
+      "failure": null,
+      "status": "passed",
+      "stderr": "",
+      "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-fxgg_74y/original/junit.xml ----\n1 passed in 0.01s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "triage_artifact_ref": "triage/contract/ebad6149cee857c9/attempt-01/attempt.json"
+  },
+  "module_path": "gradebook.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "Gt",
+      "anchor": {
+        "column": 7,
+        "end_column": 24,
+        "end_line": 39,
+        "line": 39
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "GtE",
+      "id": "ebad6149cee857c9",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "k >= len(ordered)"
+    },
+    "execution": {
+      "duration_seconds": 0.9845657060000121,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0035-mk0_vg1d/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 7,
+      "end_column": 23,
+      "end_line": 36,
+      "line": 36
+    }
+  },
+  "mutant_id": "ebad6149cee857c9",
+  "mutated_function": "def percentile(scores, p):\n    \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n    p = clamp_percent(p)\n    ordered = sorted(scores)\n    k = int(len(ordered) * p / 100)\n    if k > len(ordered):\n        k = len(ordered) - 1\n    return ordered[k]",
+  "mutation": {
+    "mutated_segment": "k > len(ordered)",
+    "original_segment": "k >= len(ordered)",
+    "unified_diff": "--- original\n+++ mutant\n@@ -3,6 +3,6 @@\n     p = clamp_percent(p)\n     ordered = sorted(scores)\n     k = int(len(ordered) * p / 100)\n-    if k >= len(ordered):\n+    if k > len(ordered):\n         k = len(ordered) - 1\n     return ordered[k]"
+  },
+  "original_function": "def percentile(scores, p):\n    \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n    p = clamp_percent(p)\n    ordered = sorted(scores)\n    k = int(len(ordered) * p / 100)\n    if k >= len(ordered):\n        k = len(ordered) - 1\n    return ordered[k]",
+  "qualified_function_name": "percentile",
+  "submitted_suite_artifact_ref": "mutants/ebad6149cee857c9/result.json",
+  "submitted_suite_tests_passed": 10
+}

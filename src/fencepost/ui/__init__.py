@@ -664,16 +664,12 @@ def _function_flows(assessments: Sequence[Mapping[str, Any]]) -> str:
         total = item.get("total_mutants")
         caught = item.get("killed_by_submitted_tests")
         discuss = item.get("question_mutants")
-        discuss_noun = "to discuss"
-        if _count(discuss) is None:
-            discuss = item.get("contract_real_gap_mutants")
-            discuss_noun = "verified gaps"
         withheld = item.get("not_questioned_mutants")
         flow = _outcome_flow(
             total=total,
             segments=(
                 ("caught", "caught", caught),
-                ("discuss", discuss_noun, discuss),
+                ("discuss", "to discuss", discuss),
                 ("withheld", "withheld", withheld),
             ),
             label=f"{name or 'Unknown function'} change outcomes",

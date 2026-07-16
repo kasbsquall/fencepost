@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.7969653139999764,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_upper_boundary_preserves_float_representation():\n>       assert str(clamp_percent(100.0)) == '100.0'\nE       AssertionError: assert '100' == '100.0'\nE         \nE         - 100.0\nE         ?    --\nE         + 100\n\n.fencepost-generated-0015/test_adversarial.py:4: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert '100' == '100.0'\n  \n  - 100.0\n  ?    --\n  + 100",
+    "nodeid": ".fencepost-generated-0015.test_adversarial::test_upper_boundary_preserves_float_representation"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________ test_upper_boundary_preserves_float_representation ______________\n\n    def test_upper_boundary_preserves_float_representation():\n>       assert str(clamp_percent(100.0)) == '100.0'\nE       AssertionError: assert '100' == '100.0'\nE         \nE         - 100.0\nE         ?    --\nE         + 100\n\n.fencepost-generated-0015/test_adversarial.py:4: AssertionError\n----- generated xml file: /work/jobs/triage-0015-_8xc6cfm/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0015/test_adversarial.py::test_upper_boundary_preserves_float_representation\n1 failed in 0.02s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

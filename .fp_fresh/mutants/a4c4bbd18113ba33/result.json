@@ -1,0 +1,61 @@
+{
+  "candidate": {
+    "after": "101",
+    "anchor": {
+      "column": 31,
+      "end_column": 34,
+      "end_line": 38,
+      "line": 38
+    },
+    "ast_path": [
+      {
+        "field": "body",
+        "index": 3
+      },
+      {
+        "field": "body",
+        "index": 3
+      },
+      {
+        "field": "value",
+        "index": null
+      },
+      {
+        "field": "args",
+        "index": 0
+      },
+      {
+        "field": "right",
+        "index": null
+      }
+    ],
+    "before": "100",
+    "id": "a4c4bbd18113ba33",
+    "kind": "numeric_boundary",
+    "parameters": [
+      [
+        "direction",
+        "1"
+      ]
+    ],
+    "path": "gradebook/analytics.py",
+    "source_segment": "100"
+  },
+  "execution": {
+    "duration_seconds": 1.0065974249999954,
+    "exit_code": 1,
+    "failing_tests": [
+      "tests.test_analytics::test_percentile_low"
+    ],
+    "status": "killed",
+    "stderr": "",
+    "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.....F....                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_percentile_low ______________________________\n\n    def test_percentile_low():\n>       assert percentile([10, 20, 30, 40, 50], 20) == 20\nE       assert 10 == 20\nE        +  where 10 = percentile([10, 20, 30, 40, 50], 20)\n\ntests/test_analytics.py:25: AssertionError\n------------ generated xml file: /work/jobs/0034-344ga8nn/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_percentile_low - assert 10 == 20\n1 failed, 9 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "generated_anchor": {
+    "column": 31,
+    "end_column": 34,
+    "end_line": 35,
+    "line": 35
+  }
+}

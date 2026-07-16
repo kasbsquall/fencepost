@@ -1,0 +1,124 @@
+{
+  "artifact_refs": [
+    "mutants/764a18c525e359d6/result.json",
+    "triage/contract/764a18c525e359d6/attempt-01/attempt.json",
+    "probe/sites/site-b9aeb2d417c38766/mutants/764a18c525e359d6.json"
+  ],
+  "evidence": {
+    "adversarial_test": {
+      "generation_duration_seconds": 0.0,
+      "input_tokens": null,
+      "model": null,
+      "output_tokens": null,
+      "provider": "fixture-fake",
+      "response_id": null,
+      "source": "from gradebook.analytics import clamp_percent, percentile\n\ndef test_upper_numeric_boundaries():\n    assert clamp_percent(99.5) == 99.5\n    assert percentile([30, 10, 20], 66) == 20\n",
+      "targeted_behavior": "upper clamp and percentile denominator boundaries"
+    },
+    "failing_assertion": {
+      "detail": "def test_upper_numeric_boundaries():\n        assert clamp_percent(99.5) == 99.5\n>       assert percentile([30, 10, 20], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = percentile([30, 10, 20], 66)\n\n.fencepost-generated-0018/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "assert 30 == 20\n +  where 30 = percentile([30, 10, 20], 66)",
+      "nodeid": ".fencepost-generated-0018.test_adversarial::test_upper_numeric_boundaries"
+    },
+    "mutant_execution": {
+      "duration_seconds": 0.9232628070000146,
+      "exit_code": 1,
+      "failure": {
+        "detail": "def test_upper_numeric_boundaries():\n        assert clamp_percent(99.5) == 99.5\n>       assert percentile([30, 10, 20], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = percentile([30, 10, 20], 66)\n\n.fencepost-generated-0018/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "assert 30 == 20\n +  where 30 = percentile([30, 10, 20], 66)",
+        "nodeid": ".fencepost-generated-0018.test_adversarial::test_upper_numeric_boundaries"
+      },
+      "status": "failed",
+      "stderr": "",
+      "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________________ test_upper_numeric_boundaries _________________________\n\n    def test_upper_numeric_boundaries():\n        assert clamp_percent(99.5) == 99.5\n>       assert percentile([30, 10, 20], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = percentile([30, 10, 20], 66)\n\n.fencepost-generated-0018/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0018-s_y0e0h9/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0018/test_adversarial.py::test_upper_numeric_boundaries\n1 failed in 0.03s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "original_execution": {
+      "duration_seconds": 0.7467846929999951,
+      "exit_code": 0,
+      "failure": null,
+      "status": "passed",
+      "stderr": "",
+      "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-s_y0e0h9/original/junit.xml ----\n1 passed in 0.01s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "triage_artifact_ref": "triage/contract/764a18c525e359d6/attempt-01/attempt.json"
+  },
+  "module_path": "gradebook.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "99",
+      "anchor": {
+        "column": 31,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        },
+        {
+          "field": "right",
+          "index": null
+        }
+      ],
+      "before": "100",
+      "id": "764a18c525e359d6",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    "execution": {
+      "duration_seconds": 0.9926694160000125,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0033-6lve__1b/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 31,
+      "end_column": 33,
+      "end_line": 35,
+      "line": 35
+    }
+  },
+  "mutant_id": "764a18c525e359d6",
+  "mutated_function": "def percentile(scores, p):\n    \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n    p = clamp_percent(p)\n    ordered = sorted(scores)\n    k = int(len(ordered) * p / 99)\n    if k >= len(ordered):\n        k = len(ordered) - 1\n    return ordered[k]",
+  "mutation": {
+    "mutated_segment": "99",
+    "original_segment": "100",
+    "unified_diff": "--- original\n+++ mutant\n@@ -2,7 +2,7 @@\n     \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n     p = clamp_percent(p)\n     ordered = sorted(scores)\n-    k = int(len(ordered) * p / 100)\n+    k = int(len(ordered) * p / 99)\n     if k >= len(ordered):\n         k = len(ordered) - 1\n     return ordered[k]"
+  },
+  "original_function": "def percentile(scores, p):\n    \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n    p = clamp_percent(p)\n    ordered = sorted(scores)\n    k = int(len(ordered) * p / 100)\n    if k >= len(ordered):\n        k = len(ordered) - 1\n    return ordered[k]",
+  "qualified_function_name": "percentile",
+  "submitted_suite_artifact_ref": "mutants/764a18c525e359d6/result.json",
+  "submitted_suite_tests_passed": 10
+}

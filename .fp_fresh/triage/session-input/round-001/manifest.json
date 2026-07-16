@@ -1,0 +1,156 @@
+{
+  "import_roots": [
+    "."
+  ],
+  "jobs": [
+    {
+      "attempt": 1,
+      "id": "strict-86e0917e5c6bf1d8-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0000-mutant.py",
+      "test_file": "0000-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-2e231a949dfe891d-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0001-mutant.py",
+      "test_file": "0001-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-1d2de104b4e2ea87-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0002-mutant.py",
+      "test_file": "0002-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-bc57b02d4b5d32a1-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0003-mutant.py",
+      "test_file": "0003-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-de6e7433e88c46a6-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0004-mutant.py",
+      "test_file": "0004-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-ce1508b29bd64233-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0005-mutant.py",
+      "test_file": "0005-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-75b9f689f32ac45a-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0006-mutant.py",
+      "test_file": "0006-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-dbb83dad668b1b68-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0007-mutant.py",
+      "test_file": "0007-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-8e3bb3b74b5e7623-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0008-mutant.py",
+      "test_file": "0008-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-9e215f782bcfc8e3-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0009-mutant.py",
+      "test_file": "0009-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-db66414d596970b4-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0010-mutant.py",
+      "test_file": "0010-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-7d45e006f2ec7b27-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0011-mutant.py",
+      "test_file": "0011-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-67c52a2840605244-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0012-mutant.py",
+      "test_file": "0012-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-ab756a31efd05a69-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0013-mutant.py",
+      "test_file": "0013-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-44bc84979be41b9d-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0014-mutant.py",
+      "test_file": "0014-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-92261c57ed4e3d56-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0015-mutant.py",
+      "test_file": "0015-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-086eee6e74bf01f0-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0016-mutant.py",
+      "test_file": "0016-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-2e3d6e7b8bdac2ad-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0017-mutant.py",
+      "test_file": "0017-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-bb49d21e0537bf13-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0018-mutant.py",
+      "test_file": "0018-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-764a18c525e359d6-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0019-mutant.py",
+      "test_file": "0019-test.py"
+    },
+    {
+      "attempt": 1,
+      "id": "strict-ebad6149cee857c9-attempt-01",
+      "path": "gradebook/analytics.py",
+      "source_file": "0020-mutant.py",
+      "test_file": "0020-test.py"
+    }
+  ],
+  "timeout_seconds": 10.0,
+  "workers": 4
+}

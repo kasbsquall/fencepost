@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fixture-fake",
+    "response_id": null,
+    "source": "from gradebook.analytics import percentile\n\nclass DivergentDivision:\n    def __lt__(self, other):\n        return False\n    def __gt__(self, other):\n        return False\n    def __rmul__(self, other):\n        return self\n    def __truediv__(self, other):\n        return 1\n    def __floordiv__(self, other):\n        return 0\n\ndef test_custom_division_protocol():\n    assert percentile([10, 20], DivergentDivision()) == 20\n",
+    "targeted_behavior": "custom true-division versus floor-division protocol"
+  },
+  "mutant": {
+    "duration_seconds": 0.683829768999999,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_custom_division_protocol():\n>       assert percentile([10, 20], DivergentDivision()) == 20\nE       assert 10 == 20\nE        +  where 10 = percentile([10, 20], <test_adversarial.DivergentDivision object at 0x70ebc25d9400>)\nE        +    where <test_adversarial.DivergentDivision object at 0x70ebc25d9400> = DivergentDivision()\n\n.fencepost-generated-0018/test_adversarial.py:16: AssertionError",
+      "kind": "failure",
+      "message": "assert 10 == 20\n +  where 10 = percentile([10, 20], <test_adversarial.DivergentDivision object at 0x70ebc25d9400>)\n +    where <test_adversarial.DivergentDivision object at 0x70ebc25d9400> = DivergentDivision()",
+      "nodeid": ".fencepost-generated-0018.test_adversarial::test_custom_division_protocol"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________________ test_custom_division_protocol _________________________\n\n    def test_custom_division_protocol():\n>       assert percentile([10, 20], DivergentDivision()) == 20\nE       assert 10 == 20\nE        +  where 10 = percentile([10, 20], <test_adversarial.DivergentDivision object at 0x70ebc25d9400>)\nE        +    where <test_adversarial.DivergentDivision object at 0x70ebc25d9400> = DivergentDivision()\n\n.fencepost-generated-0018/test_adversarial.py:16: AssertionError\n----- generated xml file: /work/jobs/triage-0018-x747sudk/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0018/test_adversarial.py::test_custom_division_protocol\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.7042655710000645,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-x747sudk/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

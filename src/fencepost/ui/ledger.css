@@ -214,7 +214,7 @@ h2 { margin-bottom: 8px; font-size: clamp(28px, 4vw, 42px); font-weight: 400; }
 .flow-caught { background: var(--green); }
 .flow-discuss { background: var(--red); }
 .flow-withheld { background: var(--tan); }
-.flow-unclassified { background: var(--sunken); }
+.flow-unclassified { background: transparent; }
 
 .outcome-flow-compact caption { display: none; }
 .outcome-flow-compact .flow-label { height: 27px; padding-bottom: 6px; }
@@ -881,7 +881,7 @@ footer {
   .command-ledger li { grid-template-columns: 1fr; gap: 9px; }
   .method-door { align-items: flex-start; flex-direction: column; }
   .function-flow-list { padding: 18px; }
-  .flow-label { font-size: 10px; white-space: normal; }
+  .flow-label { font-size: 11px; white-space: normal; }
   .site-card > summary, .shielded-card > summary { grid-template-columns: 1fr; gap: 14px; padding: 20px 50px 20px 18px; }
   .site-evidence, .shielded-body { padding: 26px 17px 20px; }
   .mutation-story > summary { padding: 17px; }

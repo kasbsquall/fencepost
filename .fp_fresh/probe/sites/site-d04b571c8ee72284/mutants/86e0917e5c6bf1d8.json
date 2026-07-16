@@ -1,0 +1,116 @@
+{
+  "artifact_refs": [
+    "mutants/86e0917e5c6bf1d8/result.json",
+    "triage/contract/86e0917e5c6bf1d8/attempt-01/attempt.json",
+    "probe/sites/site-d04b571c8ee72284/mutants/86e0917e5c6bf1d8.json"
+  ],
+  "evidence": {
+    "adversarial_test": {
+      "generation_duration_seconds": 0.0,
+      "input_tokens": null,
+      "model": null,
+      "output_tokens": null,
+      "provider": "fixture-fake",
+      "response_id": null,
+      "source": "from gradebook.analytics import letter_grade\n\ndef test_letter_grade_boundary_90():\n    assert letter_grade(90) == 'A'\n",
+      "targeted_behavior": "letter_grade exact 90 boundary"
+    },
+    "failing_assertion": {
+      "detail": "def test_letter_grade_boundary_90():\n>       assert letter_grade(90) == 'A'\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:4: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+      "nodeid": ".fencepost-generated-0000.test_adversarial::test_letter_grade_boundary_90"
+    },
+    "mutant_execution": {
+      "duration_seconds": 0.8519358679999414,
+      "exit_code": 1,
+      "failure": {
+        "detail": "def test_letter_grade_boundary_90():\n>       assert letter_grade(90) == 'A'\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:4: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+        "nodeid": ".fencepost-generated-0000.test_adversarial::test_letter_grade_boundary_90"
+      },
+      "status": "failed",
+      "stderr": "",
+      "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________________ test_letter_grade_boundary_90 _________________________\n\n    def test_letter_grade_boundary_90():\n>       assert letter_grade(90) == 'A'\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:4: AssertionError\n----- generated xml file: /work/jobs/triage-0000-p79llieg/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0000/test_adversarial.py::test_letter_grade_boundary_90\n1 failed in 0.02s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "original_execution": {
+      "duration_seconds": 0.7223953699999583,
+      "exit_code": 0,
+      "failure": null,
+      "status": "passed",
+      "stderr": "",
+      "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-p79llieg/original/junit.xml ----\n1 passed in 0.01s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "triage_artifact_ref": "triage/contract/86e0917e5c6bf1d8/attempt-01/attempt.json"
+  },
+  "module_path": "gradebook.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "Gt",
+      "anchor": {
+        "column": 7,
+        "end_column": 18,
+        "end_line": 13,
+        "line": 13
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "GtE",
+      "id": "86e0917e5c6bf1d8",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "score >= 90"
+    },
+    "execution": {
+      "duration_seconds": 1.0413926560000846,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0000-fchdfvqk/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 7,
+      "end_column": 17,
+      "end_line": 12,
+      "line": 12
+    }
+  },
+  "mutant_id": "86e0917e5c6bf1d8",
+  "mutated_function": "def letter_grade(score):\n    \"\"\"Return the letter grade for a numeric score.\n\n    A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n    \"\"\"\n    if score > 90:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 60:\n        return 'D'\n    else:\n        return 'F'",
+  "mutation": {
+    "mutated_segment": "score > 90",
+    "original_segment": "score >= 90",
+    "unified_diff": "--- original\n+++ mutant\n@@ -3,13 +3,13 @@\n \n     A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n     \"\"\"\n-    if score >= 90:\n-        return \"A\"\n+    if score > 90:\n+        return 'A'\n     elif score >= 80:\n-        return \"B\"\n+        return 'B'\n     elif score >= 70:\n-        return \"C\"\n+        return 'C'\n     elif score >= 60:\n-        return \"D\"\n+        return 'D'\n     else:\n-        return \"F\"\n+        return 'F'"
+  },
+  "original_function": "def letter_grade(score):\n    \"\"\"Return the letter grade for a numeric score.\n\n    A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n    \"\"\"\n    if score >= 90:\n        return \"A\"\n    elif score >= 80:\n        return \"B\"\n    elif score >= 70:\n        return \"C\"\n    elif score >= 60:\n        return \"D\"\n    else:\n        return \"F\"",
+  "qualified_function_name": "letter_grade",
+  "submitted_suite_artifact_ref": "mutants/86e0917e5c6bf1d8/result.json",
+  "submitted_suite_tests_passed": 10
+}

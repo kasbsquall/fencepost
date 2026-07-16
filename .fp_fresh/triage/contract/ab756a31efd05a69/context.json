@@ -1,0 +1,122 @@
+{
+  "contract_rules": {
+    "allowed_function_definitions": "top-level synchronous test_* functions only",
+    "allowed_imports": [
+      "pytest",
+      "<module-under-test>"
+    ],
+    "allowed_input_values": [
+      "int",
+      "float",
+      "str",
+      "bool",
+      "None",
+      "list",
+      "tuple",
+      "dict",
+      "set"
+    ],
+    "forbidden_comparison_operators": [
+      "Is",
+      "IsNot"
+    ],
+    "forbidden_definition_nodes": [
+      "ClassDef",
+      "AsyncFunctionDef",
+      "Lambda"
+    ],
+    "forbidden_fixture_names": [
+      "monkeypatch"
+    ],
+    "forbidden_inspection_attributes": [
+      "__class__"
+    ],
+    "forbidden_inspection_calls": [
+      "isinstance",
+      "type",
+      "id"
+    ],
+    "forbidden_mock_modules": [
+      "unittest.mock",
+      "mock"
+    ],
+    "forbidden_mock_names": [
+      "mock",
+      "patch",
+      "monkeypatch"
+    ],
+    "forbidden_mutation_calls": [
+      "setattr",
+      "delattr",
+      "setitem"
+    ],
+    "limitation": "CONTRACT mode can hide a genuine behavioral gap when the only witness uses type, identity, a custom object, or another excluded input. This deliberate false-negative risk means its rate is execution-grounded only under the stated caller contract, not universal truth.",
+    "program_replacement_rationale": "A test that replaces part of the program is no longer evidence about the program.",
+    "resolved_allowed_imports": [
+      "pytest",
+      "gradebook.analytics"
+    ],
+    "target_arguments": "plain literals, containers of plain literals, unary signed numeric literals, or local names bound directly to those values"
+  },
+  "mode": "CONTRACT",
+  "module_path": "gradebook.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "-1",
+      "anchor": {
+        "column": 11,
+        "end_column": 12,
+        "end_line": 27,
+        "line": 27
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "0",
+      "id": "ab756a31efd05a69",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "0"
+    },
+    "execution": {
+      "duration_seconds": 0.9807960699999967,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0021-gbonxq_o/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 11,
+      "end_column": 13,
+      "end_line": 25,
+      "line": 25
+    }
+  },
+  "mutated_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < -1:\n        p = 0\n    if p > 100:\n        p = 100\n    return p",
+  "original_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 0:\n        p = 0\n    if p > 100:\n        p = 100\n    return p",
+  "qualified_function_name": "clamp_percent",
+  "unified_diff": "--- original\n+++ mutant\n@@ -1,6 +1,6 @@\n def clamp_percent(p):\n     \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n-    if p < 0:\n+    if p < -1:\n         p = 0\n     if p > 100:\n         p = 100"
+}
