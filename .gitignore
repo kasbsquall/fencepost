@@ -33,3 +33,7 @@ Thumbs.db
 .pytest-unit-local/
 .pytest-contract-*/
 .fp_two/
+.fp_new/
+.fp_v2/
+.pytest-*/
+answers.json

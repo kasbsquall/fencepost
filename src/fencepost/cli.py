@@ -27,6 +27,8 @@ def _parser() -> argparse.ArgumentParser:
         ),
         epilog=(
             "Use 'fencepost serve ARTIFACT_DIR' to open the read-only report UI. "
+            "Use 'fencepost probe ARTIFACT_DIR --out answers.json' for the "
+            "evidence-after-answer student flow. "
             "Scope: committed projects using only the standard library and pytest. "
             "Fencepost adds the repository root, conventional src/, and detected top-level packages to PYTHONPATH; "
             "it does not install requirements.txt, pyproject, or setup.py dependencies, or support custom build layouts. "
@@ -173,6 +175,10 @@ def main(argv: list[str] | None = None) -> int:
         from .serve import main as serve_main
 
         return serve_main(raw_args[1:])
+    if raw_args[:1] == ["probe"]:
+        from .probe_server import main as probe_main
+
+        return probe_main(raw_args[1:])
     parser = _parser()
     args = parser.parse_args(raw_args)
     if not args.skip_triage and not args.adversarial_model:

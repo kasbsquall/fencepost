@@ -39,3 +39,20 @@ def test_cli_dispatches_serve_without_starting_analysis(monkeypatch, tmp_path) -
     monkeypatch.setattr(fencepost.serve, "main", fake_serve)
     assert main(["serve", str(tmp_path), "--no-open"]) == 17
     assert received == [[str(tmp_path), "--no-open"]]
+
+
+def test_cli_dispatches_student_probe_without_starting_analysis(
+    monkeypatch, tmp_path
+) -> None:
+    import fencepost.probe_server
+
+    received = []
+
+    def fake_probe(argv):
+        received.append(argv)
+        return 19
+
+    monkeypatch.setattr(fencepost.probe_server, "main", fake_probe)
+    args = [str(tmp_path), "--out", str(tmp_path.parent / "answers.json"), "--no-open"]
+    assert main(["probe", *args]) == 19
+    assert received == [args]

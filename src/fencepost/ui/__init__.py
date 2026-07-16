@@ -116,9 +116,15 @@ def _inline_disclosure(label: str) -> str:
     return f'<summary>{_text(label)}{_icon("chevron", "disclosure-icon")}</summary>'
 
 
-def _logo() -> str:
-    return """
-<a class="brand" href="/" aria-label="Fencepost report home">
+def _logo(*, linked: bool = True) -> str:
+    opening = (
+        '<a class="brand" href="/" aria-label="Fencepost report home">'
+        if linked
+        else '<span class="brand" aria-label="Fencepost">'
+    )
+    closing = "</a>" if linked else "</span>"
+    return f"""
+{opening}
   <svg class="brand-mark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
     <rect x="12" y="30" width="9" height="54" rx="2" fill="currentColor"/>
     <rect x="30" y="30" width="9" height="54" rx="2" fill="currentColor"/>
@@ -127,7 +133,7 @@ def _logo() -> str:
     <rect x="84" y="30" width="9" height="54" rx="2" fill="currentColor"/>
   </svg>
   <span class="wordmark"><span>fence</span><span class="wordmark-post">post</span></span>
-</a>""".strip()
+{closing}""".strip()
 
 
 def _rate_card(report: Mapping[str, Any], mode: str) -> str:
