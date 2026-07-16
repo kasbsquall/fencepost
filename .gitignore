@@ -1,0 +1,26 @@
+# generated fixture, build with: python demo/build_demo_repo.py
+demo/student-repo/
+
+# run artifacts
+.fencepost/
+*.log
+
+# python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+venv/
+.venv/
+
+# node
+node_modules/
+dist/
+
+# editors / local tooling
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
