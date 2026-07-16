@@ -11,7 +11,13 @@ from importlib.resources import files
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from .ui import ReportUiError, load_report, render_error_document, render_report_document
+from .ui import (
+    ReportUiError,
+    load_report,
+    render_error_document,
+    render_method_document,
+    render_report_document,
+)
 from .ui import resolve_report_path
 
 
@@ -44,7 +50,7 @@ def _security_headers(handler: BaseHTTPRequestHandler) -> None:
 
 
 def _handler(
-    *, page: bytes, stylesheet: bytes, report_json: bytes | None
+    *, page: bytes, method_page: bytes, stylesheet: bytes, report_json: bytes | None
 ) -> type[BaseHTTPRequestHandler]:
     class ReportHandler(BaseHTTPRequestHandler):
         server_version = "FencepostReport/2.0"
@@ -62,6 +68,8 @@ def _handler(
             path = urlsplit(self.path).path
             if path in {"/", "/index.html"}:
                 self._respond(200, "text/html; charset=utf-8", page)
+            elif path in {"/method", "/method/"}:
+                self._respond(200, "text/html; charset=utf-8", method_page)
             elif path == "/assets/ledger.css":
                 self._respond(200, "text/css; charset=utf-8", stylesheet)
             elif path == "/report.json" and report_json is not None:
@@ -88,14 +96,17 @@ def create_server(
         report = load_report(report_path)
     except ReportUiError as exc:
         page_text = render_error_document(str(exc))
+        method_text = page_text
     else:
         page_text = render_report_document(report)
+        method_text = render_method_document(report)
         report_json = (
             json.dumps(report, indent=2, sort_keys=True) + "\n"
         ).encode("utf-8")
     stylesheet = files("fencepost.ui").joinpath("ledger.css").read_bytes()
     handler = _handler(
         page=page_text.encode("utf-8"),
+        method_page=method_text.encode("utf-8"),
         stylesheet=stylesheet,
         report_json=report_json,
     )

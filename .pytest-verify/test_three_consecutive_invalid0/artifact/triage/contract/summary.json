@@ -1,0 +1,139 @@
+{
+  "equivalent_rate": null,
+  "generator_call_count": 3,
+  "generator_wall_clock_seconds": 0.0,
+  "invalid_contract_attempts": 3,
+  "invalid_original_attempts": 0,
+  "mode": "CONTRACT",
+  "probable_equivalent_count": 0,
+  "real_gap_count": 0,
+  "results": [
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [
+            {
+              "column": 11,
+              "line": 1,
+              "message": "generated test is not valid Python: invalid syntax",
+              "rule": "syntax"
+            }
+          ],
+          "generated_test": {
+            "generation_duration_seconds": 0.0,
+            "input_tokens": null,
+            "model": null,
+            "output_tokens": null,
+            "provider": "fake",
+            "response_id": null,
+            "source": "not valid python !",
+            "targeted_behavior": "fixture behavior"
+          },
+          "mutant": null,
+          "original": null,
+          "outcome": "INVALID_CONTRACT",
+          "valid_attempt_number": null
+        },
+        {
+          "attempt": 2,
+          "contract_violations": [
+            {
+              "column": 11,
+              "line": 1,
+              "message": "generated test is not valid Python: invalid syntax",
+              "rule": "syntax"
+            }
+          ],
+          "generated_test": {
+            "generation_duration_seconds": 0.0,
+            "input_tokens": null,
+            "model": null,
+            "output_tokens": null,
+            "provider": "fake",
+            "response_id": null,
+            "source": "not valid python !",
+            "targeted_behavior": "fixture behavior"
+          },
+          "mutant": null,
+          "original": null,
+          "outcome": "INVALID_CONTRACT",
+          "valid_attempt_number": null
+        },
+        {
+          "attempt": 3,
+          "contract_violations": [
+            {
+              "column": 11,
+              "line": 1,
+              "message": "generated test is not valid Python: invalid syntax",
+              "rule": "syntax"
+            }
+          ],
+          "generated_test": {
+            "generation_duration_seconds": 0.0,
+            "input_tokens": null,
+            "model": null,
+            "output_tokens": null,
+            "provider": "fake",
+            "response_id": null,
+            "source": "not valid python !",
+            "targeted_behavior": "fixture behavior"
+          },
+          "mutant": null,
+          "original": null,
+          "outcome": "INVALID_CONTRACT",
+          "valid_attempt_number": null
+        }
+      ],
+      "attempts_used": 3,
+      "failure_evidence": null,
+      "invalid_attempts": 3,
+      "label": "UNRESOLVED",
+      "mode": "CONTRACT",
+      "mutant": {
+        "candidate": {
+          "after": "Gt",
+          "anchor": {
+            "column": 0,
+            "end_column": 1,
+            "end_line": 1,
+            "line": 1
+          },
+          "ast_path": [],
+          "before": "GtE",
+          "id": "invalid-mutant",
+          "kind": "compare",
+          "parameters": [],
+          "path": "pkg/analytics.py",
+          "source_segment": "value >= 1"
+        },
+        "execution": {
+          "duration_seconds": 0.1,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 0,
+          "end_column": 1,
+          "end_line": 1,
+          "line": 1
+        }
+      },
+      "unresolved_reason": "consecutive invalid retry limit reached (3); last invalid outcome was INVALID_CONTRACT",
+      "valid_attempts": 0,
+      "winning_test": null
+    }
+  ],
+  "selected_survivor_count": 1,
+  "total_attempts": 3,
+  "total_survivors": 1,
+  "triage_complete": true,
+  "triage_wall_clock_seconds": 0.014999999999417923,
+  "unresolved_count": 1,
+  "valid_attempts": 0
+}

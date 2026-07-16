@@ -15,6 +15,7 @@ from typing import TYPE_CHECKING, Mapping
 from .contract import CONTRACT_LIMITATION, CONTRACT_RULES
 from .models import (
     AnalysisResult,
+    AuthoredLineCoverage,
     BlameLine,
     ExecutionResult,
     MutantResult,
@@ -22,6 +23,7 @@ from .models import (
     RunConfig,
     TriageConfig,
     json_value,
+    pytest_pass_count,
 )
 from .mutation import (
     GeneratedMutation,
@@ -40,7 +42,11 @@ from .repository import (
 from .probe import run_probes
 from .report import build_report
 from .sandbox import DockerSandbox, SandboxError
-from .triage import build_survivor_context, triage_survivors
+from .triage import (
+    build_survivor_context,
+    candidate_function_name,
+    triage_survivors,
+)
 
 if TYPE_CHECKING:
     from .adversarial import AdversarialTestGenerator
@@ -49,6 +55,9 @@ if TYPE_CHECKING:
 
 class PipelineError(RuntimeError):
     pass
+
+
+MIN_AUTHORED_LINE_COVERAGE = 0.50
 
 
 @dataclass(frozen=True)
@@ -154,12 +163,19 @@ def _student_name(blame: dict[str, dict[int, BlameLine]]) -> str | None:
     return names.most_common(1)[0][0] if names else None
 
 
-def _eligible_candidates(
+def _candidate_inventory(
     sources: tuple[SourceFile, ...],
     blame: dict[str, dict[int, BlameLine]],
     covered_lines: dict[str, tuple[int, ...]],
-) -> tuple[_EligibleCandidate, ...]:
+) -> tuple[
+    tuple[_EligibleCandidate, ...],
+    AuthoredLineCoverage,
+    dict[str, str],
+]:
     eligible: list[_EligibleCandidate] = []
+    authored_mutatable_lines: set[tuple[str, int]] = set()
+    covered_authored_mutatable_lines: set[tuple[str, int]] = set()
+    function_by_candidate: dict[str, str] = {}
     for source in sources:
         covered = set(covered_lines.get(source.path, ()))
         attributed = blame[source.path]
@@ -169,9 +185,31 @@ def _eligible_candidates(
             raise PipelineError(f"cannot parse {source.path}: {exc}") from exc
         for candidate in candidates:
             line = attributed.get(candidate.anchor.line)
-            if line is not None and line.is_student and candidate.anchor.line in covered:
-                eligible.append(_EligibleCandidate(candidate=candidate, source=source))
-    return tuple(eligible)
+            if line is None or not line.is_student:
+                continue
+            key = (source.path, candidate.anchor.line)
+            authored_mutatable_lines.add(key)
+            if candidate.anchor.line not in covered:
+                continue
+            covered_authored_mutatable_lines.add(key)
+            eligible.append(_EligibleCandidate(candidate=candidate, source=source))
+            function_by_candidate[candidate.id] = candidate_function_name(
+                source.text, candidate
+            )
+    total = len(authored_mutatable_lines)
+    covered_count = len(covered_authored_mutatable_lines)
+    rate = covered_count / total if total else None
+    coverage = AuthoredLineCoverage(
+        authored_mutatable_line_count=total,
+        covered_authored_mutatable_line_count=covered_count,
+        rate=rate,
+        minimum_rate=MIN_AUTHORED_LINE_COVERAGE,
+        sufficient_for_assessment=(
+            rate is not None and rate >= MIN_AUTHORED_LINE_COVERAGE
+        ),
+        artifact_ref="selection.json",
+    )
+    return tuple(eligible), coverage, function_by_candidate
 
 
 def _mutant_timeout(config: RunConfig, baseline_duration: float) -> float:
@@ -358,12 +396,16 @@ def run_analysis(
             )
         except SandboxError as exc:
             raise PipelineError(str(exc)) from exc
-        eligible = _eligible_candidates(sources, blame, covered)
+        eligible, authored_line_coverage, function_by_candidate = (
+            _candidate_inventory(sources, blame, covered)
+        )
         _write_json(
             artifact_dir / "selection.json",
             {
                 "covered_lines": covered,
+                "authored_line_coverage": authored_line_coverage,
                 "eligible_candidates": [item.candidate for item in eligible],
+                "candidate_functions": function_by_candidate,
             },
         )
 
@@ -513,6 +555,12 @@ def run_analysis(
                 triage=triage_summary,
                 probe=probe_summary,
                 contexts=survivor_contexts,
+                submitted_suite_tests_passed=pytest_pass_count(
+                    baseline.execution.stdout
+                ),
+                authored_line_coverage=authored_line_coverage,
+                mutant_results=mutant_results,
+                function_by_mutant_id=function_by_candidate,
                 artifact_dir=artifact_dir,
             )
 

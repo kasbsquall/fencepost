@@ -1,0 +1,9 @@
+{
+  "generation_duration_seconds": 13.75,
+  "input_tokens": 19002,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 236,
+  "provider": "codex-cli",
+  "question_text": "What observable behavior would break at and around the maximum percentage if the upper-bound check included the limit or moved it by one, and why should values at or below the maximum be returned unchanged while only larger values are clamped?",
+  "response_id": "019f6aec-70b1-7c41-8fc4-c2f6a461435d"
+}

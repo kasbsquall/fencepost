@@ -1,0 +1,387 @@
+{
+  "authored_line_coverage": {
+    "artifact_ref": "selection.json",
+    "authored_mutatable_line_count": 1,
+    "covered_authored_mutatable_line_count": 1,
+    "minimum_rate": 0.5,
+    "rate": 1.0,
+    "sufficient_for_assessment": true
+  },
+  "baseline_artifact_ref": "baseline/result.json",
+  "complete": true,
+  "contract_limitation": "CONTRACT can hide a genuine type-only gap.",
+  "conversation_count": 1,
+  "deliberately_not_asked": [
+    {
+      "artifact_refs": [
+        "triage/strict/strict-only/attempt-01/attempt.json",
+        "triage/contract/strict-only/result.json"
+      ],
+      "line": 2,
+      "mutant_id": "strict-only",
+      "mutated_segment": "value > 1",
+      "original_segment": "value >= 1",
+      "path": "pkg/analytics.py",
+      "plain_language_reason": "We found a technical way to distinguish this change, but it falls outside the plain-caller contract used for student questions. We dropped it rather than ask about an artificial edge case.",
+      "reason": "STRICT execution found a technical distinction, but CONTRACT execution did not find a caller-conforming distinction. Fencepost therefore withholds this question from the student.",
+      "strict_failure_evidence": {
+        "detail": "AssertionError",
+        "kind": "failure",
+        "message": "assert False",
+        "nodeid": "test_probe.py::test_boundary"
+      },
+      "strict_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fixture",
+        "response_id": null,
+        "source": "from pkg.analytics import f\n\ndef test_boundary():\n    assert f(1)\n",
+        "targeted_behavior": "exact lower boundary"
+      }
+    }
+  ],
+  "equivalent_rate_contract": 0.5,
+  "equivalent_rate_strict": 0.0,
+  "formative_notice": "This report is formative and advisory. It identifies behavior changes the submitted tests did not distinguish; it is not a verdict, accusation, or standalone score. An instructor should review the evidence and decide whether a conversation would be useful.",
+  "function_assessments": [
+    {
+      "artifact_refs": [
+        "mutants/contract-gap/result.json",
+        "mutants/contract-gap-2/result.json",
+        "mutants/strict-only/result.json"
+      ],
+      "broken_mutants": 0,
+      "contract_real_gap_mutants": 2,
+      "killed_by_submitted_tests": 0,
+      "path": "pkg/analytics.py",
+      "qualified_function_name": "f",
+      "question_site_count": 1,
+      "status": "GAPS_FOUND",
+      "survived_submitted_tests": 3,
+      "total_mutants": 3
+    }
+  ],
+  "function_groups": [
+    {
+      "mutant_count": 2,
+      "path": "pkg/analytics.py",
+      "priority_reason": null,
+      "qualified_function_name": "f",
+      "ranking_signals": [
+        "multiple_surviving_mutations"
+      ],
+      "site_count": 1,
+      "site_ids": [
+        "site-f9113754b1ff1f00"
+      ]
+    }
+  ],
+  "graded_answer_count": 1,
+  "mutation_summary": {
+    "broken_mutants": 0,
+    "killed_by_submitted_tests": 0,
+    "survived_submitted_tests": 3,
+    "total_mutants": 3
+  },
+  "not_questioned_mutant_count": 1,
+  "pedagogically_not_asked": [],
+  "places": [
+    {
+      "answer": "I don't know",
+      "artifact_refs": [
+        "run.json",
+        "triage/contract/contract-gap/attempt-01/attempt.json",
+        "triage/contract/contract-gap-2/attempt-01/attempt.json",
+        "probe/sites/site-f9113754b1ff1f00/result.json"
+      ],
+      "assessment": {
+        "citations": [
+          {
+            "artifact_ref": "triage/contract/contract-gap/attempt-01/attempt.json",
+            "detail": "AssertionError",
+            "kind": "MUTANT_FAILING_ASSERTION",
+            "message": "assert False",
+            "nodeid": "test_probe.py::test_boundary"
+          },
+          {
+            "artifact_ref": "triage/contract/contract-gap-2/attempt-01/attempt.json",
+            "detail": "AssertionError",
+            "kind": "MUTANT_FAILING_ASSERTION",
+            "message": "assert False",
+            "nodeid": "test_probe.py::test_boundary"
+          }
+        ],
+        "evidence_explanation": "The supporting mutants failed: test_probe.py::test_boundary: assert False; test_probe.py::test_boundary: assert False",
+        "feedback": "Review the answer against the execution-grounded boundary behavior.",
+        "generated": {
+          "evidence_explanation": "The supporting mutants failed: test_probe.py::test_boundary: assert False; test_probe.py::test_boundary: assert False",
+          "feedback": "Review the answer against the execution-grounded boundary behavior.",
+          "generation_duration_seconds": 0.0,
+          "input_tokens": null,
+          "model": null,
+          "output_tokens": null,
+          "provider": "fixture-fake",
+          "response_id": null,
+          "verdict": "INSUFFICIENT"
+        },
+        "verdict": "INSUFFICIENT"
+      },
+      "error": null,
+      "grounding": {
+        "attribution_artifact_ref": "run.json",
+        "authored_lines": [
+          {
+            "author_date": "2026-07-07",
+            "author_email": "student@example.edu",
+            "author_name": "Diego Ramos",
+            "commit": "4a3f000000000000000000000000000000000000",
+            "commit_summary": "implement boundary",
+            "line": 2,
+            "path": "pkg/analytics.py",
+            "text": "    return value >= 1"
+          }
+        ],
+        "end_line": 2,
+        "original_segment": "    return value >= 1",
+        "path": "pkg/analytics.py",
+        "start_line": 2
+      },
+      "mutants": [
+        {
+          "artifact_refs": [
+            "mutants/contract-gap/result.json",
+            "triage/contract/contract-gap/attempt-01/attempt.json",
+            "probe/sites/site-f9113754b1ff1f00/mutants/contract-gap.json"
+          ],
+          "evidence": {
+            "adversarial_test": {
+              "generation_duration_seconds": 0.0,
+              "input_tokens": null,
+              "model": null,
+              "output_tokens": null,
+              "provider": "fixture",
+              "response_id": null,
+              "source": "from pkg.analytics import f\n\ndef test_boundary():\n    assert f(1)\n",
+              "targeted_behavior": "exact lower boundary"
+            },
+            "failing_assertion": {
+              "detail": "AssertionError",
+              "kind": "failure",
+              "message": "assert False",
+              "nodeid": "test_probe.py::test_boundary"
+            },
+            "mutant_execution": {
+              "duration_seconds": 0.01,
+              "exit_code": 1,
+              "failure": {
+                "detail": "AssertionError",
+                "kind": "failure",
+                "message": "assert False",
+                "nodeid": "test_probe.py::test_boundary"
+              },
+              "status": "failed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "original_execution": {
+              "duration_seconds": 0.01,
+              "exit_code": 0,
+              "failure": null,
+              "status": "passed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "triage_artifact_ref": "triage/contract/contract-gap/attempt-01/attempt.json"
+          },
+          "module_path": "pkg.analytics",
+          "mutant": {
+            "candidate": {
+              "after": "Gt",
+              "anchor": {
+                "column": 11,
+                "end_column": 21,
+                "end_line": 2,
+                "line": 2
+              },
+              "ast_path": [],
+              "before": "GtE",
+              "id": "contract-gap",
+              "kind": "compare",
+              "parameters": [],
+              "path": "pkg/analytics.py",
+              "source_segment": "value >= 1"
+            },
+            "execution": {
+              "duration_seconds": 0.1,
+              "exit_code": 0,
+              "failing_tests": [],
+              "status": "survived",
+              "stderr": "",
+              "stdout": ".......... [100%]\n10 passed in 0.10s\n",
+              "timed_out": false
+            },
+            "generated_anchor": {
+              "column": 11,
+              "end_column": 20,
+              "end_line": 2,
+              "line": 2
+            }
+          },
+          "mutant_id": "contract-gap",
+          "mutated_function": "def f(value):\n    return value > 1",
+          "mutation": {
+            "mutated_segment": "value > 1",
+            "original_segment": "value >= 1",
+            "unified_diff": "-    return value >= 1\n+    return value > 1"
+          },
+          "original_function": "def f(value):\n    return value >= 1",
+          "qualified_function_name": "f",
+          "submitted_suite_artifact_ref": "mutants/contract-gap/result.json",
+          "submitted_suite_tests_passed": 10
+        },
+        {
+          "artifact_refs": [
+            "mutants/contract-gap-2/result.json",
+            "triage/contract/contract-gap-2/attempt-01/attempt.json",
+            "probe/sites/site-f9113754b1ff1f00/mutants/contract-gap-2.json"
+          ],
+          "evidence": {
+            "adversarial_test": {
+              "generation_duration_seconds": 0.0,
+              "input_tokens": null,
+              "model": null,
+              "output_tokens": null,
+              "provider": "fixture",
+              "response_id": null,
+              "source": "from pkg.analytics import f\n\ndef test_boundary():\n    assert f(1)\n",
+              "targeted_behavior": "exact lower boundary"
+            },
+            "failing_assertion": {
+              "detail": "AssertionError",
+              "kind": "failure",
+              "message": "assert False",
+              "nodeid": "test_probe.py::test_boundary"
+            },
+            "mutant_execution": {
+              "duration_seconds": 0.01,
+              "exit_code": 1,
+              "failure": {
+                "detail": "AssertionError",
+                "kind": "failure",
+                "message": "assert False",
+                "nodeid": "test_probe.py::test_boundary"
+              },
+              "status": "failed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "original_execution": {
+              "duration_seconds": 0.01,
+              "exit_code": 0,
+              "failure": null,
+              "status": "passed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "triage_artifact_ref": "triage/contract/contract-gap-2/attempt-01/attempt.json"
+          },
+          "module_path": "pkg.analytics",
+          "mutant": {
+            "candidate": {
+              "after": "2",
+              "anchor": {
+                "column": 20,
+                "end_column": 21,
+                "end_line": 2,
+                "line": 2
+              },
+              "ast_path": [],
+              "before": "1",
+              "id": "contract-gap-2",
+              "kind": "numeric_boundary",
+              "parameters": [],
+              "path": "pkg/analytics.py",
+              "source_segment": "1"
+            },
+            "execution": {
+              "duration_seconds": 0.1,
+              "exit_code": 0,
+              "failing_tests": [],
+              "status": "survived",
+              "stderr": "",
+              "stdout": ".......... [100%]\n10 passed in 0.10s\n",
+              "timed_out": false
+            },
+            "generated_anchor": {
+              "column": 20,
+              "end_column": 21,
+              "end_line": 2,
+              "line": 2
+            }
+          },
+          "mutant_id": "contract-gap-2",
+          "mutated_function": "def f(value):\n    return value >= 2",
+          "mutation": {
+            "mutated_segment": "2",
+            "original_segment": "1",
+            "unified_diff": "-    return value >= 1\n+    return value >= 2"
+          },
+          "original_function": "def f(value):\n    return value >= 1",
+          "qualified_function_name": "f",
+          "submitted_suite_artifact_ref": "mutants/contract-gap-2/result.json",
+          "submitted_suite_tests_passed": 10
+        }
+      ],
+      "question": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fixture-fake",
+        "question_text": "What result changes at this boundary, and why?",
+        "response_id": null
+      },
+      "site_id": "site-f9113754b1ff1f00",
+      "status": "GRADED",
+      "survivor_count": 2
+    }
+  ],
+  "probable_equivalent_count_contract": 1,
+  "probable_equivalent_count_strict": 0,
+  "question_count": 1,
+  "question_mutant_count": 2,
+  "real_gap_count_contract": 2,
+  "real_gap_count_strict": 3,
+  "repository_commit": "fixture-commit",
+  "schema_version": "2.0",
+  "student_email": "student@example.edu",
+  "student_name": "Diego Ramos",
+  "submitted_answer_count": 1,
+  "submitted_suite_status": "PASSED",
+  "submitted_suite_tests_passed": 10,
+  "title": "Fencepost comprehension report",
+  "traceability_artifacts": [
+    "run.json",
+    "baseline/result.json",
+    "selection.json",
+    "triage/summary.json",
+    "probe/summary.json"
+  ],
+  "unresolved_count_contract": 0,
+  "unresolved_count_strict": 0,
+  "unverified_place_count": 1
+}

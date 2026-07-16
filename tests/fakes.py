@@ -228,7 +228,7 @@ class FixtureComprehensionProbeAgent:
         self.question_requests.append(request)
         return GeneratedProbeQuestion(
             question_text=(
-                "What observable behavior at this source boundary can change, and why?"
+                "What result changes at this boundary, and why?"
             ),
             provider="fixture-fake",
             model=None,

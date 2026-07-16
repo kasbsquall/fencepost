@@ -7,6 +7,7 @@ from fencepost.adversarial import CodexStructuredResponse
 from fencepost.models import (
     AdversarialAttempt,
     AdversarialExecution,
+    AuthoredLineCoverage,
     BlameLine,
     ContractShieldedResult,
     DualSurvivorTriageResult,
@@ -376,6 +377,19 @@ def test_probe_targets_contract_gaps_and_grades_with_execution_citation(tmp_path
         triage=triage,
         probe=summary,
         contexts=contexts,
+        submitted_suite_tests_passed=10,
+        authored_line_coverage=AuthoredLineCoverage(
+            authored_mutatable_line_count=1,
+            covered_authored_mutatable_line_count=1,
+            rate=1.0,
+            minimum_rate=0.5,
+            sufficient_for_assessment=True,
+            artifact_ref="selection.json",
+        ),
+        mutant_results=tuple(item.mutant for item in triage.results),
+        function_by_mutant_id={
+            item.mutant.candidate.id: "f" for item in triage.results
+        },
         artifact_dir=tmp_path,
     )
     assert report.unverified_place_count == 1
@@ -414,7 +428,7 @@ def test_codex_probe_agent_uses_shared_structured_client(tmp_path) -> None:
             self.calls.append((prompt, schema))
             if schema["required"] == ["question_prompt"]:
                 payload = {
-                    "question_prompt": "What observable boundary behavior changes, and why?"
+                    "question_prompt": "What result changes at this boundary, and why?"
                 }
             else:
                 payload = {
@@ -492,3 +506,117 @@ def test_codex_probe_rejects_question_that_repeats_report_grounding(tmp_path) ->
     assert summary.failed_question_count == 1
     assert summary.results[0].status == "QUESTION_FAILED"
     assert summary.results[0].question is None
+
+
+def test_pedagogically_absurd_contract_witness_is_withheld_not_questioned(
+    tmp_path,
+) -> None:
+    triage, contexts, blame = _records()
+    boolean_test = GeneratedAdversarialTest(
+        source=(
+            "from pkg.analytics import f\n\n"
+            "def test_boolean_as_number():\n"
+            "    assert f(False) is False\n"
+        ),
+        targeted_behavior="boolean numeric coercion",
+        provider="fixture",
+        model=None,
+        response_id=None,
+        generation_duration_seconds=0.0,
+    )
+    original_attempt = triage.results[0].contract.attempts[0]
+    boolean_attempt = replace(original_attempt, generated_test=boolean_test)
+    boolean_contract = replace(
+        triage.results[0].contract,
+        attempts=(boolean_attempt,),
+        winning_test=boolean_test,
+    )
+    boolean_pair = replace(triage.results[0], contract=boolean_contract)
+    triage = replace(triage, results=(boolean_pair, triage.results[1]))
+    agent = FixtureComprehensionProbeAgent()
+
+    summary = run_probes(
+        triage,
+        contexts,
+        blame=blame,
+        agent=agent,
+        answers=None,
+        artifact_dir=tmp_path,
+    )
+
+    assert agent.question_requests == []
+    assert summary.total_targets == 1
+    assert summary.eligible_target_count == 0
+    assert summary.pedagogically_withheld_count == 1
+    assert summary.total_sites == 0
+    assert summary.accounted_mutant_count == 1
+    assert summary.question_count == 0
+    assert summary.complete is True
+    withheld = summary.pedagogically_withheld[0]
+    assert withheld.mutant.mutant_id == "contract-gap"
+    assert withheld.reason_codes == ("implicit_bool_as_number",)
+    assert (tmp_path / "probe" / "withheld" / "contract-gap.json").exists()
+    report = build_report(
+        commit="fixture-commit",
+        student_email="student@example.edu",
+        student_name="Diego Ramos",
+        triage=triage,
+        probe=summary,
+        contexts=contexts,
+        submitted_suite_tests_passed=10,
+        authored_line_coverage=AuthoredLineCoverage(
+            authored_mutatable_line_count=1,
+            covered_authored_mutatable_line_count=1,
+            rate=1.0,
+            minimum_rate=0.5,
+            sufficient_for_assessment=True,
+            artifact_ref="selection.json",
+        ),
+        mutant_results=tuple(item.mutant for item in triage.results),
+        function_by_mutant_id={
+            item.mutant.candidate.id: "f" for item in triage.results
+        },
+        artifact_dir=tmp_path,
+    )
+    assert report.question_mutant_count == 0
+    assert report.not_questioned_mutant_count == 2
+    assert report.pedagogically_not_asked == (withheld,)
+
+
+def test_codex_probe_rejects_template_and_overlong_questions(tmp_path) -> None:
+    triage, contexts, blame = _records()
+
+    bad_questions = (
+        "What observable behavior changes at this boundary?",
+        (
+            "Under this function contract, what happens at the lower boundary "
+            "when the condition changes, which inputs receive a different result, "
+            "and why does the implementation need to preserve every exact endpoint "
+            "for all ordinary callers of this function?"
+        ),
+    )
+    for index, question in enumerate(bad_questions):
+        class BadQuestionClient:
+            model = "gpt-5.6-terra"
+
+            def run(self, *, prompt, schema):
+                return CodexStructuredResponse(
+                    payload={"question_prompt": question},
+                    response_id=f"fixture-{index}",
+                    duration_seconds=0.01,
+                    input_tokens=10,
+                    output_tokens=5,
+                )
+
+        summary = run_probes(
+            triage,
+            contexts,
+            blame=blame,
+            agent=CodexCliComprehensionProbeAgent(
+                model="gpt-5.6-terra", client=BadQuestionClient()
+            ),
+            answers=None,
+            artifact_dir=tmp_path / str(index),
+        )
+        assert summary.question_count == 0
+        assert summary.failed_question_count == 1

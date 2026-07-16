@@ -84,7 +84,7 @@ def _code(value: object, class_name: str = "") -> str:
 
 def _logo() -> str:
     return """
-<a class="brand" href="#top" aria-label="Fencepost report home">
+<a class="brand" href="/" aria-label="Fencepost report home">
   <svg class="brand-mark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
     <rect x="12" y="30" width="9" height="54" rx="2" fill="currentColor"/>
     <rect x="30" y="30" width="9" height="54" rx="2" fill="currentColor"/>
@@ -198,22 +198,20 @@ def _suite_state(mutant: Mapping[str, Any]) -> str:
     if status is None and count is None:
         return ""
     if isinstance(count, int) and not isinstance(count, bool):
-        outcome = f"{count} passed"
+        label = f"Their {count} tests"
     elif status == "survived":
-        outcome = "passed"
+        label = "Their submitted tests"
     elif status is not None:
-        outcome = str(status)
+        label = "Their submitted tests"
     else:
         return ""
+    outcome = "passed" if status == "survived" else str(status)
     artifact = mutant.get("submitted_suite_artifact_ref")
-    raw_output = result.get("stdout") if count is None else None
     return f"""
 <section class="run-state run-state-pass" aria-label="Student test suite passed">
   <span class="state-icon" aria-hidden="true">✓</span>
   <div>
-    <p class="state-name">Student's own suite</p>
-    <p class="state-result">{_text(outcome)}</p>
-    {f'<pre class="suite-output"><code>{_text(raw_output)}</code></pre>' if raw_output else ''}
+    <p class="state-result"><span>{_text(label)}</span> <strong>— {_text(outcome)}</strong></p>
     {f'<p class="artifact-ref">{_code(artifact)}</p>' if artifact else ''}
   </div>
 </section>""".strip()
@@ -272,11 +270,13 @@ def _mutation_story(mutant: Mapping[str, Any]) -> str:
     adversarial = _adversarial_section(evidence)
     failure = _failure_section(evidence)
     artifact = evidence.get("triage_artifact_ref")
+    unified_diff = mutation.get("unified_diff")
     return f"""
 <article class="mutation-story">
   <section class="change-considered">
     <p class="step-label"><span>2</span> Change considered</p>
     {f'<div class="change-line">{change}</div>' if change else ''}
+    {f'<details class="unified-diff"><summary>Full source diff</summary><pre><code>{_text(unified_diff)}</code></pre></details>' if unified_diff else ''}
   </section>
   <div class="state-sequence">
     <div>
@@ -300,10 +300,30 @@ def _assessment(place: Mapping[str, Any]) -> str:
         parts.append(f'<blockquote>{_text(answer)}</blockquote>')
     verdict = assessment.get("verdict")
     feedback = assessment.get("feedback")
+    explanation = assessment.get("evidence_explanation")
+    citations = [_mapping(item) for item in _sequence(assessment.get("citations"))]
     if verdict is not None:
         parts.append(f'<p class="verdict">{_text(verdict)}</p>')
     if feedback is not None:
         parts.append(f"<p>{_text(feedback)}</p>")
+    if explanation is not None:
+        parts.append(f'<p class="evidence-explanation">{_text(explanation)}</p>')
+    if citations:
+        parts.append('<h5>Execution evidence used for this assessment</h5><ul class="citations">')
+        for citation in citations:
+            nodeid = citation.get("nodeid")
+            message = citation.get("message")
+            detail = citation.get("detail")
+            artifact = citation.get("artifact_ref")
+            parts.append(
+                "<li>"
+                + (f"<p>{_code(nodeid)}</p>" if nodeid else "")
+                + (f"<pre><code>{_text(message)}</code></pre>" if message else "")
+                + (f"<p class=\"artifact-ref\">{_code(artifact)}</p>" if artifact else "")
+                + (f"<details><summary>Full assertion trace</summary><pre><code>{_text(detail)}</code></pre></details>" if detail else "")
+                + "</li>"
+            )
+        parts.append("</ul>")
     parts.append("</section>")
     return "".join(parts)
 
@@ -369,20 +389,241 @@ def _shielded_item(item: Mapping[str, Any]) -> str:
     test = _mapping(item.get("strict_test"))
     failure = _mapping(item.get("strict_failure_evidence"))
     reason = item.get("reason")
+    plain_reason = item.get("plain_language_reason") or reason
     return f"""
-<details class="shielded-card">
-  <summary>
-    <span>{_code(location, 'location')}</span>
-    <span class="shielded-label">withheld from probes</span>
-  </summary>
+<article class="shielded-card">
   <div class="shielded-body">
+    <p class="shielded-label">withheld from probes · {_code(location, 'location')}</p>
+    {f'<p class="shielded-lead">{_text(plain_reason)}</p>' if plain_reason else ''}
     {f'<div class="change-line">{change}</div>' if change else ''}
-    {f'<p>{_text(reason)}</p>' if reason else ''}
-    <p class="shielded-explanation">The unrestricted STRICT witness is retained for audit, but CONTRACT did not justify a student-facing question.</p>
-    {f'<p class="step-label">STRICT-mode killing test</p><pre class="test-code"><code>{_text(test.get("source"))}</code></pre>' if test.get('source') is not None else ''}
-    {f'<div class="strict-failure"><p>{_code(failure.get("nodeid"))}</p><pre><code>{_text(failure.get("message"))}</code></pre></div>' if failure else ''}
+    <details class="technical-evidence">
+      <summary>Technical evidence for audit</summary>
+      {f'<p>{_text(reason)}</p>' if reason and reason != plain_reason else ''}
+      {f'<p class="step-label">STRICT-mode killing test</p><pre class="test-code"><code>{_text(test.get("source"))}</code></pre>' if test.get('source') is not None else ''}
+      {f'<div class="strict-failure"><p>{_code(failure.get("nodeid"))}</p><pre><code>{_text(failure.get("message"))}</code></pre></div>' if failure else ''}
+    </details>
   </div>
-</details>""".strip()
+</article>""".strip()
+
+
+def _pedagogically_withheld_item(item: Mapping[str, Any]) -> str:
+    mutant = _mapping(item.get("mutant"))
+    mutation = _mapping(mutant.get("mutation"))
+    evidence = _mapping(mutant.get("evidence"))
+    candidate = _mapping(_mapping(mutant.get("mutant")).get("candidate"))
+    path = candidate.get("path")
+    anchor = _mapping(candidate.get("anchor"))
+    line = anchor.get("line")
+    location = ":".join(_text(value) for value in (path, line) if value is not None)
+    codes = set(str(code) for code in _sequence(item.get("reason_codes")))
+    if "implicit_bool_as_number" in codes:
+        lead = (
+            "We found a difference only by treating a boolean as a number even "
+            "though the function does not declare a boolean input. That is not a "
+            "fair CS2 question, so we dropped it."
+        )
+    elif "implementation_introspection" in codes:
+        lead = (
+            "We found a difference only by inspecting Python implementation details, "
+            "not the function's ordinary result. That is not a fair CS2 question, so "
+            "we dropped it."
+        )
+    else:
+        lead = (
+            "Execution found a technical difference, but its witness would make a "
+            "poor CS2 question. We dropped it from the conversation guide."
+        )
+    change = _change_line(mutation)
+    test = _mapping(evidence.get("adversarial_test"))
+    failure = _mapping(evidence.get("failing_assertion"))
+    reasons = _sequence(item.get("reasons"))
+    return f"""
+<article class="shielded-card">
+  <div class="shielded-body">
+    <p class="shielded-label">withheld from probes {f'· {_code(location, "location")}' if location else ''}</p>
+    <p class="shielded-lead">{_text(lead)}</p>
+    {f'<div class="change-line">{change}</div>' if change else ''}
+    <details class="technical-evidence">
+      <summary>Technical evidence for audit</summary>
+      {''.join(f'<p>{_text(reason)}</p>' for reason in reasons)}
+      {f'<pre class="test-code"><code>{_text(test.get("source"))}</code></pre>' if test.get('source') is not None else ''}
+      {f'<div class="strict-failure"><p>{_code(failure.get("nodeid"))}</p><pre><code>{_text(failure.get("message"))}</code></pre></div>' if failure else ''}
+    </details>
+  </div>
+</article>""".strip()
+
+
+def _coverage_section(report: Mapping[str, Any]) -> str:
+    coverage = _mapping(report.get("authored_line_coverage"))
+    total = coverage.get("authored_mutatable_line_count")
+    covered = coverage.get("covered_authored_mutatable_line_count")
+    rate = coverage.get("rate")
+    minimum = coverage.get("minimum_rate")
+    sufficient = coverage.get("sufficient_for_assessment")
+    if not coverage:
+        return ""
+    parts = []
+    if isinstance(covered, int) and isinstance(total, int):
+        parts.append(f"Their suite executes <strong>{covered} of {total}</strong> mutatable lines they authored.")
+    if isinstance(rate, (int, float)) and not isinstance(rate, bool):
+        parts.append(f"Coverage: <strong>{rate:.0%}</strong>.")
+    if sufficient is False:
+        parts.append(
+            "Fencepost cannot assess understanding of code their tests never run."
+        )
+        if isinstance(minimum, (int, float)) and not isinstance(minimum, bool):
+            parts.append(
+                f"Assessment requires at least {minimum:.0%} authored-line coverage."
+            )
+    class_name = "coverage-context coverage-low" if sufficient is False else "coverage-context"
+    return f'<aside class="{class_name}"><p class="eyebrow">Authored-line coverage</p><p>{" ".join(parts)}</p></aside>'
+
+
+def _instructor_headline(report: Mapping[str, Any]) -> tuple[str, str]:
+    student = report.get("student_name") or report.get("student_email") or "The student"
+    coverage = _mapping(report.get("authored_line_coverage"))
+    sufficient = coverage.get("sufficient_for_assessment")
+    covered = coverage.get("covered_authored_mutatable_line_count")
+    authored = coverage.get("authored_mutatable_line_count")
+    tests = report.get("submitted_suite_tests_passed")
+    test_phrase = (
+        f"{tests} tests pass"
+        if isinstance(tests, int) and not isinstance(tests, bool)
+        else "submitted tests pass"
+    )
+    if sufficient is False:
+        if isinstance(covered, int) and isinstance(authored, int):
+            headline = (
+                f"{student}'s {test_phrase}, but they execute {covered} of {authored} "
+                "mutatable lines they wrote."
+            )
+        else:
+            headline = f"{student}'s {test_phrase}, but coverage is too low to assess."
+        return (
+            headline,
+            "Fencepost cannot assess understanding of code their tests never run.",
+        )
+
+    mutation = _mapping(report.get("mutation_summary"))
+    total = mutation.get("total_mutants")
+    killed = mutation.get("killed_by_submitted_tests")
+    survived = mutation.get("survived_submitted_tests")
+    fair = report.get("question_mutant_count")
+    withheld = report.get("not_questioned_mutant_count")
+    headline = f"{student}'s {test_phrase}."
+    detail = []
+    if isinstance(total, int) and isinstance(killed, int):
+        detail.append(
+            f"We made {total} small changes to code they wrote; their tests caught {killed}."
+        )
+    if isinstance(survived, int) and isinstance(fair, int):
+        detail.append(
+            f"Of the {survived} changes they missed, {fair} are fair to discuss."
+        )
+    if isinstance(withheld, int) and withheld:
+        noun = "change" if withheld == 1 else "changes"
+        detail.append(
+            f"We withheld {withheld} {noun} that would not make a fair question."
+        )
+    return headline, " ".join(detail)
+
+
+def _function_outcomes(report: Mapping[str, Any]) -> str:
+    assessments = [
+        _mapping(item) for item in _sequence(report.get("function_assessments"))
+    ]
+    if not assessments:
+        return ""
+    clean = [item for item in assessments if item.get("status") == "CLEAN"]
+    gaps = [item for item in assessments if item.get("status") == "GAPS_FOUND"]
+    other = [item for item in assessments if item not in clean and item not in gaps]
+
+    def items(values, *, positive: bool) -> str:
+        rendered = []
+        for item in values:
+            name = item.get("qualified_function_name")
+            killed = item.get("killed_by_submitted_tests")
+            total = item.get("total_mutants")
+            gaps_count = item.get("contract_real_gap_mutants")
+            question_sites = item.get("question_site_count")
+            detail = ""
+            if positive and isinstance(killed, int) and isinstance(total, int):
+                detail = f"all {killed} of {total} changes caught"
+            elif isinstance(gaps_count, int) and isinstance(total, int):
+                detail = f"{gaps_count} verified behavior changes among {total} changes"
+                if isinstance(question_sites, int):
+                    detail += (
+                        f"; {question_sites} fair question "
+                        f"{'site' if question_sites == 1 else 'sites'}"
+                    )
+            rendered.append(
+                f'<li><span>{_code(name or "<unknown>")}</span>{f"<small>{_text(detail)}</small>" if detail else ""}</li>'
+            )
+        return "".join(rendered)
+
+    columns = []
+    if clean:
+        columns.append(
+            '<div class="function-column function-clean"><h3>Protected by their tests</h3>'
+            f'<ul>{items(clean, positive=True)}</ul></div>'
+        )
+    if gaps:
+        columns.append(
+            '<div class="function-column"><h3>Worth discussing</h3>'
+            f'<ul>{items(gaps, positive=False)}</ul></div>'
+        )
+    if other:
+        columns.append(
+            '<div class="function-column"><h3>No fair conclusion yet</h3>'
+            f'<ul>{items(other, positive=False)}</ul></div>'
+        )
+    return f"""
+<section class="function-outcomes" aria-labelledby="outcomes-heading">
+  <div class="section-intro"><p class="eyebrow">Both sides of the evidence</p><h2 id="outcomes-heading">What their tests already protect</h2></div>
+  <div class="function-columns">{''.join(columns)}</div>
+</section>""".strip()
+
+
+def _conversation_groups(report: Mapping[str, Any]) -> str:
+    places = {
+        item.get("site_id"): item
+        for item in (_mapping(value) for value in _sequence(report.get("places")))
+        if item.get("site_id")
+    }
+    groups = [
+        _mapping(item) for item in _sequence(report.get("function_groups"))
+    ]
+    if not groups and places:
+        return "".join(_site_card(place) for place in places.values())
+    rendered = []
+    for group in groups:
+        name = group.get("qualified_function_name")
+        path = group.get("path")
+        site_count = group.get("site_count")
+        mutant_count = group.get("mutant_count")
+        reason = group.get("priority_reason")
+        metadata = []
+        if isinstance(site_count, int):
+            metadata.append(f"{site_count} source {'site' if site_count == 1 else 'sites'}")
+        if isinstance(mutant_count, int):
+            metadata.append(f"{mutant_count} surviving {'change' if mutant_count == 1 else 'changes'}")
+        cards = "".join(
+            _site_card(places[site_id])
+            for site_id in _sequence(group.get("site_ids"))
+            if site_id in places
+        )
+        rendered.append(
+            f"""<section class="conversation-group">
+  <header class="conversation-header">
+    <p class="eyebrow">{_text(path) if path else 'Source function'}</p>
+    <h3>{_code(name or '<unknown>')}</h3>
+    {f'<p class="group-meta">{" · ".join(metadata)}</p>' if metadata else ''}
+    {f'<p class="priority-reason"><strong>Why this comes first.</strong> {_text(reason)}</p>' if reason else ''}
+  </header>
+  {cards}
+</section>"""
+        )
+    return "".join(rendered)
 
 
 def render_report_document(report: Mapping[str, Any]) -> str:
@@ -393,39 +634,34 @@ def render_report_document(report: Mapping[str, Any]) -> str:
             f"This viewer requires report schema {SUPPORTED_REPORT_SCHEMA}; "
             f"the supplied data declares {schema!r}."
         )
-    student = report.get("student_name") or report.get("student_email")
     commit = report.get("repository_commit")
-    status = report.get("submitted_suite_status")
-    sites = report.get("unverified_place_count")
-    if status == "PASSED" and isinstance(sites, int) and not isinstance(sites, bool):
-        noun = "site" if sites == 1 else "sites"
-        headline = f"Their suite passed; {sites} {noun} where understanding is unverified."
-    elif status is not None and isinstance(sites, int) and not isinstance(sites, bool):
-        noun = "site" if sites == 1 else "sites"
-        headline = f"Submitted suite: {status}. {sites} unverified {noun}."
-    elif status is not None:
-        headline = f"Submitted suite: {status}."
-    elif isinstance(sites, int) and not isinstance(sites, bool):
-        noun = "site" if sites == 1 else "sites"
-        headline = f"{sites} {noun} where understanding is unverified."
-    else:
-        headline = "Comprehension report"
+    student = report.get("student_name") or report.get("student_email")
+    headline, summary = _instructor_headline(report)
     run_meta = []
     if student:
         run_meta.append(f'<span class="student-name">{_text(student)}</span>')
     if commit:
         run_meta.append(f'<span>repository commit {_code(commit)}</span>')
-    rates = "".join(
-        card for card in (_rate_card(report, "STRICT"), _rate_card(report, "CONTRACT")) if card
-    )
-    limitation = report.get("contract_limitation")
-    places = [_mapping(item) for item in _sequence(report.get("places"))]
-    place_cards = "".join(_site_card(place) for place in places)
     shielded = [
         _mapping(item)
         for item in _sequence(report.get("deliberately_not_asked"))
     ]
     shielded_cards = "".join(_shielded_item(item) for item in shielded)
+    pedagogical = [
+        _mapping(item)
+        for item in _sequence(report.get("pedagogically_not_asked"))
+    ]
+    pedagogical_cards = "".join(
+        _pedagogically_withheld_item(item) for item in pedagogical
+    )
+    coverage = _mapping(report.get("authored_line_coverage"))
+    if coverage.get("sufficient_for_assessment") is False:
+        empty_conversations = (
+            "Question generation is inconclusive because the submitted tests do "
+            "not execute enough student-authored code."
+        )
+    else:
+        empty_conversations = "No fair question sites are present in this report."
     formative = report.get("formative_notice")
     title = report.get("title") or "Fencepost comprehension report"
     return f"""<!doctype html>
@@ -440,26 +676,68 @@ def render_report_document(report: Mapping[str, Any]) -> str:
 <body id="top">
   <a class="skip-link" href="#main">Skip to report</a>
   <header class="masthead">
-    <div class="shell masthead-inner">{_logo()}<span class="schema-tag">report v{_text(schema)}</span></div>
+    <div class="shell masthead-inner">{_logo()}<nav aria-label="Report navigation"><a href="/method">Method</a></nav></div>
   </header>
   <main class="shell" id="main">
     {f'<aside class="formative-notice"><strong>Formative, human-reviewed.</strong><span>{_text(formative)}</span></aside>' if formative else ''}
     <section class="run-header" aria-labelledby="run-title">
       {f'<p class="run-meta">{" · ".join(run_meta)}</p>' if run_meta else ''}
       <h1 id="run-title">{_text(headline)}</h1>
+      {f'<p class="headline-detail">{_text(summary)}</p>' if summary else ''}
     </section>
-    {f'<section class="rates" aria-label="Equivalent mutant rates">{rates}</section>' if rates else ''}
-    {f'<p class="contract-limitation"><strong>CONTRACT limitation.</strong> {_text(limitation)}</p>' if limitation else ''}
-    <section class="places" aria-labelledby="places-heading">
-      <div class="section-intro"><p class="eyebrow">Instructor conversation guide</p><h2 id="places-heading">Places to discuss</h2></div>
-      {place_cards if place_cards else '<p class="empty-state">No question sites are present in this report.</p>'}
-    </section>
+    {_coverage_section(report)}
+    {_function_outcomes(report)}
     <section class="shielded" aria-labelledby="shielded-heading">
-      <div class="section-intro"><p class="eyebrow">Evidence of restraint</p><h2 id="shielded-heading">Deliberately not asked</h2><p>Technical distinctions excluded by the caller contract remain visible for instructor audit.</p></div>
-      {shielded_cards if shielded_cards else '<p class="empty-state">No contract-shielded mutations are present in this report.</p>'}
+      <div class="section-intro"><p class="eyebrow">Evidence of restraint</p><h2 id="shielded-heading">Deliberately not asked</h2><p>We keep technical distinctions visible for audit without turning them into unfair student questions.</p></div>
+      {shielded_cards + pedagogical_cards if shielded_cards or pedagogical_cards else '<p class="empty-state">No changes were withheld from student questions in this report.</p>'}
+    </section>
+    <section class="places" aria-labelledby="places-heading">
+      <div class="section-intro"><p class="eyebrow">Instructor conversation guide</p><h2 id="places-heading">Conversations worth having</h2><p>Related sites are grouped by function and ordered by the strength of their execution and commit evidence.</p></div>
+      {_conversation_groups(report) or f'<p class="empty-state">{empty_conversations}</p>'}
     </section>
   </main>
   <footer class="shell"><span class="wordmark small"><span>fence</span><span class="wordmark-post">post</span></span><span>Execution-grounded. Advisory, never a verdict.</span></footer>
+</body>
+</html>"""
+
+
+def render_method_document(report: Mapping[str, Any]) -> str:
+    """Render the technical rates and contract tradeoffs away from the student view."""
+    schema = report.get("schema_version")
+    if schema != SUPPORTED_REPORT_SCHEMA:
+        return render_error_document(
+            f"This viewer requires report schema {SUPPORTED_REPORT_SCHEMA}; "
+            f"the supplied data declares {schema!r}."
+        )
+    rates = "".join(
+        card
+        for card in (_rate_card(report, "STRICT"), _rate_card(report, "CONTRACT"))
+        if card
+    )
+    limitation = report.get("contract_limitation")
+    coverage = _mapping(report.get("authored_line_coverage"))
+    minimum = coverage.get("minimum_rate")
+    title = report.get("title") or "Fencepost comprehension report"
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Method · {_text(title)}</title>
+  <link rel="stylesheet" href="/assets/ledger.css">
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to method</a>
+  <header class="masthead"><div class="shell masthead-inner">{_logo()}<nav aria-label="Report navigation"><a href="/">Instructor report</a></nav></div></header>
+  <main class="shell method-main" id="main">
+    <section class="run-header"><p class="eyebrow">Technical appendix</p><h1>How Fencepost decides what is fair to ask.</h1><p class="headline-detail">These rates describe mutation triage, not the student. They are kept here so an instructor or reviewer can audit the method without mistaking them for a score.</p></section>
+    {f'<section class="rates" aria-label="Equivalent mutant rates">{rates}</section>' if rates else ''}
+    {f'<p class="contract-limitation"><strong>CONTRACT limitation.</strong> {_text(limitation)}</p>' if limitation else ''}
+    <section class="method-copy"><h2>Coverage precondition</h2><p>Fencepost measures the unique student-authored lines that contain mutation sites and were executed by the submitted suite. {f"At least {minimum:.0%} must be covered before the report presents zero findings as assessable." if isinstance(minimum, (int, float)) and not isinstance(minimum, bool) else "A run below the configured threshold is marked as not assessable."}</p></section>
+    <section class="method-copy"><h2>Two lenses, both retained</h2><p><strong>STRICT</strong> permits every distinction Python can express. <strong>CONTRACT</strong> admits only plain-caller evidence and drives student questions. Technical or pedagogically inappropriate witnesses are retained under “Deliberately not asked,” never silently deleted.</p></section>
+    <section class="method-copy"><h2>Execution trail</h2><p>Fencepost combines AST mutation, Git-blame attribution, Docker sandbox execution, and dual-mode equivalence triage. GPT-5.6 generates adversarial tests inside the product; it phrases tests and questions, while executed results remain the ground truth.</p></section>
+  </main>
 </body>
 </html>"""
 
@@ -495,6 +773,7 @@ __all__ = [
     "load_report",
     "render_artifact_page",
     "render_error_document",
+    "render_method_document",
     "render_report_document",
     "resolve_report_path",
 ]

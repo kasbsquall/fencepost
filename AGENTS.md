@@ -27,6 +27,17 @@ Fencepost asks has a ground truth we obtained by running code.
 2. **Select.** Of those lines, keep the ones covered by the student's own tests.
    An uncovered line has nothing to survive.
 
+   Selection also records an **authored-line coverage precondition**: the fraction
+   of unique student-authored production lines that contain a supported mutation
+   site and were executed by the submitted suite. The current minimum is 50%.
+   This deliberately simple floor requires evidence from at least a majority of
+   the student's authored, mutatable lines before silence can be summarized as an
+   assessable zero-finding result; it is a product policy, not a statistical
+   confidence claim.
+   Below that threshold, a report must say that Fencepost cannot assess code the
+   tests never run; zero eligible mutants is never a clean bill of health. The
+   coverage count and threshold appear in every report.
+
 3. **Mutate.** AST-level operators via the `ast` module (`ast.unparse`, py3.9+).
    One node change per mutant. Text substitution is not acceptable: it produces
    invalid code and cannot be reasoned about. Operator families: comparison
@@ -72,11 +83,28 @@ Fencepost asks has a ground truth we obtained by running code.
    using the surviving gap mutant plus
    diff context and blame metadata. It grades the student's answer against the
    execution result we already computed. The model phrases and evaluates; it does
-   not decide truth.
+   not decide truth. Questions are one or two plain-language sentences (at most
+   32 words), designed to be read aloud by an instructor; the report already
+   supplies location and attribution, so the question must not repeat them.
+
+   A final pedagogical filter applies only to the question layer, never to
+   mutation execution or either equivalence rate. A verified CONTRACT witness is
+   withheld when it inspects implementation details (dunder metadata or
+   reflection), or when it relies on an implicit `bool`-as-number quirk for a
+   parameter that the function does not declare as boolean. These are generic,
+   auditable rules for avoiding technically real but poor CS2 conversations, not
+   fixture exceptions. The evidence remains in the artifact under
+   **Deliberately not asked**. This is a deliberately conservative false-negative
+   trade: a withheld witness can still describe a genuine Python behavior.
 
 7. **Report.** Formative. "Here are the N places your understanding is
    unverified, and here is what breaks." Human in the loop. Never a verdict,
-   never an accusation, never a score that stands on its own.
+   never an accusation, never a score that stands on its own. It leads with what
+   the submitted tests already protect as well as the fair gaps, groups related
+   sites by function, and ranks conversations from execution and commit-message
+   evidence. The instructor view keeps the two equivalence rates out of the
+   student-facing headline; a separate Method view retains both rates, raw counts,
+   and the CONTRACT limitation for audit.
 
 ## Non-negotiables
 

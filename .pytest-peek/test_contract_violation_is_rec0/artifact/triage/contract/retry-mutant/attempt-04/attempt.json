@@ -1,0 +1,38 @@
+{
+  "attempt": 4,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fake",
+    "response_id": null,
+    "source": "from pkg.analytics import f\n\ndef test_generated():\n    assert f(2)\n",
+    "targeted_behavior": "retry fixture"
+  },
+  "mutant": {
+    "duration_seconds": 0.01,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": "",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.01,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": "",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "NOT_DISTINGUISHED",
+  "valid_attempt_number": 3
+}

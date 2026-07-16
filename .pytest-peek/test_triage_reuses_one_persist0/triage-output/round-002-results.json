@@ -1,0 +1,28 @@
+{
+  "infrastructure_errors": [],
+  "results": {
+    "round-002-job": {
+      "mutant": {
+        "duration_seconds": 0.01,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0
+      },
+      "original": {
+        "duration_seconds": 0.01,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0
+      },
+      "outcome": "NOT_DISTINGUISHED"
+    }
+  }
+}

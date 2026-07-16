@@ -1,0 +1,258 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fake",
+        "response_id": null,
+        "source": "def test_generated():\n    assert True\n",
+        "targeted_behavior": "fixture behavior"
+      },
+      "mutant": null,
+      "original": {
+        "duration_seconds": 0.01,
+        "exit_code": 1,
+        "failure": {
+          "detail": "AssertionError",
+          "kind": "failure",
+          "message": "assert 'B' == 'A'",
+          "nodeid": "test_adversarial::test_boundary"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "INVALID_ON_ORIGINAL",
+      "valid_attempt_number": null
+    },
+    {
+      "attempt": 2,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fake",
+        "response_id": null,
+        "source": "def test_generated():\n    assert True\n",
+        "targeted_behavior": "fixture behavior"
+      },
+      "mutant": {
+        "duration_seconds": 0.01,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.01,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "NOT_DISTINGUISHED",
+      "valid_attempt_number": 1
+    },
+    {
+      "attempt": 3,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fake",
+        "response_id": null,
+        "source": "def test_generated():\n    assert True\n",
+        "targeted_behavior": "fixture behavior"
+      },
+      "mutant": null,
+      "original": {
+        "duration_seconds": 0.01,
+        "exit_code": 1,
+        "failure": {
+          "detail": "AssertionError",
+          "kind": "failure",
+          "message": "assert 'B' == 'A'",
+          "nodeid": "test_adversarial::test_boundary"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "INVALID_ON_ORIGINAL",
+      "valid_attempt_number": null
+    },
+    {
+      "attempt": 4,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fake",
+        "response_id": null,
+        "source": "def test_generated():\n    assert True\n",
+        "targeted_behavior": "fixture behavior"
+      },
+      "mutant": {
+        "duration_seconds": 0.01,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.01,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "NOT_DISTINGUISHED",
+      "valid_attempt_number": 2
+    },
+    {
+      "attempt": 5,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fake",
+        "response_id": null,
+        "source": "def test_generated():\n    assert True\n",
+        "targeted_behavior": "fixture behavior"
+      },
+      "mutant": null,
+      "original": {
+        "duration_seconds": 0.01,
+        "exit_code": 1,
+        "failure": {
+          "detail": "AssertionError",
+          "kind": "failure",
+          "message": "assert 'B' == 'A'",
+          "nodeid": "test_adversarial::test_boundary"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "INVALID_ON_ORIGINAL",
+      "valid_attempt_number": null
+    },
+    {
+      "attempt": 6,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fake",
+        "response_id": null,
+        "source": "def test_generated():\n    assert True\n",
+        "targeted_behavior": "fixture behavior"
+      },
+      "mutant": {
+        "duration_seconds": 0.01,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.01,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": "",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "NOT_DISTINGUISHED",
+      "valid_attempt_number": 3
+    }
+  ],
+  "attempts_used": 6,
+  "failure_evidence": null,
+  "invalid_attempts": 3,
+  "label": "PROBABLE_EQUIVALENT",
+  "mode": "CONTRACT",
+  "mutant": {
+    "candidate": {
+      "after": "Gt",
+      "anchor": {
+        "column": 0,
+        "end_column": 1,
+        "end_line": 1,
+        "line": 1
+      },
+      "ast_path": [],
+      "before": "GtE",
+      "id": "equivalent-mutant",
+      "kind": "compare",
+      "parameters": [],
+      "path": "pkg/analytics.py",
+      "source_segment": "value >= 1"
+    },
+    "execution": {
+      "duration_seconds": 0.1,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 0,
+      "end_column": 1,
+      "end_line": 1,
+      "line": 1
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 3,
+  "winning_test": null
+}

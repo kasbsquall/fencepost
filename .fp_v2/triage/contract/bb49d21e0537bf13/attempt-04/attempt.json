@@ -1,0 +1,38 @@
+{
+  "attempt": 4,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 67.28199999999924,
+    "input_tokens": 43731,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 3122,
+    "provider": "codex-cli",
+    "response_id": "019f6aea-8ded-7392-ab52-6d09c6d8cb98",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_preserves_true_division_at_floating_rank_boundary():\n    assert analytics.percentile([3, 11, 19, 27, 35, 43, 51], 57.14285714285714) == 35",
+    "targeted_behavior": "At a floating-point rank boundary, true division yields index 4 while floor division rounds down to index 3."
+  },
+  "mutant": {
+    "duration_seconds": 0.5387519739997515,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-_03fgm_7/mutant/junit.xml -----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.5398071500021615,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-_03fgm_7/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "NOT_DISTINGUISHED",
+  "valid_attempt_number": 3
+}

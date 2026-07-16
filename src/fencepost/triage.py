@@ -29,6 +29,7 @@ from .models import (
     DualSurvivorTriageResult,
     GeneratedAdversarialTest,
     MutantResult,
+    MutationCandidate,
     SurvivorTriageResult,
     TriageConfig,
     TriageJob,
@@ -77,18 +78,46 @@ def _write_json(path: Path, value: object) -> None:
     )
 
 
-def _nodes_along_path(source: str, mutant: MutantResult) -> list[ast.AST]:
-    node: ast.AST = ast.parse(source, filename=mutant.candidate.path)
+def _nodes_along_candidate_path(
+    source: str, candidate: MutationCandidate
+) -> list[ast.AST]:
+    node: ast.AST = ast.parse(source, filename=candidate.path)
     nodes = [node]
-    for step in mutant.candidate.ast_path:
+    for step in candidate.ast_path:
         value = getattr(node, step.field)
         node = value if step.index is None else value[step.index]
         if not isinstance(node, ast.AST):
             raise ValueError(
-                f"mutation path for {mutant.candidate.id} resolves through a non-AST value"
+                f"mutation path for {candidate.id} resolves through a non-AST value"
             )
         nodes.append(node)
     return nodes
+
+
+def _nodes_along_path(source: str, mutant: MutantResult) -> list[ast.AST]:
+    return _nodes_along_candidate_path(source, mutant.candidate)
+
+
+def candidate_function_name(source: str, candidate: MutationCandidate) -> str:
+    """Return the class/function owner for any enumerated mutation candidate."""
+    nodes = _nodes_along_candidate_path(source, candidate)
+    function = next(
+        (
+            node
+            for node in reversed(nodes)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        ),
+        None,
+    )
+    if function is None:
+        return "<module>"
+    names = [
+        node.name
+        for node in nodes
+        if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
+        and nodes.index(node) <= nodes.index(function)
+    ]
+    return ".".join(names)
 
 
 def _function_context(

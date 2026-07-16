@@ -1,0 +1,9 @@
+{
+  "generation_duration_seconds": 7.905999999995402,
+  "input_tokens": 14785,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 136,
+  "provider": "codex-cli",
+  "question_text": "What observable behavior breaks when the computed percentile index equals the number of sorted scores, and why must that boundary be handled before indexing the list?",
+  "response_id": "019f6aec-d5d2-78e0-8edc-47efe57d8f76"
+}

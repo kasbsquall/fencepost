@@ -274,6 +274,8 @@ def main(argv: list[str] | None = None) -> int:
     if result.probe is not None:
         print(
             f"probe: mutants={result.probe.total_targets} "
+            f"eligible={result.probe.eligible_target_count} "
+            f"withheld={result.probe.pedagogically_withheld_count} "
             f"sites={result.probe.total_sites} "
             f"accounted={result.probe.accounted_mutant_count} "
             f"questions={result.probe.question_count} "

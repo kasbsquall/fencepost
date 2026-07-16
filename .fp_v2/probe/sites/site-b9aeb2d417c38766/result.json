@@ -1,0 +1,164 @@
+{
+  "answer": null,
+  "artifact_refs": [
+    "run.json",
+    "triage/contract/764a18c525e359d6/attempt-01/attempt.json",
+    "probe/sites/site-b9aeb2d417c38766/result.json"
+  ],
+  "assessment": null,
+  "error": null,
+  "grounding": {
+    "attribution_artifact_ref": "run.json",
+    "authored_lines": [
+      {
+        "author_date": "2026-07-09",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "dceec68ad2228d7e3a299b1129053f7a036e17de",
+        "commit_summary": "implement percentile",
+        "line": 38,
+        "path": "gradebook/analytics.py",
+        "text": "    k = int(len(ordered) * p / 100)"
+      }
+    ],
+    "end_line": 38,
+    "original_segment": "    k = int(len(ordered) * p / 100)",
+    "path": "gradebook/analytics.py",
+    "start_line": 38
+  },
+  "mutants": [
+    {
+      "artifact_refs": [
+        "triage/contract/764a18c525e359d6/attempt-01/attempt.json",
+        "probe/sites/site-b9aeb2d417c38766/mutants/764a18c525e359d6.json"
+      ],
+      "evidence": {
+        "adversarial_test": {
+          "generation_duration_seconds": 10.843000000000757,
+          "input_tokens": 13165,
+          "model": "gpt-5.6-terra",
+          "output_tokens": 267,
+          "provider": "codex-cli",
+          "response_id": "019f6ae4-bb3c-7d21-890d-0b8a11d7ccec",
+          "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_hundred_based_rank_scale():\n    assert analytics.percentile([10, 20, 30], 66) == 20",
+          "targeted_behavior": "Percentile rank calculation must divide by 100, so 66th percentile of three ordered scores selects index 1."
+        },
+        "failing_assertion": {
+          "detail": "def test_percentile_uses_hundred_based_rank_scale():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x739c89670220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x739c89670220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "assert 30 == 20\n +  where 30 = <function percentile at 0x739c89670220>([10, 20, 30], 66)\n +    where <function percentile at 0x739c89670220> = analytics.percentile",
+          "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_based_rank_scale"
+        },
+        "mutant_execution": {
+          "duration_seconds": 0.6294280500005698,
+          "exit_code": 1,
+          "failure": {
+            "detail": "def test_percentile_uses_hundred_based_rank_scale():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x739c89670220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x739c89670220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+            "kind": "failure",
+            "message": "assert 30 == 20\n +  where 30 = <function percentile at 0x739c89670220>([10, 20, 30], 66)\n +    where <function percentile at 0x739c89670220> = analytics.percentile",
+            "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_based_rank_scale"
+          },
+          "status": "failed",
+          "stderr": "",
+          "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________ test_percentile_uses_hundred_based_rank_scale _________________\n\n    def test_percentile_uses_hundred_based_rank_scale():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x739c89670220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x739c89670220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0019-q7nu4klo/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_uses_hundred_based_rank_scale\n1 failed in 0.02s\n",
+          "tests_collected": 1,
+          "tests_skipped": 0,
+          "timed_out": false
+        },
+        "original_execution": {
+          "duration_seconds": 0.6127768530022877,
+          "exit_code": 0,
+          "failure": null,
+          "status": "passed",
+          "stderr": "",
+          "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-q7nu4klo/original/junit.xml ----\n1 passed in 0.01s\n",
+          "tests_collected": 1,
+          "tests_skipped": 0,
+          "timed_out": false
+        },
+        "triage_artifact_ref": "triage/contract/764a18c525e359d6/attempt-01/attempt.json"
+      },
+      "module_path": "gradebook.analytics",
+      "mutant": {
+        "candidate": {
+          "after": "99",
+          "anchor": {
+            "column": 31,
+            "end_column": 34,
+            "end_line": 38,
+            "line": 38
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 3
+            },
+            {
+              "field": "body",
+              "index": 3
+            },
+            {
+              "field": "value",
+              "index": null
+            },
+            {
+              "field": "args",
+              "index": 0
+            },
+            {
+              "field": "right",
+              "index": null
+            }
+          ],
+          "before": "100",
+          "id": "764a18c525e359d6",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "-1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "100"
+        },
+        "execution": {
+          "duration_seconds": 1.3156326480002463,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.02s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0033-f9j9307d/junit.xml ------------\n10 passed in 0.02s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 31,
+          "end_column": 33,
+          "end_line": 35,
+          "line": 35
+        }
+      },
+      "mutant_id": "764a18c525e359d6",
+      "mutated_function": "def percentile(scores, p):\n    \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n    p = clamp_percent(p)\n    ordered = sorted(scores)\n    k = int(len(ordered) * p / 99)\n    if k >= len(ordered):\n        k = len(ordered) - 1\n    return ordered[k]",
+      "mutation": {
+        "mutated_segment": "99",
+        "original_segment": "100",
+        "unified_diff": "--- original\n+++ mutant\n@@ -2,7 +2,7 @@\n     \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n     p = clamp_percent(p)\n     ordered = sorted(scores)\n-    k = int(len(ordered) * p / 100)\n+    k = int(len(ordered) * p / 99)\n     if k >= len(ordered):\n         k = len(ordered) - 1\n     return ordered[k]"
+      },
+      "original_function": "def percentile(scores, p):\n    \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n    p = clamp_percent(p)\n    ordered = sorted(scores)\n    k = int(len(ordered) * p / 100)\n    if k >= len(ordered):\n        k = len(ordered) - 1\n    return ordered[k]",
+      "qualified_function_name": "percentile"
+    }
+  ],
+  "question": {
+    "generation_duration_seconds": 12.14100000000326,
+    "input_tokens": 14612,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 165,
+    "provider": "codex-cli",
+    "question_text": "How does the percentile calculation map a percentage to an index in the sorted scores, and what results would become incorrect if its divisor did not preserve the 0\u2013100 percentage scale?",
+    "response_id": "019f6aec-a68a-7f53-843f-26f9e9a36347"
+  },
+  "site_id": "site-b9aeb2d417c38766",
+  "status": "READY",
+  "survivor_count": 1
+}

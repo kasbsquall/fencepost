@@ -1,0 +1,38 @@
+{
+  "attempt": 3,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 206.88999999999942,
+    "input_tokens": 164265,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 8013,
+    "provider": "codex-cli",
+    "response_id": "019f6ae7-5f95-7be3-96cf-231eda74e3e2",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_clamps_negative_fraction_to_lowest_score():\n    assert analytics.percentile([10, 90], -0.1) == 10",
+    "targeted_behavior": "Negative fractional percent values are clamped at the lower boundary before rank selection."
+  },
+  "mutant": {
+    "duration_seconds": 0.6158314130007057,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-jba03wbv/mutant/junit.xml -----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.6142261989989493,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-jba03wbv/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "NOT_DISTINGUISHED",
+  "valid_attempt_number": 2
+}

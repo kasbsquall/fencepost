@@ -54,6 +54,9 @@ a { color: inherit; }
   gap: 24px;
 }
 
+.masthead nav { font-family: var(--mono); font-size: 12px; }
+.masthead nav a { text-underline-offset: 4px; }
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -131,6 +134,8 @@ h1 {
 
 h2 { margin-bottom: 8px; font-size: clamp(28px, 4vw, 42px); font-weight: 500; }
 
+.headline-detail { max-width: 860px; margin: 24px 0 0; font-size: 22px; color: var(--tan); }
+
 code, pre { font-family: var(--mono); }
 
 code {
@@ -184,7 +189,17 @@ code {
 
 .contract-limitation strong { color: var(--ink); }
 
-.places, .shielded { padding-top: 92px; }
+.coverage-context {
+  margin-top: 24px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+
+.coverage-context p:last-child { margin-bottom: 0; }
+.coverage-low { border-left: 4px solid var(--red); }
+
+.places, .shielded, .function-outcomes { padding-top: 92px; }
 .section-intro { max-width: 740px; margin-bottom: 26px; }
 .section-intro > p:last-child { color: var(--tan); }
 
@@ -194,6 +209,25 @@ code {
   border: 1px solid var(--line);
   background: var(--card);
 }
+
+.function-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.function-column { padding: 22px; border: 1px solid var(--line); background: var(--card); }
+.function-column h3 { margin-bottom: 16px; font-size: 20px; }
+.function-column ul { display: grid; gap: 11px; margin: 0; padding: 0; list-style: none; }
+.function-column li { display: flex; justify-content: space-between; gap: 15px; }
+.function-column small { color: var(--tan); font-family: var(--mono); text-align: right; }
+.function-clean { border-left: 4px solid var(--green); }
+
+.conversation-group { margin-bottom: 48px; }
+.conversation-header { margin-bottom: 16px; padding: 0 4px; }
+.conversation-header h3 { margin-bottom: 7px; font-size: 28px; }
+.group-meta { color: var(--tan); font-family: var(--mono); font-size: 12px; }
+.priority-reason { max-width: 760px; padding: 15px 17px; border-left: 3px solid var(--tan); background: var(--card); }
 
 .site-card > summary,
 .shielded-card > summary {
@@ -326,6 +360,15 @@ pre {
 .change-line code { padding: 8px 10px; border: 1px solid var(--line); background: var(--card); }
 .change-arrow { color: var(--tan); }
 
+.unified-diff, .suite-log, .technical-evidence { margin-top: 13px; }
+.unified-diff summary, .suite-log summary, .technical-evidence summary {
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--tan);
+}
+.unified-diff pre, .suite-log pre { margin-top: 8px; padding: 13px; border: 1px solid var(--line); background: var(--card); font-size: 10px; }
+
 .state-sequence {
   display: grid;
   grid-template-columns: minmax(180px, 0.7fr) minmax(300px, 1.4fr) minmax(250px, 1fr);
@@ -363,7 +406,8 @@ pre {
 
 .state-name, .state-result { margin: 0; }
 .state-name { font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; }
-.state-result { font-family: var(--mono); font-size: 20px; font-weight: 700; }
+.state-result { display: flex; flex-wrap: wrap; gap: 7px; font-family: var(--mono); font-size: 14px; }
+.state-result strong { font-weight: 700; }
 .suite-output { max-height: 105px; margin-top: 10px; font-size: 10px; color: currentColor; }
 .artifact-ref, .evidence-ref { margin: 10px 0 0; color: var(--tan); font-size: 10px; }
 
@@ -383,6 +427,10 @@ pre {
 .answer-section { margin-top: 30px; padding: 22px; border-left: 3px solid var(--tan); }
 .answer-section blockquote { margin: 0 0 16px; font-size: 21px; }
 .verdict { font-family: var(--mono); font-weight: 700; }
+.evidence-explanation { color: var(--tan); }
+.citations { display: grid; gap: 12px; padding: 0; list-style: none; }
+.citations li { padding: 14px; border: 1px solid var(--line); }
+.citations pre { margin-top: 8px; font-size: 11px; }
 
 .evidence-ref { text-align: right; }
 
@@ -390,7 +438,13 @@ pre {
 .shielded-card { border-style: dashed; }
 .shielded-body > * + * { margin-top: 18px; }
 .shielded-explanation { color: var(--tan); }
+.shielded-lead { max-width: 820px; font-size: 20px; }
+.technical-evidence { padding-top: 10px; border-top: 1px solid var(--line); }
+.technical-evidence[open] { padding-bottom: 10px; }
 .strict-failure { padding: 16px; border-left: 3px solid var(--red); color: var(--red); }
+
+.method-main { padding-bottom: 96px; }
+.method-copy { max-width: 800px; padding-top: 64px; }
 
 .empty-state { padding: 24px; border: 1px dashed var(--line); color: var(--tan); }
 

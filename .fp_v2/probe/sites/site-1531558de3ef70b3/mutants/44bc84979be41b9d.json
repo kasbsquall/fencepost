@@ -1,0 +1,117 @@
+{
+  "artifact_refs": [
+    "triage/contract/44bc84979be41b9d/attempt-01/attempt.json",
+    "probe/sites/site-1531558de3ef70b3/mutants/44bc84979be41b9d.json"
+  ],
+  "evidence": {
+    "adversarial_test": {
+      "generation_duration_seconds": 10.75,
+      "input_tokens": 13078,
+      "model": "gpt-5.6-terra",
+      "output_tokens": 163,
+      "provider": "codex-cli",
+      "response_id": "019f6ae0-b04c-75d3-8fad-127e90592adf",
+      "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_preserves_positive_fraction_below_one():\n    assert gradebook.analytics.clamp_percent(0.5) == 0.5",
+      "targeted_behavior": "A percentage strictly between 0 and 1 must be preserved rather than clamped."
+    },
+    "failing_assertion": {
+      "detail": "def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert gradebook.analytics.clamp_percent(0.5) == 0.5\nE       AssertionError: assert 0 == 0.5\nE        +  where 0 = <function clamp_percent at 0x7bdccf914040>(0.5)\nE        +    where <function clamp_percent at 0x7bdccf914040> = <module 'gradebook.analytics' from '/work/jobs/triage-0014-twbwgtty/mutant/tree/gradebook/analytics.py'>.clamp_percent\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0014-twbwgtty/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0014/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 0 == 0.5\n +  where 0 = <function clamp_percent at 0x7bdccf914040>(0.5)\n +    where <function clamp_percent at 0x7bdccf914040> = <module 'gradebook.analytics' from '/work/jobs/triage-0014-twbwgtty/mutant/tree/gradebook/analytics.py'>.clamp_percent\n +      where <module 'gradebook.analytics' from '/work/jobs/triage-0014-twbwgtty/mutant/tree/gradebook/analytics.py'> = gradebook.analytics",
+      "nodeid": ".fencepost-generated-0014.test_adversarial::test_clamp_percent_preserves_positive_fraction_below_one"
+    },
+    "mutant_execution": {
+      "duration_seconds": 0.6349103850006941,
+      "exit_code": 1,
+      "failure": {
+        "detail": "def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert gradebook.analytics.clamp_percent(0.5) == 0.5\nE       AssertionError: assert 0 == 0.5\nE        +  where 0 = <function clamp_percent at 0x7bdccf914040>(0.5)\nE        +    where <function clamp_percent at 0x7bdccf914040> = <module 'gradebook.analytics' from '/work/jobs/triage-0014-twbwgtty/mutant/tree/gradebook/analytics.py'>.clamp_percent\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0014-twbwgtty/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0014/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 0 == 0.5\n +  where 0 = <function clamp_percent at 0x7bdccf914040>(0.5)\n +    where <function clamp_percent at 0x7bdccf914040> = <module 'gradebook.analytics' from '/work/jobs/triage-0014-twbwgtty/mutant/tree/gradebook/analytics.py'>.clamp_percent\n +      where <module 'gradebook.analytics' from '/work/jobs/triage-0014-twbwgtty/mutant/tree/gradebook/analytics.py'> = gradebook.analytics",
+        "nodeid": ".fencepost-generated-0014.test_adversarial::test_clamp_percent_preserves_positive_fraction_below_one"
+      },
+      "status": "failed",
+      "stderr": "",
+      "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_clamp_percent_preserves_positive_fraction_below_one ___________\n\n    def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert gradebook.analytics.clamp_percent(0.5) == 0.5\nE       AssertionError: assert 0 == 0.5\nE        +  where 0 = <function clamp_percent at 0x7bdccf914040>(0.5)\nE        +    where <function clamp_percent at 0x7bdccf914040> = <module 'gradebook.analytics' from '/work/jobs/triage-0014-twbwgtty/mutant/tree/gradebook/analytics.py'>.clamp_percent\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0014-twbwgtty/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0014/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0014-twbwgtty/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0014/test_adversarial.py::test_clamp_percent_preserves_positive_fraction_below_one\n1 failed in 0.02s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "original_execution": {
+      "duration_seconds": 0.6535806439969747,
+      "exit_code": 0,
+      "failure": null,
+      "status": "passed",
+      "stderr": "",
+      "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0014-twbwgtty/original/junit.xml ----\n1 passed in 0.01s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "triage_artifact_ref": "triage/contract/44bc84979be41b9d/attempt-01/attempt.json"
+  },
+  "module_path": "gradebook.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "1",
+      "anchor": {
+        "column": 11,
+        "end_column": 12,
+        "end_line": 27,
+        "line": 27
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "0",
+      "id": "44bc84979be41b9d",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "0"
+    },
+    "execution": {
+      "duration_seconds": 1.128026582999155,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0022-8swnjwry/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 11,
+      "end_column": 12,
+      "end_line": 25,
+      "line": 25
+    }
+  },
+  "mutant_id": "44bc84979be41b9d",
+  "mutated_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 1:\n        p = 0\n    if p > 100:\n        p = 100\n    return p",
+  "mutation": {
+    "mutated_segment": "1",
+    "original_segment": "0",
+    "unified_diff": "--- original\n+++ mutant\n@@ -1,6 +1,6 @@\n def clamp_percent(p):\n     \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n-    if p < 0:\n+    if p < 1:\n         p = 0\n     if p > 100:\n         p = 100"
+  },
+  "original_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 0:\n        p = 0\n    if p > 100:\n        p = 100\n    return p",
+  "qualified_function_name": "clamp_percent"
+}

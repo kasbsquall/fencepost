@@ -10,7 +10,11 @@ from pathlib import Path
 
 from fencepost import RunConfig, TriageConfig, run_analysis
 from fencepost.probe import probe_site_id
-from fencepost.ui import load_report, render_report_document
+from fencepost.ui import (
+    load_report,
+    render_method_document,
+    render_report_document,
+)
 from tests.fakes import (
     FixtureAdversarialTestGenerator,
     FixtureComprehensionProbeAgent,
@@ -200,6 +204,8 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     assert result.probe is not None
     probe = result.probe
     assert probe.total_targets == 20
+    assert probe.eligible_target_count == 20
+    assert probe.pedagogically_withheld_count == 0
     expected_sites = {
         (item.mutant.candidate.path, item.mutant.candidate.anchor.line)
         for item in triage.results
@@ -272,12 +278,45 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     assert len(report.deliberately_not_asked) == 1
     assert report.equivalent_rate_strict == 0.0
     assert report.equivalent_rate_contract == 1 / 21
+    assert report.submitted_suite_tests_passed == 10
+    assert report.mutation_summary.total_mutants == 51
+    assert report.mutation_summary.killed_by_submitted_tests == 30
+    assert report.mutation_summary.survived_submitted_tests == 21
+    assert report.question_mutant_count == 20
+    assert report.not_questioned_mutant_count == 1
+    assert report.conversation_count == 3
+    assert report.function_groups[0].qualified_function_name == "percentile"
+    assert "commit_claim" in report.function_groups[0].ranking_signals
+    assert "commit_evidence_overlap" in report.function_groups[0].ranking_signals
+    assessments = {
+        item.qualified_function_name: item for item in report.function_assessments
+    }
+    assert assessments["rank"].status == "CLEAN"
+    assert assessments["top_n"].status == "CLEAN"
+    coverage = report.authored_line_coverage
+    assert coverage.sufficient_for_assessment is True
+    assert coverage.rate is not None
+    assert coverage.rate >= coverage.minimum_rate
+    assert coverage.covered_authored_mutatable_line_count <= (
+        coverage.authored_mutatable_line_count
+    )
     report_payload = json.loads(
         (result.artifact_dir / "report" / "report.json").read_text(
             encoding="utf-8"
         )
     )
     assert report_payload["schema_version"] == "2.0"
+    assert report_payload["submitted_suite_tests_passed"] == 10
+    assert report_payload["mutation_summary"] == {
+        "broken_mutants": 0,
+        "killed_by_submitted_tests": 30,
+        "survived_submitted_tests": 21,
+        "total_mutants": 51,
+    }
+    assert report_payload["conversation_count"] == 3
+    assert report_payload["function_groups"][0][
+        "qualified_function_name"
+    ] == "percentile"
     assert len(report_payload["places"]) == probe.total_sites
     assert sum(place["survivor_count"] for place in report_payload["places"]) == 20
     assert sum(len(place["mutants"]) for place in report_payload["places"]) == 20
@@ -286,6 +325,16 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
         for place in report_payload["places"]
         for mutant in place["mutants"]
     } == {10}
+    assert all(
+        mutant["mutation"]["unified_diff"]
+        for place in report_payload["places"]
+        for mutant in place["mutants"]
+    )
+    graded_payload = [
+        place for place in report_payload["places"] if place["assessment"] is not None
+    ]
+    assert len(graded_payload) == 1
+    assert graded_payload[0]["assessment"]["citations"]
     assert len(report_payload["deliberately_not_asked"]) == 1
     assert (result.artifact_dir / "report" / "report.md").exists()
 
@@ -294,11 +343,22 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     )
     parsed = _ReportText()
     parsed.feed(document)
-    assert (
-        f"Their suite passed; {probe.total_sites} sites where understanding is "
-        "unverified."
-    ) in parsed.visible
-    assert "STRICT equivalent rate" in parsed.visible
-    assert "CONTRACT equivalent rate" in parsed.visible
+    assert "10 tests pass" in parsed.visible
+    assert "We made 51 small changes to code they wrote; their tests caught 30." in parsed.visible
+    assert "What their tests already protect" in parsed.visible
+    assert "rank all" in parsed.visible
+    assert "top_n all" in parsed.visible
+    assert "STRICT equivalent rate" not in parsed.visible
+    assert "CONTRACT equivalent rate" not in parsed.visible
     assert "Deliberately not asked" in parsed.visible
-    assert "10 passed" in parsed.visible
+    assert "Their 10 tests — passed" in parsed.visible
+    assert "fix percentile index out of range when p=100" in parsed.visible
+
+    method = render_method_document(
+        load_report(result.artifact_dir / "report" / "report.json")
+    )
+    method_text = _ReportText()
+    method_text.feed(method)
+    assert "STRICT equivalent rate" in method_text.visible
+    assert "CONTRACT equivalent rate" in method_text.visible
+    assert "false-negative risk" in method_text.visible.lower()

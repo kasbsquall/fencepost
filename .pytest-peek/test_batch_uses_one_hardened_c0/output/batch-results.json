@@ -1,0 +1,15 @@
+{
+  "aborted_all_broken": false,
+  "duration_seconds": 1.0,
+  "results": {
+    "m1": {
+      "duration_seconds": 0.25,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "",
+      "timed_out": false
+    }
+  }
+}

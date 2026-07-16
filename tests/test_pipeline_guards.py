@@ -4,8 +4,19 @@ import json
 
 import pytest
 
-from fencepost.models import ExecutionResult, MutantResult, MutationCandidate, SourceSpan
-from fencepost.pipeline import PipelineError, _raise_if_initial_mutants_all_broken
+from fencepost.models import (
+    BlameLine,
+    ExecutionResult,
+    MutantResult,
+    MutationCandidate,
+    SourceSpan,
+)
+from fencepost.pipeline import (
+    PipelineError,
+    _candidate_inventory,
+    _raise_if_initial_mutants_all_broken,
+)
+from fencepost.repository import SourceFile
 
 
 def _broken_result(index: int) -> MutantResult:
@@ -41,3 +52,43 @@ def test_initial_all_broken_guard_stops_after_five(tmp_path) -> None:
     diagnostic = json.loads((tmp_path / "all-broken.json").read_text(encoding="utf-8"))
     assert diagnostic["attempted_mutants"] == 5
     assert diagnostic["eligible_mutants"] == 40
+
+
+def test_authored_line_coverage_counts_unique_mutatable_source_lines() -> None:
+    source = SourceFile(
+        path="pkg/logic.py",
+        text=(
+            "def f(value):\n"
+            "    if value > 0:\n"
+            "        return value + 1\n"
+            "    return 0\n"
+        ),
+        sha256="fixture",
+    )
+    blame = {
+        source.path: {
+            line: BlameLine(
+                path=source.path,
+                line=line,
+                commit="a" * 40,
+                author_name="Student",
+                author_email="student@example.edu",
+                author_date="2026-07-01",
+                summary="implement logic",
+                is_student=True,
+            )
+            for line in range(1, 5)
+        }
+    }
+
+    eligible, coverage, functions = _candidate_inventory(
+        (source,), blame, {source.path: (2,)}
+    )
+
+    assert coverage.authored_mutatable_line_count == 3
+    assert coverage.covered_authored_mutatable_line_count == 1
+    assert coverage.rate == pytest.approx(1 / 3)
+    assert coverage.minimum_rate == 0.5
+    assert coverage.sufficient_for_assessment is False
+    assert eligible
+    assert set(functions.values()) == {"f"}

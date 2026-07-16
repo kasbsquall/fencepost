@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import asdict, dataclass, is_dataclass
 from pathlib import Path
 from typing import Any, Literal
@@ -336,6 +337,13 @@ class ProbeMutantEvidence:
 
 
 @dataclass(frozen=True)
+class PedagogicallyWithheldTarget:
+    mutant: ProbeMutantEvidence
+    reason_codes: tuple[str, ...]
+    reasons: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class ProbeQuestionRequest:
     site_id: str
     grounding: ProbeGrounding
@@ -410,6 +418,8 @@ class ProbeResult:
 @dataclass(frozen=True)
 class ProbeSummary:
     total_targets: int
+    eligible_target_count: int
+    pedagogically_withheld_count: int
     total_sites: int
     accounted_mutant_count: int
     question_count: int
@@ -423,6 +433,50 @@ class ProbeSummary:
     call_count: int
     model_wall_clock_seconds: float
     results: tuple[ProbeResult, ...]
+    pedagogically_withheld: tuple[PedagogicallyWithheldTarget, ...]
+
+
+@dataclass(frozen=True)
+class AuthoredLineCoverage:
+    authored_mutatable_line_count: int
+    covered_authored_mutatable_line_count: int
+    rate: float | None
+    minimum_rate: float
+    sufficient_for_assessment: bool
+    artifact_ref: str
+
+
+@dataclass(frozen=True)
+class MutationOutcomeSummary:
+    total_mutants: int
+    killed_by_submitted_tests: int
+    survived_submitted_tests: int
+    broken_mutants: int
+
+
+@dataclass(frozen=True)
+class FunctionAssessment:
+    path: str
+    qualified_function_name: str
+    status: str
+    total_mutants: int
+    killed_by_submitted_tests: int
+    survived_submitted_tests: int
+    broken_mutants: int
+    contract_real_gap_mutants: int
+    question_site_count: int
+    artifact_refs: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class ReportFunctionGroup:
+    path: str
+    qualified_function_name: str
+    site_ids: tuple[str, ...]
+    site_count: int
+    mutant_count: int
+    ranking_signals: tuple[str, ...]
+    priority_reason: str | None
 
 
 @dataclass(frozen=True)
@@ -433,6 +487,7 @@ class ContractShieldedReportItem:
     original_segment: str
     mutated_segment: str
     reason: str
+    plain_language_reason: str
     strict_test: GeneratedAdversarialTest
     strict_failure_evidence: FailureEvidence
     artifact_refs: tuple[str, ...]
@@ -447,7 +502,15 @@ class FencepostReport:
     student_email: str
     repository_commit: str
     submitted_suite_status: str
+    submitted_suite_tests_passed: int | None
     baseline_artifact_ref: str
+    authored_line_coverage: AuthoredLineCoverage
+    mutation_summary: MutationOutcomeSummary
+    function_assessments: tuple[FunctionAssessment, ...]
+    function_groups: tuple[ReportFunctionGroup, ...]
+    conversation_count: int
+    question_mutant_count: int
+    not_questioned_mutant_count: int
     unverified_place_count: int
     question_count: int
     submitted_answer_count: int
@@ -463,6 +526,7 @@ class FencepostReport:
     contract_limitation: str
     places: tuple[ProbeResult, ...]
     deliberately_not_asked: tuple[ContractShieldedReportItem, ...]
+    pedagogically_not_asked: tuple[PedagogicallyWithheldTarget, ...]
     traceability_artifacts: tuple[str, ...]
     complete: bool
 
@@ -500,3 +564,12 @@ def json_value(value: Any) -> Any:
     if isinstance(value, dict):
         return {str(key): json_value(item) for key, item in value.items()}
     return value
+
+
+_PYTEST_PASSED_RE = re.compile(r"(?<!\w)(\d+)\s+passed\b")
+
+
+def pytest_pass_count(stdout: str) -> int | None:
+    """Extract the final pytest-reported pass count into an engine artifact."""
+    matches = _PYTEST_PASSED_RE.findall(stdout)
+    return int(matches[-1]) if matches else None
