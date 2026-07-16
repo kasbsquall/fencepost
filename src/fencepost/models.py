@@ -1,4 +1,4 @@
-"""Records shared by Fencepost's first four pipeline stages."""
+"""Records shared by Fencepost's execution and triage stages."""
 
 from __future__ import annotations
 
@@ -9,6 +9,13 @@ from typing import Any, Literal
 
 ExecutionStatus = Literal[
     "survived", "killed", "broken", "timed_out", "infrastructure_error"
+]
+TriageLabel = Literal["REAL_GAP", "PROBABLE_EQUIVALENT", "UNRESOLVED"]
+AttemptOutcome = Literal[
+    "INVALID_ON_ORIGINAL", "NOT_DISTINGUISHED", "DISTINGUISHED"
+]
+AdversarialExecutionStatus = Literal[
+    "passed", "failed", "timed_out", "infrastructure_error"
 ]
 
 
@@ -23,6 +30,13 @@ class RunConfig:
     mutant_timeout_cap_seconds: float = 60.0
     mutant_workers: int | None = None
     build_image: bool = True
+
+
+@dataclass(frozen=True)
+class TriageConfig:
+    valid_attempts: int = 3
+    invalid_retry_limit: int = 3
+    test_timeout_seconds: float = 10.0
 
 
 @dataclass(frozen=True)
@@ -86,6 +100,115 @@ class MutantResult:
 
 
 @dataclass(frozen=True)
+class FailureEvidence:
+    nodeid: str
+    kind: str
+    message: str
+    detail: str
+
+
+@dataclass(frozen=True)
+class AdversarialExecution:
+    status: AdversarialExecutionStatus
+    exit_code: int | None
+    duration_seconds: float
+    stdout: str
+    stderr: str
+    timed_out: bool = False
+    tests_collected: int = 0
+    tests_skipped: int = 0
+    failure: FailureEvidence | None = None
+
+
+@dataclass(frozen=True)
+class AttemptFeedback:
+    attempt: int
+    test_source: str
+    outcome: AttemptOutcome
+    original_summary: str
+    mutant_summary: str | None = None
+
+
+@dataclass(frozen=True)
+class AdversarialTestRequest:
+    mutant: MutantResult
+    attempt: int
+    valid_attempts_completed: int
+    module_path: str
+    qualified_function_name: str
+    original_function: str
+    mutated_function: str
+    unified_diff: str
+    prior_attempts: tuple[AttemptFeedback, ...] = ()
+
+
+@dataclass(frozen=True)
+class GeneratedAdversarialTest:
+    source: str
+    targeted_behavior: str
+    provider: str
+    model: str | None
+    response_id: str | None
+    generation_duration_seconds: float
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+
+
+@dataclass(frozen=True)
+class TriageJob:
+    id: str
+    mutant_path: str
+    mutant_source: str
+    test_source: str
+    attempt: int
+
+
+@dataclass(frozen=True)
+class TriageJobResult:
+    id: str
+    outcome: AttemptOutcome
+    original: AdversarialExecution
+    mutant: AdversarialExecution | None
+
+
+@dataclass(frozen=True)
+class AdversarialAttempt:
+    attempt: int
+    valid_attempt_number: int | None
+    generated_test: GeneratedAdversarialTest
+    outcome: AttemptOutcome
+    original: AdversarialExecution
+    mutant: AdversarialExecution | None
+
+
+@dataclass(frozen=True)
+class SurvivorTriageResult:
+    mutant: MutantResult
+    label: TriageLabel
+    attempts: tuple[AdversarialAttempt, ...]
+    attempts_used: int
+    valid_attempts: int
+    invalid_attempts: int
+    winning_test: GeneratedAdversarialTest | None
+    failure_evidence: FailureEvidence | None
+    unresolved_reason: str | None = None
+
+
+@dataclass(frozen=True)
+class TriageSummary:
+    total_survivors: int
+    real_gap_count: int
+    probable_equivalent_count: int
+    unresolved_count: int
+    equivalent_rate: float | None
+    triage_complete: bool
+    total_attempts: int
+    valid_attempts: int
+    invalid_original_attempts: int
+    results: tuple[SurvivorTriageResult, ...]
+
+
+@dataclass(frozen=True)
 class AnalysisResult:
     repo: Path
     commit: str
@@ -96,6 +219,7 @@ class AnalysisResult:
     batch_duration_seconds: float
     elapsed_seconds: float
     artifact_dir: Path
+    triage: TriageSummary | None = None
 
     @property
     def mutant_count(self) -> int:

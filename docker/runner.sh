@@ -23,6 +23,13 @@ case "$mode" in
     exec python /opt/fencepost/batch_driver.py \
       /input/manifest.json /out/batch-results.json
     ;;
+  triage-session)
+    trap 'exit 0' TERM INT
+    while :; do
+      sleep 3600 &
+      wait "$!"
+    done
+    ;;
   *)
     echo "unknown runner mode: $mode" >&2
     exit 64

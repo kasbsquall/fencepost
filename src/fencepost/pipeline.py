@@ -9,6 +9,7 @@ import tempfile
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from .models import (
     AnalysisResult,
@@ -17,6 +18,7 @@ from .models import (
     MutantResult,
     MutationCandidate,
     RunConfig,
+    TriageConfig,
     json_value,
 )
 from .mutation import (
@@ -34,6 +36,10 @@ from .repository import (
     resolve_commit,
 )
 from .sandbox import DockerSandbox, SandboxError
+from .triage import build_survivor_context, triage_survivors
+
+if TYPE_CHECKING:
+    from .adversarial import AdversarialTestGenerator
 
 
 class PipelineError(RuntimeError):
@@ -53,6 +59,37 @@ def _project_root() -> Path:
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(json_value(value), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _summary_payload(result: AnalysisResult) -> dict[str, object]:
+    payload = json_value(result)
+    triage = result.triage
+    if triage is None:
+        payload.update(
+            {
+                "total_survivors": sum(
+                    mutant.execution.status == "survived"
+                    for mutant in result.mutant_results
+                ),
+                "real_gap_count": 0,
+                "probable_equivalent_count": 0,
+                "unresolved_count": 0,
+                "equivalent_rate": None,
+                "triage_complete": False,
+            }
+        )
+    else:
+        payload.update(
+            {
+                "total_survivors": triage.total_survivors,
+                "real_gap_count": triage.real_gap_count,
+                "probable_equivalent_count": triage.probable_equivalent_count,
+                "unresolved_count": triage.unresolved_count,
+                "equivalent_rate": triage.equivalent_rate,
+                "triage_complete": triage.triage_complete,
+            }
+        )
+    return payload
 
 
 def _blame_index(
@@ -150,8 +187,13 @@ def _raise_if_initial_mutants_all_broken(
     )
 
 
-def run_analysis(config: RunConfig) -> AnalysisResult:
-    """Run stages 1-4 and persist a self-contained run artifact.
+def run_analysis(
+    config: RunConfig,
+    *,
+    adversarial_generator: "AdversarialTestGenerator | None" = None,
+    triage_config: TriageConfig | None = None,
+) -> AnalysisResult:
+    """Run stages 1-4 and optionally Stage 5 equivalence triage.
 
     The submitted pytest suite is run exactly as submitted.  Blame only filters
     the source lines eligible to mutate; it does not filter tests by authorship.
@@ -161,6 +203,10 @@ def run_analysis(config: RunConfig) -> AnalysisResult:
     The sandbox contains only the Python standard library, pytest, and coverage.
     """
     started = time.monotonic()
+    if triage_config is not None and adversarial_generator is None:
+        raise PipelineError("triage configuration requires an adversarial generator")
+    if adversarial_generator is not None and triage_config is None:
+        triage_config = TriageConfig()
     repo = config.repo.resolve()
     artifact_dir = config.artifact_dir.resolve()
     if artifact_dir.exists():
@@ -184,6 +230,14 @@ def run_analysis(config: RunConfig) -> AnalysisResult:
             "student_email": config.student_email,
             "image": config.image,
             "mutant_workers": workers,
+            "triage": {
+                "enabled": adversarial_generator is not None,
+                "generator": type(adversarial_generator).__name__
+                if adversarial_generator is not None
+                else None,
+                "model": getattr(adversarial_generator, "model", None),
+                "config": triage_config,
+            },
             "scope": {
                 "supported": (
                     "Committed Python projects whose tests use only the standard library and pytest; "
@@ -335,6 +389,41 @@ def run_analysis(config: RunConfig) -> AnalysisResult:
                 "inspect batch/batch-results.json"
             )
 
+        triage_summary = None
+        if adversarial_generator is not None and triage_config is not None:
+            import_roots = sandbox.import_roots(baseline_tree)
+            survivor_contexts = []
+            for mutant in mutant_results:
+                if mutant.execution.status != "survived":
+                    continue
+                prepared_item = prepared.get(mutant.candidate.id)
+                if prepared_item is None:
+                    raise PipelineError(
+                        f"surviving mutant {mutant.candidate.id} has no generated source"
+                    )
+                eligible_item, generated = prepared_item
+                try:
+                    context = build_survivor_context(
+                        mutant,
+                        original_source=eligible_item.source.text,
+                        mutated_source=generated.source,
+                        import_roots=import_roots,
+                    )
+                except (SyntaxError, ValueError) as exc:
+                    raise PipelineError(
+                        f"cannot build triage context for {mutant.candidate.id}: {exc}"
+                    ) from exc
+                survivor_contexts.append(context)
+            triage_summary = triage_survivors(
+                survivor_contexts,
+                generator=adversarial_generator,
+                sandbox=sandbox,
+                baseline_tree=baseline_tree,
+                artifact_dir=artifact_dir,
+                config=triage_config,
+                workers=workers,
+            )
+
     result = AnalysisResult(
         repo=repo,
         commit=commit,
@@ -345,8 +434,9 @@ def run_analysis(config: RunConfig) -> AnalysisResult:
         batch_duration_seconds=batch_duration,
         elapsed_seconds=time.monotonic() - started,
         artifact_dir=artifact_dir,
+        triage=triage_summary,
     )
-    _write_json(artifact_dir / "summary.json", result)
+    _write_json(artifact_dir / "summary.json", _summary_payload(result))
     if result.mutant_count and all(
         mutant.execution.status == "broken" for mutant in result.mutant_results
     ):

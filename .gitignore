@@ -9,6 +9,7 @@ demo/student-repo/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.pytest-unit-*/
 .coverage
 htmlcov/
 venv/

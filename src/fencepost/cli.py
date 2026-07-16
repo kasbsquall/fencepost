@@ -1,19 +1,23 @@
-"""Command-line entry point for the stage 1-4 engine."""
+"""Command-line entry point for the Fencepost analysis engine."""
 
 from __future__ import annotations
 
 import argparse
+import os
 import statistics
 from pathlib import Path
 
-from .models import RunConfig
+from .adversarial import AdversarialGeneratorError, OpenAIAdversarialTestGenerator
+from .models import RunConfig, TriageConfig
 from .pipeline import PipelineError, run_analysis
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="fencepost",
-        description="Attribute, select, mutate, and execute a Python pytest submission.",
+        description=(
+            "Attribute, select, mutate, execute, and triage a Python pytest submission."
+        ),
         epilog=(
             "Scope: committed projects using only the standard library and pytest. "
             "Fencepost adds the repository root, conventional src/, and detected top-level packages to PYTHONPATH; "
@@ -35,11 +39,42 @@ def _parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Require the runner image to already exist",
     )
+    parser.add_argument(
+        "--adversarial-model",
+        default=os.environ.get("FENCEPOST_ADVERSARIAL_MODEL"),
+        help=(
+            "OpenAI model for adversarial test generation "
+            "(or FENCEPOST_ADVERSARIAL_MODEL)"
+        ),
+    )
+    parser.add_argument(
+        "--triage-attempts",
+        type=int,
+        default=3,
+        help="Required valid original-pass/mutant-run attempts (default: 3)",
+    )
+    parser.add_argument(
+        "--invalid-retries",
+        type=int,
+        default=3,
+        help="Consecutive invalid-on-original retry limit (default: 3)",
+    )
+    parser.add_argument(
+        "--skip-triage",
+        action="store_true",
+        help="Run only stages 1-4 without model calls",
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = _parser().parse_args(argv)
+    parser = _parser()
+    args = parser.parse_args(argv)
+    if not args.skip_triage and not args.adversarial_model:
+        parser.error(
+            "--adversarial-model or FENCEPOST_ADVERSARIAL_MODEL is required "
+            "unless --skip-triage is used"
+        )
     config = RunConfig(
         repo=args.repo,
         student_email=args.student_email,
@@ -50,8 +85,25 @@ def main(argv: list[str] | None = None) -> int:
         build_image=not args.no_build_image,
     )
     try:
-        result = run_analysis(config)
-    except PipelineError as exc:
+        generator = (
+            None
+            if args.skip_triage
+            else OpenAIAdversarialTestGenerator(model=args.adversarial_model)
+        )
+        triage_config = (
+            None
+            if args.skip_triage
+            else TriageConfig(
+                valid_attempts=args.triage_attempts,
+                invalid_retry_limit=args.invalid_retries,
+            )
+        )
+        result = run_analysis(
+            config,
+            adversarial_generator=generator,
+            triage_config=triage_config,
+        )
+    except (PipelineError, AdversarialGeneratorError, ValueError) as exc:
         print(f"fencepost: {exc}")
         return 2
     statuses: dict[str, int] = {}
@@ -66,5 +118,19 @@ def main(argv: list[str] | None = None) -> int:
         f"workers {result.mutant_workers}, median {median:.2f}s/mutant) "
         + " ".join(f"{status}={count}" for status, count in sorted(statuses.items()))
     )
+    if result.triage is not None:
+        triage = result.triage
+        rate = (
+            "null"
+            if triage.equivalent_rate is None
+            else f"{triage.equivalent_rate:.3f}"
+        )
+        print(
+            f"triage: survivors={triage.total_survivors} "
+            f"real_gap={triage.real_gap_count} "
+            f"probable_equivalent={triage.probable_equivalent_count} "
+            f"unresolved={triage.unresolved_count} "
+            f"equivalent_rate={rate} complete={triage.triage_complete}"
+        )
     print(f"artifact: {result.artifact_dir}")
-    return 0
+    return 0 if result.triage is None or result.triage.triage_complete else 3
