@@ -7,7 +7,7 @@ import difflib
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from . import _icon, _icon_sprite, _logo, _mapping, _sequence, _text
+from . import _icon_sprite, _logo, _mapping, _sequence, _text
 
 
 def _page(
@@ -31,7 +31,7 @@ def _page(
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>{_text(title)}</title>
-  <link rel="stylesheet" href="/assets/ledger.css">
+  <link rel="stylesheet" href="/assets/direction-d.css">
 </head>
 <body class="probe-body">
   {_icon_sprite()}
@@ -287,24 +287,38 @@ def _consequence_from_assertion(
     )
 
 
+def _student_run_row(
+    kind: str, who: object, status: object, metadata: Sequence[str]
+) -> str:
+    meta = (
+        f'<span class="run-meta">{_text(" · ".join(metadata))}</span>'
+        if metadata
+        else ""
+    )
+    return (
+        f'<div class="run run-{kind}"><span class="run-who">{_text(who)}</span>'
+        f'<strong class="run-verb">{_text(status)}</strong>{meta}</div>'
+    )
+
+
+def _student_duration(execution: Mapping[str, Any]) -> str | None:
+    duration = execution.get("duration_seconds")
+    if isinstance(duration, (int, float)) and not isinstance(duration, bool):
+        return f"{duration:.2f}s"
+    return None
+
+
 def _reveal_evidence(place: Mapping[str, Any]) -> str:
+    """Render the committed-answer reveal with equal-rank execution rows."""
     mutant = _primary_mutant(place)
     mutation = _mapping(mutant.get("mutation"))
     evidence = _mapping(mutant.get("evidence"))
     test = _mapping(evidence.get("adversarial_test"))
     failure = _mapping(evidence.get("failing_assertion"))
     diff = mutation.get("unified_diff")
-    assertion = _assertion_line(test.get("source"))
     failure_message = failure.get("message")
-    assertion_text = "\n".join(
-        str(item) for item in (assertion, failure_message) if item
-    )
-    tests = mutant.get("submitted_suite_tests_passed")
-    execution = _mapping(_mapping(mutant.get("mutant")).get("execution"))
-    suite_passed = execution.get("status") == "survived"
-    consequence = _consequence_from_assertion(
-        test.get("source"), failure.get("message")
-    )
+    assertion_text = str(failure_message) if failure_message is not None else ""
+    consequence = _consequence_from_assertion(test.get("source"), failure_message)
     caption = (
         "One character. Here is what your submitted suite said about it."
         if _edit_size(
@@ -313,36 +327,49 @@ def _reveal_evidence(place: Mapping[str, Any]) -> str:
         == 1
         else "Here is what your submitted suite said about this change."
     )
-    beats = []
+    sections = []
     if diff is not None:
-        beats.append(
+        sections.append(
             '<section class="reveal-beat reveal-change">'
             '<p class="eyebrow">The change</p>'
             f'<pre><code>{_text(diff)}</code></pre>'
             f'<p class="reveal-caption">{_text(caption)}</p>'
             "</section>"
         )
-    if (
-        suite_passed
-        and isinstance(tests, int)
-        and not isinstance(tests, bool)
-    ):
-        beats.append(
-            '<section class="reveal-beat reveal-suite" aria-label="Submitted tests passed">'
-            f'<span class="state-icon">{_icon("check")}</span>'
-            f'<p>Your <span class="data-value">{tests}</span> tests — <strong>passed</strong></p>'
-            "</section>"
-        )
+    rows = []
+    submitted = _mapping(_mapping(mutant.get("mutant")).get("execution"))
+    if submitted.get("status") == "survived":
+        metadata = []
+        tests = mutant.get("submitted_suite_tests_passed")
+        if isinstance(tests, int) and not isinstance(tests, bool):
+            metadata.append(f"{tests} tests")
+        if duration := _student_duration(submitted):
+            metadata.append(duration)
+        rows.append(_student_run_row("ok", "Your submitted suite", "passed", metadata))
+    changed = _mapping(evidence.get("mutant_execution"))
+    if changed.get("status") is not None:
+        contributor = test.get("model") or test.get("provider")
+        who = f"Test written by {contributor}" if contributor else "Adversarial test"
+        metadata = []
+        sandbox = _mapping(evidence.get("sandbox"))
+        if evidence.get("sandboxed") is True or sandbox.get("enabled") is True:
+            metadata.append("sandboxed")
+        network = evidence.get("network_access", sandbox.get("network_access"))
+        if network in (False, "none", "disabled"):
+            metadata.append("no network")
+        if duration := _student_duration(changed):
+            metadata.append(duration)
+        rows.append(_student_run_row("no", who, changed.get("status"), metadata))
     if assertion_text:
-        beats.append(
-            '<section class="reveal-beat reveal-failure" aria-label="Assertion failed on changed code">'
-            '<p class="eyebrow">What breaks</p>'
-            f'<pre><code>{_text(assertion_text)}</code></pre>'
-            "</section>"
+        rows.append(
+            '<blockquote class="execution-quote"><p class="quote-caption">What it printed</p>'
+            f'<pre><code>{_text(assertion_text)}</code></pre></blockquote>'
         )
+    if rows:
+        sections.append(f'<div class="runs">{"".join(rows)}</div>')
     if consequence:
-        beats.append(f'<p class="reveal-consequence">{consequence}</p>')
-    return "".join(beats)
+        sections.append(f'<p class="reveal-consequence">{consequence}</p>')
+    return "".join(sections)
 
 
 def render_probe_reveal(

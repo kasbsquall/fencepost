@@ -181,6 +181,10 @@ def test_blank_requires_explicit_unknown_and_round_trips_through_grading(tmp_pat
         assert "I don&#x27;t know" in reveal
         assert escape(mutation["unified_diff"], quote=True) in reveal
         assert escape(evidence["failing_assertion"]["message"], quote=True) in reveal
+        assert 'class="run run-ok"' in reveal
+        assert 'class="run run-no"' in reveal
+        assert 'class="execution-quote"' in reveal
+        assert "state-icon" not in reveal
         assert not output.exists()
 
         _post(

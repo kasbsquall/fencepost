@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+from datetime import datetime
 from html import escape
 from pathlib import Path
 from typing import Any, Mapping, Sequence
@@ -70,6 +71,17 @@ def _text(value: object) -> str:
     return escape(str(value), quote=True)
 
 
+def _human_timestamp(value: object) -> str:
+    """Format an artifact timestamp for reading without altering its audit value."""
+    if not isinstance(value, str):
+        return _text(value)
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return _text(value)
+    return f"{parsed.strftime('%b')} {parsed.day}, {parsed.year}"
+
+
 def _mapping(value: object) -> Mapping[str, Any]:
     return value if isinstance(value, Mapping) else {}
 
@@ -93,6 +105,15 @@ def _data_text(value: object) -> str:
     )
 
 
+def _prose_with_code(value: object) -> str:
+    """Render backtick-delimited identifiers without accepting arbitrary markup."""
+    parts = str(value).split("`")
+    return "".join(
+        _code(part) if index % 2 else _text(part)
+        for index, part in enumerate(parts)
+    )
+
+
 def _icon(name: str, class_name: str = "") -> str:
     classes = "icon" + (f" {class_name}" if class_name else "")
     return (
@@ -102,7 +123,7 @@ def _icon(name: str, class_name: str = "") -> str:
 
 
 def _icon_sprite() -> str:
-    """Definitions shared by every icon; presentation stays in Ledger CSS."""
+    """Definitions for the few disclosures and links that need an icon."""
     return """
 <svg class="icon-sprite" aria-hidden="true" focusable="false">
   <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
@@ -125,17 +146,37 @@ def _logo(*, linked: bool = True) -> str:
     closing = "</a>" if linked else "</span>"
     return f"""
 {opening}
-  <svg class="brand-mark" viewBox="0 0 120 100" fill="none" aria-hidden="true">
-    <rect class="brand-rail" x="5" y="43" width="110" height="7" fill="currentColor"/>
-    <rect class="brand-rail" x="5" y="66" width="110" height="7" fill="currentColor"/>
-    <rect x="9" y="18" width="8" height="70" rx="2" fill="currentColor"/>
-    <rect x="33" y="18" width="8" height="70" rx="2" fill="currentColor"/>
-    <rect class="brand-post-offset" x="57" y="38" width="8" height="62" rx="2" fill="currentColor"/>
-    <rect x="81" y="18" width="8" height="70" rx="2" fill="currentColor"/>
-    <rect x="105" y="18" width="8" height="70" rx="2" fill="currentColor"/>
+  <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M2 8h20M2 16h20"/>
+    <path d="M6 3v18M12 3v18M18 3v18"/>
+    <path class="brand-post-offset" d="M12 9v18"/>
   </svg>
   <span class="wordmark"><span>fence</span><span class="wordmark-post">post</span></span>
 {closing}""".strip()
+
+
+def _masthead(
+    current: str | None,
+    *,
+    student_href: str = "/#student-view",
+) -> str:
+    links = (
+        ("report", "/report", "Report"),
+        ("student", student_href, "Student"),
+        ("method", "/method", "Method"),
+    )
+    nav_parts = []
+    for key, href, label in links:
+        current_attr = ' aria-current="page"' if current == key else ""
+        nav_parts.append(
+            f'<a href="{_text(href)}"{current_attr}>{label}</a>'
+        )
+    nav = "".join(nav_parts)
+    return (
+        '<header class="masthead"><div class="shell masthead-inner">'
+        f'{_logo()}<nav aria-label="Run navigation">{nav}</nav>'
+        "</div></header>"
+    )
 
 
 def _rate_card(report: Mapping[str, Any], mode: str) -> str:
@@ -283,7 +324,6 @@ def _suite_state(mutant: Mapping[str, Any]) -> str:
     artifact = mutant.get("submitted_suite_artifact_ref")
     return f"""
 <section class="run-state run-state-pass" aria-label="Student test suite passed">
-  <span class="state-icon">{_icon("check")}</span>
   <div>
     <p class="state-result"><span>{_text(label)}</span> <strong>— {_text(outcome)}</strong></p>
     {f'<p class="artifact-ref">{_code(artifact)}</p>' if artifact else ''}
@@ -299,7 +339,7 @@ def _adversarial_section(evidence: Mapping[str, Any]) -> str:
     if source is None and behavior is None:
         return ""
     validated = (
-        f'<span class="validation-pass">{_icon("check")} passed on original</span>'
+        '<span class="validation-pass">passed on original</span>'
         if original.get("status") == "passed"
         else ""
     )
@@ -325,7 +365,6 @@ def _failure_section(evidence: Mapping[str, Any]) -> str:
     status = execution.get("status")
     return f"""
 <section class="run-state run-state-fail" aria-label="Adversarial test failed on mutant">
-  <span class="state-icon">{_icon("cross")}</span>
   <div class="failure-body">
     <p class="step-label"><span>5</span> Result on changed code</p>
     {f'<p class="state-result">{_text(status)}</p>' if status is not None else ''}
@@ -644,30 +683,38 @@ def _attribution_context(report: Mapping[str, Any]) -> str:
 </section>"""
 
 
-def _instructor_headline(report: Mapping[str, Any]) -> tuple[str, str]:
-    student = report.get("student_name") or report.get("student_email") or "The student"
+def _number_word(value: int) -> str:
+    words = (
+        "zero", "one", "two", "three", "four", "five", "six", "seven",
+        "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen",
+        "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty",
+    )
+    return words[value] if 0 <= value < len(words) else str(value)
+
+
+def _instructor_headline(report: Mapping[str, Any]) -> tuple[str, str, str]:
     coverage = _mapping(report.get("authored_line_coverage"))
     sufficient = coverage.get("sufficient_for_assessment")
     covered = coverage.get("covered_authored_mutatable_line_count")
     authored = coverage.get("authored_mutatable_line_count")
     tests = report.get("submitted_suite_tests_passed")
-    test_phrase = (
-        f"{tests} tests pass"
-        if isinstance(tests, int) and not isinstance(tests, bool)
-        else "submitted tests pass"
-    )
+    if isinstance(tests, int) and not isinstance(tests, bool):
+        test_phrase = (
+            f"{_number_word(tests).capitalize()} "
+            f"{'test passes' if tests == 1 else 'tests pass'}."
+        )
+    else:
+        test_phrase = "The submitted suite passes."
     if sufficient is False:
         if isinstance(covered, int) and isinstance(authored, int):
-            headline = (
-                f"{student}'s {test_phrase}, but they execute {covered} of {authored} "
-                "mutatable lines Git attributes to them."
+            detail = (
+                f"Their suite executes {covered} of {authored} mutatable lines Git "
+                "attributes to this student. Fencepost cannot assess code their tests "
+                "never run."
             )
         else:
-            headline = f"{student}'s {test_phrase}, but coverage is too low to assess."
-        return (
-            headline,
-            "Fencepost cannot assess understanding of code their tests never run.",
-        )
+            detail = "Fencepost cannot assess code the submitted tests never run."
+        return test_phrase, "Coverage is too low to assess.", detail
 
     mutation = _mapping(report.get("mutation_summary"))
     total = mutation.get("total_mutants")
@@ -675,11 +722,19 @@ def _instructor_headline(report: Mapping[str, Any]) -> tuple[str, str]:
     survived = mutation.get("survived_submitted_tests")
     fair = report.get("question_mutant_count")
     withheld = report.get("not_questioned_mutant_count")
-    headline = f"{student}'s {test_phrase}."
+    conversations = report.get("conversation_count")
+    if isinstance(conversations, int) and not isinstance(conversations, bool):
+        conversation_phrase = (
+            f"{_number_word(conversations).capitalize()} "
+            f"{'function says' if conversations == 1 else 'functions say'} nothing."
+        )
+    else:
+        conversation_phrase = "The evidence identifies questions worth discussing."
     detail = []
     if isinstance(total, int) and isinstance(killed, int):
         detail.append(
-            f"We made {total} small changes to code Git attributes to them; their tests caught {killed}."
+            f"We made {total} small changes to code Git attributes to this student. "
+            f"Their own tests caught {killed}."
         )
     if isinstance(survived, int) and isinstance(fair, int):
         detail.append(
@@ -690,7 +745,7 @@ def _instructor_headline(report: Mapping[str, Any]) -> tuple[str, str]:
         detail.append(
             f"We withheld {withheld} {noun} that would not make a fair question."
         )
-    return headline, " ".join(detail)
+    return test_phrase, conversation_phrase, " ".join(detail)
 
 
 def _count(value: object) -> int | None:
@@ -737,6 +792,46 @@ def _outcome_flow(
   <thead><tr>{labels}</tr></thead>
   <tbody><tr>{bars}</tr></tbody>
 </table>"""
+
+
+def _headline_flow(report: Mapping[str, Any]) -> str:
+    """Render Direction D's compact, directly-labelled run flow."""
+    mutation = _mapping(report.get("mutation_summary"))
+    total = _count(mutation.get("total_mutants"))
+    if total is None or total == 0:
+        return ""
+    candidates = (
+        ("caught", "caught by their tests", _count(mutation.get("killed_by_submitted_tests"))),
+        ("discuss", "worth discussing", _count(report.get("question_mutant_count"))),
+        ("withheld", "withheld", _count(report.get("not_questioned_mutant_count"))),
+    )
+    segments = [item for item in candidates if item[2] is not None and item[2] > 0]
+    if not segments or sum(item[2] for item in segments) > total:
+        return ""
+    cells = "".join(
+        f'<td class="flow-segment flow-{kind}" colspan="{count}">'
+        f'<span class="visually-hidden">{count} {_text(noun)}</span></td>'
+        for kind, noun, count in segments
+    )
+    remainder = total - sum(item[2] for item in segments)
+    if remainder:
+        cells += (
+            f'<td class="flow-segment flow-unclassified" colspan="{remainder}" '
+            'aria-hidden="true"></td>'
+        )
+    legend = []
+    for kind, noun, count in segments:
+        label = f'<span class="data-value">{count}</span> {_text(noun)}'
+        if kind == "withheld":
+            label = f'<a href="#withheld">{label} — see why</a>'
+        legend.append(
+            f'<span><i class="legend-swatch flow-{kind}" aria-hidden="true"></i>{label}</span>'
+        )
+    return f"""
+<div class="headline-flow">
+  <table class="flow-bar" aria-label="Outcome of {_text(total)} code changes"><tbody><tr>{cells}</tr></tbody></table>
+  <div class="flow-legend">{"".join(legend)}</div>
+</div>""".strip()
 
 
 def _mutation_flow(report: Mapping[str, Any]) -> str:
@@ -914,23 +1009,132 @@ def _conversation_groups(report: Mapping[str, Any]) -> str:
     return "".join(rendered)
 
 
-def _top_ranked_place(report: Mapping[str, Any]) -> Mapping[str, Any]:
+def _top_ranked_context(
+    report: Mapping[str, Any],
+) -> tuple[Mapping[str, Any], Mapping[str, Any]]:
     places = [_mapping(item) for item in _sequence(report.get("places"))]
-    by_id = {
-        item.get("site_id"): item for item in places if item.get("site_id")
-    }
-    for group in (
-        _mapping(item) for item in _sequence(report.get("function_groups"))
-    ):
-        for site_id in _sequence(group.get("site_ids")):
-            if site_id in by_id:
-                return by_id[site_id]
-    return places[0] if places else {}
+    by_id = {item.get("site_id"): item for item in places if item.get("site_id")}
+    for group in (_mapping(item) for item in _sequence(report.get("function_groups"))):
+        ranked = [
+            by_id[site_id]
+            for site_id in _sequence(group.get("site_ids"))
+            if site_id in by_id
+        ]
+        if not ranked:
+            continue
+        signals = {str(value) for value in _sequence(group.get("ranking_signals"))}
+        reason = str(group.get("priority_reason") or "").casefold()
+        if "commit_claim" in signals and reason:
+            for place in ranked:
+                authored = [
+                    _mapping(item)
+                    for item in _sequence(
+                        _mapping(place.get("grounding")).get("authored_lines")
+                    )
+                ]
+                matches_claim = any(
+                    (
+                        line.get("commit")
+                        and str(line["commit"])[:7].casefold() in reason
+                    )
+                    or (
+                        line.get("commit_summary")
+                        and str(line["commit_summary"]).casefold() in reason
+                    )
+                    for line in authored
+                )
+                if matches_claim:
+                    return place, group
+        return ranked[0], group
+    return (places[0], {}) if places else ({}, {})
+
+
+def _direction_diff(
+    grounding: Mapping[str, Any], mutation: Mapping[str, Any]
+) -> str:
+    authored = [_mapping(item) for item in _sequence(grounding.get("authored_lines"))]
+    if not authored:
+        return ""
+    line = authored[0]
+    before = line.get("text")
+    original = mutation.get("original_segment")
+    changed = mutation.get("mutated_segment")
+    if not all(isinstance(value, str) for value in (before, original, changed)):
+        return ""
+    offset = before.find(original)
+    after = (
+        before[:offset] + changed + before[offset + len(original) :]
+        if offset >= 0
+        else changed
+    )
+    number = line.get("line")
+    number_html = _text(number) if number is not None else ""
+    return f"""
+<div class="diff" aria-label="Source change">
+  <div class="diff-row diff-del"><span class="diff-number">{number_html}</span><span class="diff-sign">−</span><code>{_text(before)}</code></div>
+  <div class="diff-row diff-add"><span class="diff-number" aria-hidden="true"></span><span class="diff-sign">+</span><code>{_text(after)}</code></div>
+</div>""".strip()
+
+
+def _duration_label(execution: Mapping[str, Any]) -> str | None:
+    duration = execution.get("duration_seconds")
+    if isinstance(duration, (int, float)) and not isinstance(duration, bool):
+        return f"{duration:.2f}s"
+    return None
+
+
+def _run_row(kind: str, who: object, status: object, metadata: Sequence[str]) -> str:
+    meta = (
+        f'<span class="run-meta">{_text(" · ".join(metadata))}</span>'
+        if metadata
+        else ""
+    )
+    return (
+        f'<div class="run run-{kind}"><span class="run-who">{_text(who)}</span>'
+        f'<strong class="run-verb">{_text(status)}</strong>{meta}</div>'
+    )
+
+
+def _hero_run_rows(mutant: Mapping[str, Any], evidence: Mapping[str, Any]) -> str:
+    submitted = _mapping(_mapping(mutant.get("mutant")).get("execution"))
+    changed = _mapping(evidence.get("mutant_execution"))
+    test = _mapping(evidence.get("adversarial_test"))
+    rows = []
+    if submitted.get("status") is not None:
+        submitted_meta = []
+        tests = mutant.get("submitted_suite_tests_passed")
+        if isinstance(tests, int) and not isinstance(tests, bool):
+            submitted_meta.append(f"{tests} tests")
+        duration = _duration_label(submitted)
+        if duration:
+            submitted_meta.append(duration)
+        rows.append(_run_row("ok", "Their submitted suite", "passed", submitted_meta))
+    if changed.get("status") is not None:
+        contributor = test.get("model") or test.get("provider")
+        who = f"Test written by {contributor}" if contributor else "Adversarial test"
+        changed_meta = []
+        sandbox = _mapping(evidence.get("sandbox"))
+        if evidence.get("sandboxed") is True or sandbox.get("enabled") is True:
+            changed_meta.append("sandboxed")
+        network = evidence.get("network_access", sandbox.get("network_access"))
+        if network in (False, "none", "disabled"):
+            changed_meta.append("no network")
+        duration = _duration_label(changed)
+        if duration:
+            changed_meta.append(duration)
+        rows.append(_run_row("no", who, changed.get("status"), changed_meta))
+    failure = _mapping(evidence.get("failing_assertion"))
+    if failure.get("message") is not None:
+        rows.append(
+            '<blockquote class="execution-quote"><p class="quote-caption">What it printed</p>'
+            f'<pre><code>{_text(failure.get("message"))}</code></pre></blockquote>'
+        )
+    return f'<div class="runs">{"".join(rows)}</div>' if rows else ""
 
 
 def _hero_evidence(report: Mapping[str, Any]) -> str:
-    """Render the top-ranked execution flip without a disclosure or new claims."""
-    place = _top_ranked_place(report)
+    """Render the top-ranked question and both executed states at equal rank."""
+    place, group = _top_ranked_context(report)
     grounding = _mapping(place.get("grounding"))
     mutants = [_mapping(item) for item in _sequence(place.get("mutants"))]
     if not grounding or not mutants:
@@ -938,50 +1142,55 @@ def _hero_evidence(report: Mapping[str, Any]) -> str:
     mutant = mutants[0]
     mutation = _mapping(mutant.get("mutation"))
     evidence = _mapping(mutant.get("evidence"))
-    change = _change_line(mutation)
-    submitted_execution = _mapping(
-        _mapping(mutant.get("mutant")).get("execution")
+    submitted = _mapping(_mapping(mutant.get("mutant")).get("execution"))
+    if submitted.get("status") != "survived":
+        return ""
+    if _mapping(evidence.get("failing_assertion")).get("message") is None:
+        return ""
+    diff = _direction_diff(grounding, mutation)
+    if not diff:
+        return ""
+    authored = [_mapping(item) for item in _sequence(grounding.get("authored_lines"))]
+    first = authored[0] if authored else {}
+    provenance = []
+    line = grounding.get("start_line")
+    if line is not None:
+        provenance.append(f"line {_text(line)}")
+    commit = first.get("commit")
+    if commit:
+        provenance.append(_code(str(commit)[:7]))
+    date = first.get("author_date")
+    if date:
+        provenance.append(f'<time datetime="{_text(date)}">{_text(date)}</time>')
+    signals = {str(value) for value in _sequence(group.get("ranking_signals"))}
+    summary = first.get("commit_summary")
+    priority = (
+        f'<p class="priority-claim">Their commit says &quot;{_text(summary)}&quot; '
+        "— and their tests never checked it.</p>"
+        if summary and "commit_claim" in signals
+        else ""
     )
-    if submitted_execution.get("status") != "survived":
-        return ""
-    submitted_count = mutant.get("submitted_suite_tests_passed")
-    submitted_label = (
-        f"Their {submitted_count} tests"
-        if isinstance(submitted_count, int)
-        and not isinstance(submitted_count, bool)
-        else "Their submitted tests"
+    question = _mapping(place.get("question")).get("question_text")
+    function_name = group.get("qualified_function_name") or mutant.get(
+        "qualified_function_name"
     )
-    hero_failure = dict(_mapping(evidence.get("failing_assertion")))
-    if hero_failure.get("message") is None:
-        return ""
-    failed_execution = _mapping(evidence.get("mutant_execution"))
-    source = _source_section(grounding)
-    if not source or not change:
-        return ""
-    return f"""<article class="hero-evidence" aria-label="Top-ranked execution evidence">
-  <div class="hero-source">{source}</div>
-  <section class="hero-change">
-    <p class="step-label"><span>2</span> Change considered</p>
-    <div class="change-line">{change}</div>
-  </section>
-  <p class="hero-pass-line" aria-label="Submitted test suite passed">
-    {_icon("check", "hero-status-icon")}
-    <span>{_text(submitted_label)} <strong>— passed</strong></span>
-  </p>
-  <section class="hero-failure" aria-label="Adversarial test failed on changed code">
-    {_icon("cross", "hero-status-icon")}
-    <div>
-      <p class="step-label">Result on changed code</p>
-      {f'<p class="state-result">{_text(failed_execution.get("status"))}</p>' if failed_execution.get('status') is not None else ''}
-      {f'<p class="failure-node">{_code(hero_failure.get("nodeid"))}</p>' if hero_failure.get('nodeid') else ''}
-      <pre class="hero-failure-message"><code>{_text(hero_failure.get("message"))}</code></pre>
-    </div>
-  </section>
+    total_sites = _count(report.get("unverified_place_count"))
+    rank = f"1 of {total_sites} · ranked by evidence" if total_sites else "ranked by evidence"
+    provenance_html = " · ".join(provenance)
+    return f"""<article class="question-card" aria-label="Top-ranked execution evidence">
+  <header class="question-card-header"><span class="card-kicker">Start here</span>{f'<code>{_text(function_name)}</code>' if function_name else ''}<span class="card-rank">{_text(rank)}</span></header>
+  <div class="question-card-body">
+    {f'<h2 class="hero-question">{_prose_with_code(question)}</h2>' if question else ''}
+    {f'<p class="hero-provenance">{provenance_html}</p>' if provenance_html else ''}
+    {priority}
+  </div>
+  {diff}
+  {_hero_run_rows(mutant, evidence)}
 </article>"""
 
 
 def render_report_document(report: Mapping[str, Any]) -> str:
-    """Render schema 2.0 as a self-contained semantic HTML document."""
+    """Render report schema 2.0 using the committed Direction D composition."""
     schema = report.get("schema_version")
     if schema != SUPPORTED_REPORT_SCHEMA:
         return render_error_document(
@@ -990,34 +1199,38 @@ def render_report_document(report: Mapping[str, Any]) -> str:
         )
     commit = report.get("repository_commit")
     student = report.get("student_name") or report.get("student_email")
-    headline, summary = _instructor_headline(report)
+    headline, headline_secondary, summary = _instructor_headline(report)
     run_meta = []
     if student:
         run_meta.append(f'<span class="student-name">{_text(student)}</span>')
     if commit:
-        run_meta.append(f'<span>repository commit {_code(commit)}</span>')
+        run_meta.append(f'<span>commit {_code(str(commit)[:7])}</span>')
+    repository_path = report.get("repository_path")
+    if isinstance(repository_path, str) and repository_path:
+        run_meta.append(f'<span>{_code(Path(repository_path).name)}</span>')
+    started_at = report.get("run_started_at")
+    if started_at:
+        run_meta.append(
+            f'<span><time datetime="{_text(started_at)}">{_human_timestamp(started_at)}</time></span>'
+        )
     shielded = [
-        _mapping(item)
-        for item in _sequence(report.get("deliberately_not_asked"))
+        _mapping(item) for item in _sequence(report.get("deliberately_not_asked"))
     ]
-    shielded_cards = "".join(_shielded_item(item) for item in shielded)
     pedagogical = [
-        _mapping(item)
-        for item in _sequence(report.get("pedagogically_not_asked"))
+        _mapping(item) for item in _sequence(report.get("pedagogically_not_asked"))
     ]
-    pedagogical_cards = "".join(
+    withheld_content = "".join(_shielded_item(item) for item in shielded) + "".join(
         _pedagogically_withheld_item(item) for item in pedagogical
     )
     coverage = _mapping(report.get("authored_line_coverage"))
-    if coverage.get("sufficient_for_assessment") is False:
-        empty_conversations = (
-            "Question generation is inconclusive because the submitted tests do "
-            "not execute enough student-authored code."
-        )
-    else:
-        empty_conversations = "No fair question sites are present in this report."
-    formative = report.get("formative_notice")
+    empty_conversations = (
+        "Question generation is inconclusive because the submitted tests do not "
+        "execute enough student-authored code."
+        if coverage.get("sufficient_for_assessment") is False
+        else "No fair question sites are present in this report."
+    )
     title = report.get("title") or "Fencepost comprehension report"
+    meta_html = " · ".join(run_meta)
     hero = _hero_evidence(report)
     return f"""<!doctype html>
 <html lang="en">
@@ -1026,38 +1239,30 @@ def render_report_document(report: Mapping[str, Any]) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>{_text(title)}</title>
-  <link rel="stylesheet" href="/assets/ledger.css">
+  <link rel="stylesheet" href="/assets/direction-d.css">
 </head>
-<body id="top">
+<body class="report-page" id="top">
   {_icon_sprite()}
   <a class="skip-link" href="#main">Skip to report</a>
-  <header class="masthead">
-    <div class="shell masthead-inner">{_logo()}<nav aria-label="Report navigation"><a href="/">Home</a><a href="/method">Method</a></nav></div>
-  </header>
+  {_masthead("report")}
   <main class="shell" id="main">
-    {f'<aside class="formative-notice"><strong>Formative, human-reviewed.</strong><span>{_text(formative)}</span></aside>' if formative else ''}
-    <section class="report-lead{' report-lead-summary-only' if not hero else ''}">
-      <header class="run-header" aria-labelledby="run-title">
-        {f'<p class="run-meta">{" · ".join(run_meta)}</p>' if run_meta else ''}
-        <h1 id="run-title">{_data_text(headline)}</h1>
-        {f'<p class="headline-detail">{_data_text(summary)}</p>' if summary else ''}
-      </header>
-      {hero}
+    <section class="report-head" aria-labelledby="run-title">
+      <h1 id="run-title">{_data_text(headline)} <em>{_data_text(headline_secondary)}</em></h1>
+      {f'<p class="report-summary">{_data_text(summary)}</p>' if summary else ''}
+      {f'<p class="report-meta">{meta_html}</p>' if meta_html else ''}
+      {_headline_flow(report)}
     </section>
-    {_mutation_flow(report)}
+    {hero}
+    {f'<section class="withheld-stack" id="withheld" aria-labelledby="withheld-heading"><h2 id="withheld-heading">Deliberately not asked</h2>{withheld_content}</section>' if withheld_content else ''}
+    {_function_outcomes(report)}
     {_coverage_section(report)}
     {_attribution_context(report)}
-    {_function_outcomes(report)}
-    <section class="shielded" aria-labelledby="shielded-heading">
-      <div class="section-intro"><p class="eyebrow">Evidence of restraint</p><h2 id="shielded-heading">Deliberately not asked</h2><p>We keep technical distinctions visible for audit without turning them into unfair student questions.</p></div>
-      {shielded_cards + pedagogical_cards if shielded_cards or pedagogical_cards else '<p class="empty-state">No changes were withheld from student questions in this report.</p>'}
-    </section>
     <section class="places" aria-labelledby="places-heading">
       <div class="section-intro"><p class="eyebrow">Instructor conversation guide</p><h2 id="places-heading">Conversations worth having</h2><p>Related sites are grouped by function and ordered by the strength of their execution and commit evidence.</p></div>
       {_conversation_groups(report) or f'<p class="empty-state">{empty_conversations}</p>'}
     </section>
   </main>
-  <footer class="shell"><span class="wordmark small"><span>fence</span><span class="wordmark-post">post</span></span><span>Execution-grounded. Advisory, never a verdict.</span></footer>
+  <footer class="shell"><span class="wordmark small"><span>fence</span><span class="wordmark-post">post</span></span><span>Execution-grounded. Formative, human-reviewed, never a verdict.</span></footer>
 </body>
 </html>"""
 
@@ -1086,12 +1291,12 @@ def render_method_document(report: Mapping[str, Any]) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>Method · {_text(title)}</title>
-  <link rel="stylesheet" href="/assets/ledger.css">
+  <link rel="stylesheet" href="/assets/direction-d.css">
 </head>
-<body id="top">
+<body class="method-page" id="top">
   {_icon_sprite()}
   <a class="skip-link" href="#main">Skip to method</a>
-  <header class="masthead"><div class="shell masthead-inner">{_logo()}<nav aria-label="Report navigation"><a href="/">Home</a><a href="/report">Instructor report</a></nav></div></header>
+  {_masthead("method")}
   <main class="shell method-main" id="main">
     <section class="run-header"><p class="eyebrow">Technical appendix</p><h1>How Fencepost decides what is fair to ask.</h1><p class="headline-detail">These rates describe mutation triage, not the student. They are kept here so an instructor or reviewer can audit the method without mistaking them for a score.</p></section>
     {f'<section class="rates" aria-label="Equivalent mutant rates">{rates}</section>' if rates else ''}
@@ -1144,7 +1349,7 @@ def render_landing_document(
         run_facts.append(f'<div><dt>Student</dt><dd>{_text(student)}</dd></div>')
     if started_at:
         run_facts.append(
-            f'<div><dt>Run started</dt><dd><time datetime="{_text(started_at)}">{_text(started_at)}</time></dd></div>'
+            f'<div><dt>Run started</dt><dd><time datetime="{_text(started_at)}">{_human_timestamp(started_at)}</time></dd></div>'
         )
 
     artifact_arg = _command_arg(artifact_dir)
@@ -1180,22 +1385,22 @@ def render_landing_document(
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>Fencepost run home</title>
-  <link rel="stylesheet" href="/assets/ledger.css">
+  <link rel="stylesheet" href="/assets/direction-d.css">
 </head>
-<body id="top">
+<body class="landing-page" id="top">
   {_icon_sprite()}
   <a class="skip-link" href="#main">Skip to run views</a>
-  <header class="masthead"><div class="shell masthead-inner">{_logo()}<nav aria-label="Run navigation"><a href="/report">Report</a><a href="/method">Method</a></nav></div></header>
+  {_masthead(None, student_href=probe_url)}
   <main class="shell landing-main" id="main">
     <section class="landing-hero">
       <p class="eyebrow">One run, two human views</p>
       <h1>Choose where you enter the conversation.</h1>
       <p class="headline-detail">Fencepost keeps the instructor's execution evidence separate until the student has committed each answer.</p>
     </section>
-    {f'<dl class="run-ledger">{"".join(run_facts)}</dl>' if run_facts else ''}
+    {f'<dl class="run-facts">{"".join(run_facts)}</dl>' if run_facts else ''}
     <section class="view-choices" aria-labelledby="views-heading">
       <h2 class="visually-hidden" id="views-heading">Run views</h2>
-      <article class="view-choice">
+      <article class="view-choice" id="student-view">
         <p class="eyebrow">Instructor view</p>
         <h2>Read the report.</h2>
         <p>Review what the submitted tests protect and decide whether to have a conversation.</p>
@@ -1209,7 +1414,7 @@ def render_landing_document(
       </article>
     </section>
     <p class="probe-origin-note">The student probe runs on its own local address so unrevealed instructor evidence is not reachable from that view. Start it with the command below.</p>
-    <section class="command-ledger" aria-labelledby="commands-heading">
+    <section class="command-list" aria-labelledby="commands-heading">
       <div class="section-intro"><p class="eyebrow">From the terminal</p><h2 id="commands-heading">Produce and open the views.</h2></div>
       <ol>{command_rows}</ol>
     </section>
@@ -1229,7 +1434,7 @@ def render_error_document(message: str) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>Fencepost report unavailable</title>
-  <link rel="stylesheet" href="/assets/ledger.css">
+  <link rel="stylesheet" href="/assets/direction-d.css">
 </head>
 <body id="top">
   {_icon_sprite()}

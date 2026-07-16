@@ -54,7 +54,8 @@ def _assert_mutation_headline(payload: dict, visible: str) -> None:
     fair = payload["question_mutant_count"]
     withheld = payload["not_questioned_mutant_count"]
 
-    assert re.search(rf"\b{tests}\s+tests\s+pass\b", visible)
+    assert re.search(rf"\b{tests}\s+tests\b", visible)
+    assert re.search(r"\btests?\s+pass(?:es)?\b", visible, re.IGNORECASE)
     assert re.search(rf"\b{total}\s+small\s+changes\b", visible)
     assert re.search(rf"\btests\s+caught\s+{killed}\b", visible)
     assert re.search(rf"\b{missed}\s+changes\s+they\s+missed\b", visible)
@@ -419,7 +420,8 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     assert "STRICT equivalent rate" not in parsed.visible
     assert "CONTRACT equivalent rate" not in parsed.visible
     assert "Deliberately not asked" in parsed.visible
-    assert "Their 10 tests — passed" in parsed.visible
+    assert "Their submitted suite" in parsed.visible
+    assert re.search(r"\bpassed\s+10\s+tests\b", parsed.visible)
     assert "fix percentile index out of range when p=100" in parsed.visible
 
     method = render_method_document(

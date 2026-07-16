@@ -52,7 +52,8 @@ def _assert_headline_facts(report, visible: str) -> None:
     fair = report["question_mutant_count"]
     withheld = report["not_questioned_mutant_count"]
 
-    assert re.search(rf"\b{tests}\s+tests\s+pass\b", visible)
+    assert re.search(rf"\b{tests}\s+tests\b", visible)
+    assert re.search(r"\btests?\s+pass(?:es)?\b", visible, re.IGNORECASE)
     assert re.search(rf"\b{total}\s+small\s+changes\b", visible)
     assert re.search(rf"\btests\s+caught\s+{killed}\b", visible)
     assert re.search(rf"\b{missed}\s+changes\s+they\s+missed\b", visible)
@@ -137,6 +138,14 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
             }
         ],
     }
+    report["run_started_at"] = "2026-07-16T19:34:54.565028+00:00"
+    group = report["function_groups"][0]
+    summary = authored_line["commit_summary"]
+    group["ranking_signals"] = ["commit_claim"]
+    group["priority_reason"] = (
+        f'Commit {authored_line["commit"][:7]} says "{summary}", '
+        "but execution shows the submitted tests did not protect that claimed behavior."
+    )
     document = render_report_document(report)
     parsed = _DocumentFacts()
     parsed.feed(document)
@@ -151,9 +160,11 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
     assert "CONTRACT equivalent rate" not in visible
     assert "Deliberately not asked" in visible
     assert "withheld from probes" in visible
-    assert "Their 10 tests — passed" in visible
+    assert "Their submitted suite" in visible
+    assert re.search(r"\bpassed\s+10\s+tests\b", visible)
     assert "value >= 1" in visible
     assert "value > 1" in visible
+    assert "value ≥ 1" not in visible
     assert "assert False" in visible
     assert "Full source diff" in visible
     assert "Execution evidence used for this assessment" in visible
@@ -165,27 +176,33 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
     assert "co-author trailer: sam@example.edu" in visible
     assert "-M move match" in visible
     assert "blame origin pkg/analytics.py:2" in visible
-    hero = document.split('<article class="hero-evidence"', 1)[1].split(
+    hero = document.split('<article class="question-card"', 1)[1].split(
         "</article>", 1
     )[0]
     assert "Top-ranked execution evidence" in hero
     assert "value &gt;= 1" in hero
     assert "value &gt; 1" in hero
-    assert "Their 10 tests" in hero
+    assert hero.count(summary) == 1
+    assert hero.count(authored_line["commit"][:7]) == 1
+    assert "Their commit says" in hero
+    assert "Their submitted suite" in hero
     assert "assert False" in hero
     assert "<details" not in hero
-    assert 'class="hero-pass-line"' in hero
-    assert 'class="hero-failure"' in hero
-    assert "run-state-pass" not in hero
-    assert "hero-results" not in hero
-    assert document.count('class="brand-rail"') == 2
-    assert document.index('<article class="hero-evidence"') < document.index(
-        '<section class="mutation-flow"'
+    assert 'class="run run-ok"' in hero
+    assert 'class="run run-no"' in hero
+    assert 'class="execution-quote"' in hero
+    assert "state-icon" not in hero
+    assert 'class="brand-post-offset"' in document
+    assert document.index('<article class="question-card"') < document.index(
+        '<section class="function-outcomes"'
     )
+    headline_markup = document.split('<h1 id="run-title">', 1)[1].split("</h1>", 1)[0]
+    assert "Diego Ramos" not in headline_markup
     assert "suite-output" not in document
     assert parsed.tags.count("details") >= 2
     assert "script" not in parsed.tags
     assert "https://" not in document
+    assert '<time datetime="2026-07-16T19:34:54.565028+00:00">Jul 16, 2026</time>' in document
 
     chart_report = json.loads(json.dumps(report))
     chart_report["mutation_summary"] = {
@@ -244,10 +261,10 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
     chart_facts = _DocumentFacts()
     chart_facts.feed(chart_document)
     assert re.search(r"\b30\s+caught\b", chart_facts.visible_text)
-    assert re.search(r"\b20\s+to\s+discuss\b", chart_facts.visible_text)
+    assert re.search(r"\b20\s+worth\s+discussing\b", chart_facts.visible_text)
     assert re.search(r"\b1\s+withheld\b", chart_facts.visible_text)
-    overview = chart_document.split('<section class="mutation-flow"', 1)[1].split(
-        "</section>", 1
+    overview = chart_document.split('<div class="headline-flow"', 1)[1].split(
+        "</div>", 1
     )[0]
     assert overview.index("flow-caught") < overview.index("flow-discuss")
     assert overview.index("flow-discuss") < overview.index("flow-withheld")
@@ -264,8 +281,8 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
     del missing_segment["not_questioned_mutant_count"]
     missing_document = render_report_document(missing_segment)
     missing_overview = missing_document.split(
-        '<section class="mutation-flow"', 1
-    )[1].split("</section>", 1)[0]
+        '<div class="headline-flow"', 1
+    )[1].split("</div>", 1)[0]
     assert "flow-withheld" not in missing_overview
 
     method = render_method_document(report)
@@ -330,9 +347,11 @@ def test_low_authored_line_coverage_is_not_rendered_as_a_clean_report(tmp_path) 
     document = render_report_document(report)
     parsed = _DocumentFacts()
     parsed.feed(document)
-    assert "Lazy Student's 1 tests pass, but they execute 1 of 4" in parsed.visible_text
-    assert "mutatable lines Git attributes to them." in parsed.visible_text
-    assert "Fencepost cannot assess understanding of code their tests never run." in parsed.visible_text
+    assert "Lazy Student" in parsed.visible_text
+    assert "One test passes. Coverage is too low to assess." in parsed.visible_text
+    assert "Their suite executes 1 of 4" in parsed.visible_text
+    assert "mutatable lines Git attributes to this student." in parsed.visible_text
+    assert "Fencepost cannot assess code their tests never run." in parsed.visible_text
     assert "Coverage: 25%" in parsed.visible_text
     assert "Question generation is inconclusive" in parsed.visible_text
     assert "No fair question sites are present" not in parsed.visible_text
@@ -348,7 +367,7 @@ def test_absent_test_count_never_falls_back_to_pytest_stdout(tmp_path) -> None:
     document = render_report_document(report)
     parsed = _DocumentFacts()
     parsed.feed(document)
-    assert "Their submitted tests — passed" in parsed.visible_text
+    assert re.search(r"\bTheir submitted suite\s+passed\b", parsed.visible_text)
     assert "999 passed" not in parsed.visible_text
     assert "suite-output" not in document
 
@@ -406,11 +425,14 @@ def test_local_server_exposes_only_known_read_only_routes(tmp_path) -> None:
             method = response.read().decode("utf-8")
             assert "STRICT equivalent rate" in method
             assert "CONTRACT equivalent rate" in method
-        with urlopen(base + "/assets/ledger.css", timeout=3) as response:
+        with urlopen(base + "/assets/direction-d.css", timeout=3) as response:
             assert response.status == 200
             stylesheet = response.read().decode("utf-8").casefold()
-            assert "#b24a3c" in stylesheet
-            assert "border-spacing: 2px 0" in stylesheet
+            assert "#0b0c0e" in stylesheet
+            assert "#3dd68c" in stylesheet
+            assert "border-spacing: 3px 0" in stylesheet
+            assert 'font-feature-settings: "liga" 0, "calt" 0' in stylesheet
+            assert "font-variant-ligatures: none" in stylesheet
         with urlopen(base + "/report.json", timeout=3) as response:
             assert json.load(response) == expected_report
         for unknown_path in (
@@ -419,6 +441,7 @@ def test_local_server_exposes_only_known_read_only_routes(tmp_path) -> None:
             "/summary.json",
             "/probe/summary.json",
             "/answers.json",
+            "/assets/ledger.css",
         ):
             try:
                 urlopen(base + unknown_path, timeout=3)

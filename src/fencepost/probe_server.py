@@ -194,7 +194,7 @@ def _handler(
                     )
                 )
                 return
-            if path == "/assets/ledger.css":
+            if path == "/assets/direction-d.css":
                 self._respond(200, "text/css; charset=utf-8", stylesheet)
                 return
             if path == "/end":
@@ -420,7 +420,7 @@ def create_probe_server(
         places=_ordered_places(report),
         answers_path=output,
     )
-    stylesheet = files("fencepost.ui").joinpath("ledger.css").read_bytes()
+    stylesheet = files("fencepost.ui").joinpath("direction-d.css").read_bytes()
     handler = _handler(session=session, stylesheet=stylesheet)
     server = ThreadingHTTPServer((host, port), handler)
     server.probe_session = session  # type: ignore[attr-defined]

@@ -83,7 +83,7 @@ def _handler(
                 self._respond(200, "text/html; charset=utf-8", report_page)
             elif path in {"/method", "/method/"}:
                 self._respond(200, "text/html; charset=utf-8", method_page)
-            elif path == "/assets/ledger.css":
+            elif path == "/assets/direction-d.css":
                 self._respond(200, "text/css; charset=utf-8", stylesheet)
             elif path == "/report.json" and report_json is not None:
                 self._respond(200, "application/json; charset=utf-8", report_json)
@@ -126,7 +126,7 @@ def create_server(
         report_json = (
             json.dumps(report, indent=2, sort_keys=True) + "\n"
         ).encode("utf-8")
-    stylesheet = files("fencepost.ui").joinpath("ledger.css").read_bytes()
+    stylesheet = files("fencepost.ui").joinpath("direction-d.css").read_bytes()
     handler = _handler(
         home_page=home_text.encode("utf-8"),
         report_page=report_text.encode("utf-8"),
