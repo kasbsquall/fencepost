@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 7.639999999999418,
+  "input_tokens": 12881,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 119,
+  "provider": "codex-cli",
+  "response_id": "019f6a71-ba77-72b3-b74d-32b527bd249a",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_awards_a_at_exact_lower_boundary():\n    assert letter_grade(90) == \"A\"",
+  "targeted_behavior": "The exact A/B cutoff: a score of 90 must receive an A."
+}

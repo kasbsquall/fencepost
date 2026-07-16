@@ -1,0 +1,1967 @@
+{
+  "covered_lines": {
+    "gradebook/__init__.py": [
+      0
+    ],
+    "gradebook/analytics.py": [
+      1,
+      8,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      22,
+      25,
+      27,
+      28,
+      29,
+      30,
+      31,
+      34,
+      36,
+      37,
+      38,
+      39,
+      41,
+      44,
+      46,
+      47,
+      48,
+      49,
+      50,
+      53,
+      55,
+      56
+    ]
+  },
+  "eligible_candidates": [
+    {
+      "after": "Gt",
+      "anchor": {
+        "column": 7,
+        "end_column": 18,
+        "end_line": 13,
+        "line": 13
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "GtE",
+      "id": "86e0917e5c6bf1d8",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "score >= 90"
+    },
+    {
+      "after": "89",
+      "anchor": {
+        "column": 16,
+        "end_column": 18,
+        "end_line": 13,
+        "line": 13
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "90",
+      "id": "2e231a949dfe891d",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "90"
+    },
+    {
+      "after": "91",
+      "anchor": {
+        "column": 16,
+        "end_column": 18,
+        "end_line": 13,
+        "line": 13
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "90",
+      "id": "1d2de104b4e2ea87",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "90"
+    },
+    {
+      "after": "None",
+      "anchor": {
+        "column": 8,
+        "end_column": 18,
+        "end_line": 14,
+        "line": 14
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 0
+        }
+      ],
+      "before": "'A'",
+      "id": "505c45e3e9f96d41",
+      "kind": "return_none",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "return \"A\""
+    },
+    {
+      "after": "''",
+      "anchor": {
+        "column": 15,
+        "end_column": 18,
+        "end_line": 14,
+        "line": 14
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "'A'",
+      "id": "855aea364aae6807",
+      "kind": "string_constant",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "\"A\""
+    },
+    {
+      "after": "Gt",
+      "anchor": {
+        "column": 9,
+        "end_column": 20,
+        "end_line": 15,
+        "line": 15
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "GtE",
+      "id": "bc57b02d4b5d32a1",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "score >= 80"
+    },
+    {
+      "after": "79",
+      "anchor": {
+        "column": 18,
+        "end_column": 20,
+        "end_line": 15,
+        "line": 15
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "80",
+      "id": "de6e7433e88c46a6",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "80"
+    },
+    {
+      "after": "81",
+      "anchor": {
+        "column": 18,
+        "end_column": 20,
+        "end_line": 15,
+        "line": 15
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "80",
+      "id": "ce1508b29bd64233",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "80"
+    },
+    {
+      "after": "None",
+      "anchor": {
+        "column": 8,
+        "end_column": 18,
+        "end_line": 16,
+        "line": 16
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "body",
+          "index": 0
+        }
+      ],
+      "before": "'B'",
+      "id": "2af10139d54f0607",
+      "kind": "return_none",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "return \"B\""
+    },
+    {
+      "after": "''",
+      "anchor": {
+        "column": 15,
+        "end_column": 18,
+        "end_line": 16,
+        "line": 16
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "'B'",
+      "id": "cd38c10fd5fc49d0",
+      "kind": "string_constant",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "\"B\""
+    },
+    {
+      "after": "Gt",
+      "anchor": {
+        "column": 9,
+        "end_column": 20,
+        "end_line": 17,
+        "line": 17
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "GtE",
+      "id": "75b9f689f32ac45a",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "score >= 70"
+    },
+    {
+      "after": "69",
+      "anchor": {
+        "column": 18,
+        "end_column": 20,
+        "end_line": 17,
+        "line": 17
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "70",
+      "id": "dbb83dad668b1b68",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "70"
+    },
+    {
+      "after": "71",
+      "anchor": {
+        "column": 18,
+        "end_column": 20,
+        "end_line": 17,
+        "line": 17
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "70",
+      "id": "8e3bb3b74b5e7623",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "70"
+    },
+    {
+      "after": "None",
+      "anchor": {
+        "column": 8,
+        "end_column": 18,
+        "end_line": 18,
+        "line": 18
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "body",
+          "index": 0
+        }
+      ],
+      "before": "'C'",
+      "id": "75fb9798120ff606",
+      "kind": "return_none",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "return \"C\""
+    },
+    {
+      "after": "''",
+      "anchor": {
+        "column": 15,
+        "end_column": 18,
+        "end_line": 18,
+        "line": 18
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "'C'",
+      "id": "a4241f6232376acc",
+      "kind": "string_constant",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "\"C\""
+    },
+    {
+      "after": "Gt",
+      "anchor": {
+        "column": 9,
+        "end_column": 20,
+        "end_line": 19,
+        "line": 19
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "GtE",
+      "id": "9e215f782bcfc8e3",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "score >= 60"
+    },
+    {
+      "after": "59",
+      "anchor": {
+        "column": 18,
+        "end_column": 20,
+        "end_line": 19,
+        "line": 19
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "60",
+      "id": "db66414d596970b4",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "60"
+    },
+    {
+      "after": "61",
+      "anchor": {
+        "column": 18,
+        "end_column": 20,
+        "end_line": 19,
+        "line": 19
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "60",
+      "id": "7d45e006f2ec7b27",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "60"
+    },
+    {
+      "after": "None",
+      "anchor": {
+        "column": 8,
+        "end_column": 18,
+        "end_line": 22,
+        "line": 22
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        }
+      ],
+      "before": "'F'",
+      "id": "95ac936c86584039",
+      "kind": "return_none",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "return \"F\""
+    },
+    {
+      "after": "''",
+      "anchor": {
+        "column": 15,
+        "end_column": 18,
+        "end_line": 22,
+        "line": 22
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "'F'",
+      "id": "4e6be8c9edc861b8",
+      "kind": "string_constant",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "\"F\""
+    },
+    {
+      "after": "LtE",
+      "anchor": {
+        "column": 7,
+        "end_column": 12,
+        "end_line": 27,
+        "line": 27
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "Lt",
+      "id": "67c52a2840605244",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "p < 0"
+    },
+    {
+      "after": "-1",
+      "anchor": {
+        "column": 11,
+        "end_column": 12,
+        "end_line": 27,
+        "line": 27
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "0",
+      "id": "ab756a31efd05a69",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "0"
+    },
+    {
+      "after": "1",
+      "anchor": {
+        "column": 11,
+        "end_column": 12,
+        "end_line": 27,
+        "line": 27
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "0",
+      "id": "44bc84979be41b9d",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "0"
+    },
+    {
+      "after": "-1",
+      "anchor": {
+        "column": 12,
+        "end_column": 13,
+        "end_line": 28,
+        "line": 28
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "0",
+      "id": "cce784bd5b2c3eca",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "0"
+    },
+    {
+      "after": "1",
+      "anchor": {
+        "column": 12,
+        "end_column": 13,
+        "end_line": 28,
+        "line": 28
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "0",
+      "id": "2eb35dc0c375b819",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "0"
+    },
+    {
+      "after": "GtE",
+      "anchor": {
+        "column": 7,
+        "end_column": 14,
+        "end_line": 29,
+        "line": 29
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "Gt",
+      "id": "92261c57ed4e3d56",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "p > 100"
+    },
+    {
+      "after": "99",
+      "anchor": {
+        "column": 11,
+        "end_column": 14,
+        "end_line": 29,
+        "line": 29
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "100",
+      "id": "086eee6e74bf01f0",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    {
+      "after": "101",
+      "anchor": {
+        "column": 11,
+        "end_column": 14,
+        "end_line": 29,
+        "line": 29
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "100",
+      "id": "2e3d6e7b8bdac2ad",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    {
+      "after": "99",
+      "anchor": {
+        "column": 12,
+        "end_column": 15,
+        "end_line": 30,
+        "line": 30
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "100",
+      "id": "b3112711c383143f",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    {
+      "after": "101",
+      "anchor": {
+        "column": 12,
+        "end_column": 15,
+        "end_line": 30,
+        "line": 30
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "100",
+      "id": "62dda762106518d3",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    {
+      "after": "None",
+      "anchor": {
+        "column": 4,
+        "end_column": 12,
+        "end_line": 31,
+        "line": 31
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 3
+        }
+      ],
+      "before": "p",
+      "id": "6ed3e152fc22e94b",
+      "kind": "return_none",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "return p"
+    },
+    {
+      "after": "FloorDiv",
+      "anchor": {
+        "column": 12,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        }
+      ],
+      "before": "Div",
+      "id": "bb49d21e0537bf13",
+      "kind": "arithmetic",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "len(ordered) * p / 100"
+    },
+    {
+      "after": "FloorDiv",
+      "anchor": {
+        "column": 12,
+        "end_column": 28,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        },
+        {
+          "field": "left",
+          "index": null
+        }
+      ],
+      "before": "Mult",
+      "id": "32cc5e262da8e932",
+      "kind": "arithmetic",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "len(ordered) * p"
+    },
+    {
+      "after": "99",
+      "anchor": {
+        "column": 31,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        },
+        {
+          "field": "right",
+          "index": null
+        }
+      ],
+      "before": "100",
+      "id": "764a18c525e359d6",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    {
+      "after": "101",
+      "anchor": {
+        "column": 31,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        },
+        {
+          "field": "right",
+          "index": null
+        }
+      ],
+      "before": "100",
+      "id": "a4c4bbd18113ba33",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    {
+      "after": "Gt",
+      "anchor": {
+        "column": 7,
+        "end_column": 24,
+        "end_line": 39,
+        "line": 39
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "GtE",
+      "id": "ebad6149cee857c9",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "k >= len(ordered)"
+    },
+    {
+      "after": "None",
+      "anchor": {
+        "column": 4,
+        "end_column": 21,
+        "end_line": 41,
+        "line": 41
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 5
+        }
+      ],
+      "before": "ordered[k]",
+      "id": "847ad53c8ea6a479",
+      "kind": "return_none",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "return ordered[k]"
+    },
+    {
+      "after": "-1",
+      "anchor": {
+        "column": 13,
+        "end_column": 14,
+        "end_line": 46,
+        "line": 46
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "0",
+      "id": "9d5857fbb6465c68",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "0"
+    },
+    {
+      "after": "1",
+      "anchor": {
+        "column": 13,
+        "end_column": 14,
+        "end_line": 46,
+        "line": 46
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "0",
+      "id": "f378ec7094626217",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "0"
+    },
+    {
+      "after": "GtE",
+      "anchor": {
+        "column": 11,
+        "end_column": 21,
+        "end_line": 48,
+        "line": 48
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "Gt",
+      "id": "f3ac7e0b2ed11dcc",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "s > target"
+    },
+    {
+      "after": "Sub",
+      "anchor": {
+        "column": 12,
+        "end_column": 23,
+        "end_line": 49,
+        "line": 49
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "body",
+          "index": 0
+        }
+      ],
+      "before": "Add",
+      "id": "d914afb970dae1a0",
+      "kind": "arithmetic",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "higher += 1"
+    },
+    {
+      "after": "0",
+      "anchor": {
+        "column": 22,
+        "end_column": 23,
+        "end_line": 49,
+        "line": 49
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "1",
+      "id": "2c4b47824429bb06",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "1"
+    },
+    {
+      "after": "2",
+      "anchor": {
+        "column": 22,
+        "end_column": 23,
+        "end_line": 49,
+        "line": 49
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "body",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "1",
+      "id": "b3e125ba44e50163",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "1"
+    },
+    {
+      "after": "None",
+      "anchor": {
+        "column": 4,
+        "end_column": 21,
+        "end_line": 50,
+        "line": 50
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "body",
+          "index": 3
+        }
+      ],
+      "before": "higher + 1",
+      "id": "dc1c21e77d6e08da",
+      "kind": "return_none",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "return higher + 1"
+    },
+    {
+      "after": "Sub",
+      "anchor": {
+        "column": 11,
+        "end_column": 21,
+        "end_line": 50,
+        "line": 50
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "Add",
+      "id": "eaa225f04acd42d1",
+      "kind": "arithmetic",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "higher + 1"
+    },
+    {
+      "after": "0",
+      "anchor": {
+        "column": 20,
+        "end_column": 21,
+        "end_line": 50,
+        "line": 50
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "right",
+          "index": null
+        }
+      ],
+      "before": "1",
+      "id": "7bbb8ba1b450cc0e",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "1"
+    },
+    {
+      "after": "2",
+      "anchor": {
+        "column": 20,
+        "end_column": 21,
+        "end_line": 50,
+        "line": 50
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 4
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "right",
+          "index": null
+        }
+      ],
+      "before": "1",
+      "id": "941c284d967c452c",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "1"
+    },
+    {
+      "after": "False",
+      "anchor": {
+        "column": 37,
+        "end_column": 41,
+        "end_line": 55,
+        "line": 55
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 5
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "keywords",
+          "index": 0
+        },
+        {
+          "field": "value",
+          "index": null
+        }
+      ],
+      "before": "True",
+      "id": "9fb2edec42bf3a2d",
+      "kind": "boolean_constant",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "True"
+    },
+    {
+      "after": "None",
+      "anchor": {
+        "column": 4,
+        "end_column": 22,
+        "end_line": 56,
+        "line": 56
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 5
+        },
+        {
+          "field": "body",
+          "index": 2
+        }
+      ],
+      "before": "ordered[:n]",
+      "id": "d4065ad3a9ce3349",
+      "kind": "return_none",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "return ordered[:n]"
+    },
+    {
+      "after": "n - 1",
+      "anchor": {
+        "column": 20,
+        "end_column": 21,
+        "end_line": 56,
+        "line": 56
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 5
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "slice",
+          "index": null
+        },
+        {
+          "field": "upper",
+          "index": null
+        }
+      ],
+      "before": "n",
+      "id": "0ae08414d2fa0b1a",
+      "kind": "slice_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ],
+        [
+          "slice_field",
+          "upper"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "n"
+    },
+    {
+      "after": "n + 1",
+      "anchor": {
+        "column": 20,
+        "end_column": 21,
+        "end_line": 56,
+        "line": 56
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 5
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "slice",
+          "index": null
+        },
+        {
+          "field": "upper",
+          "index": null
+        }
+      ],
+      "before": "n",
+      "id": "63527d5c054444d3",
+      "kind": "slice_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ],
+        [
+          "slice_field",
+          "upper"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "n"
+    }
+  ]
+}

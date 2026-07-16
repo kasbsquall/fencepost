@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 183.31199999999808,
+  "input_tokens": 121462,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 7658,
+  "provider": "codex-cli",
+  "response_id": "019f6a7a-fd5a-7df1-99d9-8ceeae3f6e10",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_truncates_a_negative_fractional_rank_toward_zero(monkeypatch):\n    monkeypatch.setattr(analytics, \"clamp_percent\", float)\n    assert analytics.percentile([10, 20, 30, 40], -12.5) == 10",
+  "targeted_behavior": "With a collaborator that preserves a negative fractional percentile, int() must truncate the intermediate rank toward zero; floor division instead selects the final element."
+}

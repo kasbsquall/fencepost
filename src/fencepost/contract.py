@@ -21,6 +21,11 @@ class ContractRules:
     forbidden_comparison_operators: tuple[str, ...]
     forbidden_inspection_calls: tuple[str, ...]
     forbidden_inspection_attributes: tuple[str, ...]
+    forbidden_fixture_names: tuple[str, ...]
+    forbidden_mock_modules: tuple[str, ...]
+    forbidden_mock_names: tuple[str, ...]
+    forbidden_mutation_calls: tuple[str, ...]
+    program_replacement_rationale: str
     allowed_input_values: tuple[str, ...]
     target_arguments: str
 
@@ -32,6 +37,13 @@ CONTRACT_RULES = ContractRules(
     forbidden_comparison_operators=("Is", "IsNot"),
     forbidden_inspection_calls=("isinstance", "type", "id"),
     forbidden_inspection_attributes=("__class__",),
+    forbidden_fixture_names=("monkeypatch",),
+    forbidden_mock_modules=("unittest.mock", "mock"),
+    forbidden_mock_names=("mock", "patch", "monkeypatch"),
+    forbidden_mutation_calls=("setattr", "delattr", "setitem"),
+    program_replacement_rationale=(
+        "A test that replaces part of the program is no longer evidence about the program."
+    ),
     allowed_input_values=(
         "int",
         "float",
@@ -81,6 +93,21 @@ def _dotted_name(node: ast.AST) -> str | None:
         return None
     parts.append(current.id)
     return ".".join(reversed(parts))
+
+
+def _root_name(node: ast.AST) -> str | None:
+    """Return the lexical root of an attribute/subscript expression."""
+    current = node
+    while isinstance(current, (ast.Attribute, ast.Subscript)):
+        current = current.value
+    return current.id if isinstance(current, ast.Name) else None
+
+
+def _is_module_reachable(
+    node: ast.AST, *, module_aliases: set[str], direct_targets: set[str]
+) -> bool:
+    root = _root_name(node)
+    return root is not None and root in module_aliases.union(direct_targets)
 
 
 def _plain_value(node: ast.AST, plain_names: set[str]) -> bool:
@@ -206,6 +233,15 @@ def validate_adversarial_test(
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
+                if alias.name in CONTRACT_RULES.forbidden_mock_modules:
+                    violations.append(
+                        _violation(
+                            "mocking",
+                            node,
+                            f"import {alias.name!r} can replace program behavior and is not allowed",
+                        )
+                    )
+                    continue
                 if alias.name == "pytest":
                     continue
                 if alias.name == module_path:
@@ -220,6 +256,18 @@ def validate_adversarial_test(
                 )
         elif isinstance(node, ast.ImportFrom):
             imported = node.module or ""
+            imports_mocking = imported in CONTRACT_RULES.forbidden_mock_modules or (
+                imported == "unittest" and any(alias.name == "mock" for alias in node.names)
+            )
+            if imports_mocking:
+                violations.append(
+                    _violation(
+                        "mocking",
+                        node,
+                        f"import from {imported!r} can replace program behavior and is not allowed",
+                    )
+                )
+                continue
             if node.level or imported not in {"pytest", module_path}:
                 violations.append(
                     _violation(
@@ -241,10 +289,57 @@ def validate_adversarial_test(
                     else:
                         direct_targets.add(alias.asname or alias.name)
 
+    # Track simple aliases such as ``subject = analytics`` conservatively.  A
+    # replacement through that alias still changes the program under test.
+    aliases_changed = True
+    while aliases_changed:
+        aliases_changed = False
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Assign):
+                targets = node.targets
+                value = node.value
+            elif isinstance(node, ast.AnnAssign) and node.value is not None:
+                targets = [node.target]
+                value = node.value
+            else:
+                continue
+            if not _is_module_reachable(
+                value,
+                module_aliases=module_aliases,
+                direct_targets=direct_targets,
+            ):
+                continue
+            aliases = set().union(*(_assigned_names(target) for target in targets))
+            new_aliases = aliases.difference(direct_targets)
+            if new_aliases:
+                direct_targets.update(new_aliases)
+                aliases_changed = True
+
     parent: dict[ast.AST, ast.AST] = {}
     for owner in ast.walk(tree):
         for child in ast.iter_child_nodes(owner):
             parent[child] = owner
+
+    functions = [
+        node
+        for node in tree.body
+        if isinstance(node, ast.FunctionDef) and node.name.startswith("test_")
+    ]
+    for function in functions:
+        parameters = (
+            list(function.args.posonlyargs)
+            + list(function.args.args)
+            + list(function.args.kwonlyargs)
+        )
+        for parameter in parameters:
+            if parameter.arg in CONTRACT_RULES.forbidden_fixture_names:
+                violations.append(
+                    _violation(
+                        "fixtures",
+                        parameter,
+                        f"the {parameter.arg!r} fixture can replace program behavior and is not allowed",
+                    )
+                )
 
     for node in ast.walk(tree):
         if isinstance(node, ast.ClassDef):
@@ -293,6 +388,32 @@ def validate_adversarial_test(
                         f"call to {final_name}() is not allowed",
                     )
                 )
+            called_parts = set(called.split(".")) if called else set()
+            if called_parts.intersection(CONTRACT_RULES.forbidden_mock_names):
+                violations.append(
+                    _violation(
+                        "mocking",
+                        node,
+                        f"call to {called or '<dynamic call>'} can replace program behavior and is not allowed",
+                    )
+                )
+            if (
+                final_name in CONTRACT_RULES.forbidden_mutation_calls
+                and node.args
+                and _is_module_reachable(
+                    node.args[0],
+                    module_aliases=module_aliases,
+                    direct_targets=direct_targets,
+                )
+            ):
+                # A test that replaces part of the program is no longer evidence about the program.
+                violations.append(
+                    _violation(
+                        "program_replacement",
+                        node,
+                        f"{final_name}() targets the module under test or an object reachable from it",
+                    )
+                )
         elif isinstance(node, ast.Attribute) and node.attr in set(
             CONTRACT_RULES.forbidden_inspection_attributes
         ):
@@ -303,12 +424,46 @@ def validate_adversarial_test(
                     f"inspection through .{node.attr} is not allowed",
                 )
             )
+        if isinstance(node, ast.Name) and node.id in CONTRACT_RULES.forbidden_fixture_names:
+            violations.append(
+                _violation(
+                    "fixtures",
+                    node,
+                    f"the {node.id!r} fixture can replace program behavior and is not allowed",
+                )
+            )
+        elif (
+            isinstance(node, ast.Constant)
+            and isinstance(node.value, str)
+            and node.value in CONTRACT_RULES.forbidden_fixture_names
+        ):
+            violations.append(
+                _violation(
+                    "fixtures",
+                    node,
+                    f"the {node.value!r} fixture can replace program behavior and is not allowed",
+                )
+            )
+        elif isinstance(node, (ast.Assign, ast.AnnAssign, ast.AugAssign, ast.Delete)):
+            targets = (
+                node.targets
+                if isinstance(node, (ast.Assign, ast.Delete))
+                else [node.target]
+            )
+            for target in targets:
+                if isinstance(target, (ast.Attribute, ast.Subscript)) and _is_module_reachable(
+                    target,
+                    module_aliases=module_aliases,
+                    direct_targets=direct_targets,
+                ):
+                    violations.append(
+                        _violation(
+                            "program_replacement",
+                            target,
+                            "assignment rebinding an attribute of the module under test is not allowed",
+                        )
+                    )
 
-    functions = [
-        node
-        for node in tree.body
-        if isinstance(node, ast.FunctionDef) and node.name.startswith("test_")
-    ]
     for function in functions:
         plain_names = _plain_bindings(function)
         for node in ast.walk(function):

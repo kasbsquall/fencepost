@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 22.48400000000038,
+  "input_tokens": 13054,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 433,
+  "provider": "codex-cli",
+  "response_id": "019f6a7a-5a3e-71a2-9bb7-19ba79c1dbd0",
+  "source": "import gradebook.analytics\n\n\ndef test_percentile_uses_hundred_based_index_scale():\n    assert gradebook.analytics.percentile([10, 20, 30], 66) == 20",
+  "targeted_behavior": "Distinguishes the percentile index calculation at a non-terminal fractional boundary."
+}

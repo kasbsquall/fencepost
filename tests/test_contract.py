@@ -72,6 +72,104 @@ def test_percentile_endpoint():
         assert validation.accepted, validation.violations
 
 
+def test_monkeypatch_program_replacement_is_rejected_only_in_contract() -> None:
+    source = '''import gradebook.analytics as analytics
+
+
+def test_percentile_without_its_clamp(monkeypatch):
+    monkeypatch.setattr(analytics, "clamp_percent", float)
+    assert analytics.percentile([10, 20, 30, 40], -12.5) == 10
+'''
+
+    strict = validate_adversarial_test(source, module_path=MODULE, mode="STRICT")
+    contract = validate_adversarial_test(
+        source, module_path=MODULE, mode="CONTRACT"
+    )
+
+    assert strict.accepted
+    assert not contract.accepted
+    assert {item.rule for item in contract.violations} >= {
+        "fixtures",
+        "mocking",
+        "program_replacement",
+    }
+
+
+def test_mock_patch_is_rejected_in_contract() -> None:
+    source = '''from unittest.mock import patch
+import gradebook.analytics as analytics
+
+
+def test_percentile_with_patch():
+    with patch.object(analytics, "clamp_percent", float):
+        assert analytics.percentile([10, 20, 30], -12.5) == 10
+'''
+
+    validation = validate_adversarial_test(
+        source, module_path=MODULE, mode="CONTRACT"
+    )
+
+    assert not validation.accepted
+    assert any(item.rule == "mocking" for item in validation.violations)
+
+
+def test_direct_module_attribute_rebinding_is_rejected_in_contract() -> None:
+    source = '''import gradebook.analytics as analytics
+
+
+def test_percentile_rebinding_clamp():
+    analytics.clamp_percent = float
+    assert analytics.percentile([10, 20, 30], -12.5) == 10
+'''
+
+    validation = validate_adversarial_test(
+        source, module_path=MODULE, mode="CONTRACT"
+    )
+
+    assert not validation.accepted
+    assert any(item.rule == "program_replacement" for item in validation.violations)
+
+
+@pytest.mark.parametrize(
+    "replacement",
+    (
+        'setattr(analytics, "clamp_percent", float)',
+        'delattr(analytics, "clamp_percent")',
+        'setitem(analytics.__dict__, "clamp_percent", float)',
+    ),
+)
+def test_mutation_helpers_cannot_target_module_under_test(replacement: str) -> None:
+    source = (
+        "import gradebook.analytics as analytics\n\n"
+        "def test_program_replacement_helper():\n"
+        f"    {replacement}\n"
+    )
+
+    validation = validate_adversarial_test(
+        source, module_path=MODULE, mode="CONTRACT"
+    )
+
+    assert not validation.accepted
+    assert any(item.rule == "program_replacement" for item in validation.violations)
+
+
+def test_module_alias_cannot_bypass_program_replacement_rule() -> None:
+    source = '''import gradebook.analytics as analytics
+
+
+def test_alias_replacement():
+    subject = analytics
+    setattr(subject, "clamp_percent", float)
+'''
+
+    validation = validate_adversarial_test(
+        source, module_path=MODULE, mode="CONTRACT"
+    )
+
+    assert not validation.accepted
+    assert any(item.rule == "program_replacement" for item in validation.violations)
+
+
 @pytest.mark.parametrize(
     "assertion",
     (

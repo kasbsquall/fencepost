@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 14.046999999998661,
+  "input_tokens": 12655,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 441,
+  "provider": "codex-cli",
+  "response_id": "019f6a73-0704-70e3-ae11-2e26d9746213",
+  "source": "import gradebook.analytics as analytics\n\n\nclass _StrictBoundary:\n    def __lt__(self, other):\n        assert other == 0\n        return False\n\n    def __le__(self, other):\n        assert other == 0\n        return True\n\n    def __gt__(self, other):\n        assert other == 100\n        return False\n\n\ndef test_clamp_preserves_value_when_only_less_than_zero_is_false():\n    value = _StrictBoundary()\n    assert analytics.clamp_percent(value) is value",
+  "targeted_behavior": "At a custom boundary-like value, `< 0` can be false while `<= 0` is true; the original preserves the object whereas the mutant replaces it with integer zero."
+}

@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 129.45300000000134,
+  "input_tokens": 104915,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 5620,
+  "provider": "codex-cli",
+  "response_id": "019f6a78-60bd-75a3-b622-4de40e012d4e",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_truncated_fractional_rank():\n    assert analytics.percentile([10, 20, 30, 40], 62.5) == 30",
+  "targeted_behavior": "Select the value at a non-integral percentile rank after truncating the computed rank."
+}

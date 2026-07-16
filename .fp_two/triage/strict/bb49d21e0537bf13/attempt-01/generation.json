@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 69.45300000000134,
+  "input_tokens": 82970,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 2279,
+  "provider": "codex-cli",
+  "response_id": "019f6a74-057c-7032-8336-d7c16739df2e",
+  "source": "import gradebook.analytics as analytics\n\n\nclass _Product:\n    def __truediv__(self, divisor):\n        assert divisor == 100\n        return 1\n\n    def __floordiv__(self, divisor):\n        assert divisor == 100\n        return 0\n\n\nclass _Percent(float):\n    def __rmul__(self, size):\n        return _Product()\n\n\ndef test_percentile_uses_true_division_for_index_calculation():\n    assert analytics.percentile([10, 20], _Percent(50)) == 20",
+  "targeted_behavior": "Uses a float subclass whose multiplication result gives distinct true-division and floor-division index values, while remaining valid through percent clamping."
+}

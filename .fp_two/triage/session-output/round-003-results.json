@@ -1,0 +1,36 @@
+{
+  "duration_seconds": 1.1974810760002583,
+  "infrastructure_errors": [],
+  "results": {
+    "contract-bb49d21e0537bf13-attempt-02": {
+      "mutant": {
+        "duration_seconds": 0.5763926150011685,
+        "exit_code": 1,
+        "failure": {
+          "detail": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78773e3c8d70>\n\n    def test_percentile_truncates_a_negative_fractional_rank_toward_zero(monkeypatch):\n        monkeypatch.setattr(analytics, \"clamp_percent\", float)\n>       assert analytics.percentile([10, 20, 30, 40], -12.5) == 10\nE       assert 40 == 10\nE        +  where 40 = <function percentile at 0x78773e0bc220>([10, 20, 30, 40], -12.5)\nE        +    where <function percentile at 0x78773e0bc220> = analytics.percentile\n\n.fencepost-generated-0000/test_adversarial.py:6: AssertionError",
+          "kind": "failure",
+          "message": "assert 40 == 10\n +  where 40 = <function percentile at 0x78773e0bc220>([10, 20, 30, 40], -12.5)\n +    where <function percentile at 0x78773e0bc220> = analytics.percentile",
+          "nodeid": ".fencepost-generated-0000.test_adversarial::test_percentile_truncates_a_negative_fractional_rank_toward_zero"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______ test_percentile_truncates_a_negative_fractional_rank_toward_zero _______\n\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78773e3c8d70>\n\n    def test_percentile_truncates_a_negative_fractional_rank_toward_zero(monkeypatch):\n        monkeypatch.setattr(analytics, \"clamp_percent\", float)\n>       assert analytics.percentile([10, 20, 30, 40], -12.5) == 10\nE       assert 40 == 10\nE        +  where 40 = <function percentile at 0x78773e0bc220>([10, 20, 30, 40], -12.5)\nE        +    where <function percentile at 0x78773e0bc220> = analytics.percentile\n\n.fencepost-generated-0000/test_adversarial.py:6: AssertionError\n----- generated xml file: /work/jobs/triage-0000-xu0uxfba/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0000/test_adversarial.py::test_percentile_truncates_a_negative_fractional_rank_toward_zero\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.5533714129996952,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-xu0uxfba/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED"
+    }
+  }
+}

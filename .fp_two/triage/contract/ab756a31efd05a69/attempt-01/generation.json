@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.28099999999904,
+  "input_tokens": 12959,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 176,
+  "provider": "codex-cli",
+  "response_id": "019f6a77-7957-7e72-963f-86e35985e837",
+  "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_clamps_negative_one_to_zero():\n    assert gradebook.analytics.clamp_percent(-1) == 0",
+  "targeted_behavior": "Negative percentages, including -1, clamp to 0."
+}

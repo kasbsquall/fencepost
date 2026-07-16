@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.609000000000378,
+  "input_tokens": 12647,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 236,
+  "provider": "codex-cli",
+  "response_id": "019f6a73-bc86-7610-b943-10e954129119",
+  "source": "import pytest\nfrom decimal import Decimal\n\nfrom gradebook.analytics import clamp_percent\n\n\ndef test_exact_decimal_hundred_is_preserved_by_identity():\n    value = Decimal(\"100\")\n    assert clamp_percent(value) is value",
+  "targeted_behavior": "An exact-boundary Decimal percentage (100) must be returned unchanged; the mutant replaces it with the integer literal 100."
+}

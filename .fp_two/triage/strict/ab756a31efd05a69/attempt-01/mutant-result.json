@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.8947468509995815,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_clamp_percent_clamps_fractional_negative_values_to_zero():\n>       assert clamp_percent(-0.5) == 0\nE       assert -0.5 == 0\nE        +  where -0.5 = clamp_percent(-0.5)\n\n.fencepost-generated-0013/test_adversarial.py:7: AssertionError",
+    "kind": "failure",
+    "message": "assert -0.5 == 0\n +  where -0.5 = clamp_percent(-0.5)",
+    "nodeid": ".fencepost-generated-0013.test_adversarial::test_clamp_percent_clamps_fractional_negative_values_to_zero"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________ test_clamp_percent_clamps_fractional_negative_values_to_zero _________\n\n    def test_clamp_percent_clamps_fractional_negative_values_to_zero():\n>       assert clamp_percent(-0.5) == 0\nE       assert -0.5 == 0\nE        +  where -0.5 = clamp_percent(-0.5)\n\n.fencepost-generated-0013/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0013-5yh9nt89/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0013/test_adversarial.py::test_clamp_percent_clamps_fractional_negative_values_to_zero\n1 failed in 0.03s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

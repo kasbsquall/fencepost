@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 7.78099999999904,
+  "input_tokens": 12883,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 130,
+  "provider": "codex-cli",
+  "response_id": "019f6a71-9c16-7483-aa67-1edfde7161b9",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_score_89_is_b_not_a():\n    assert letter_grade(89) == \"B\"",
+  "targeted_behavior": "At the exact A/B boundary, a score of 89 remains a B; only scores of 90 or higher are A."
+}

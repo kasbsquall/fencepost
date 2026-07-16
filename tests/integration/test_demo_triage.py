@@ -55,11 +55,11 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     assert triage.probable_equivalent_count_strict == 0
     assert triage.unresolved_count_strict == 0
     assert triage.equivalent_rate_strict == 0.0
-    assert triage.real_gap_count_contract == 18
-    assert triage.probable_equivalent_count_contract == 3
+    assert triage.real_gap_count_contract == 20
+    assert triage.probable_equivalent_count_contract == 1
     assert triage.unresolved_count_contract == 0
-    assert triage.equivalent_rate_contract == 3 / 21
-    assert triage.invalid_contract_attempts == 3
+    assert triage.equivalent_rate_contract == 1 / 21
+    assert triage.invalid_contract_attempts == 1
     assert triage.triage_complete is True
     assert {item.label_strict for item in triage.results} == {"REAL_GAP"}
     assert {item.label_contract for item in triage.results} == {
@@ -95,7 +95,7 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     for item in required:
         assert item.label_contract == "REAL_GAP"
 
-    expected_shielded = [
+    clamp_contract_gaps = [
         item
         for item in triage.results
         if (
@@ -106,11 +106,31 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
         in {
             ("compare", "p < 0", "LtE"),
             ("compare", "p > 100", "GtE"),
+        }
+    ]
+    assert len(clamp_contract_gaps) == 2
+    assert all(item.label_contract == "REAL_GAP" for item in clamp_contract_gaps)
+    assert any(
+        "-0.0" in item.contract.winning_test.source for item in clamp_contract_gaps
+    )
+    assert any(
+        "100.0" in item.contract.winning_test.source for item in clamp_contract_gaps
+    )
+
+    expected_shielded = [
+        item
+        for item in triage.results
+        if (
+            item.mutant.candidate.kind,
+            item.mutant.candidate.source_segment.strip(),
+            item.mutant.candidate.after,
+        )
+        in {
             ("arithmetic", "len(ordered) * p / 100", "FloorDiv"),
         }
     ]
-    assert len(expected_shielded) == 3
-    assert len(triage.contract_shielded) == 3
+    assert len(expected_shielded) == 1
+    assert len(triage.contract_shielded) == 1
     for item in expected_shielded:
         assert item.label_strict == "REAL_GAP"
         assert item.label_contract == "PROBABLE_EQUIVALENT"
@@ -138,12 +158,12 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     assert summary["real_gap_count_strict"] == 21
     assert summary["probable_equivalent_count_strict"] == 0
     assert summary["equivalent_rate_strict"] == 0.0
-    assert summary["real_gap_count_contract"] == 18
-    assert summary["probable_equivalent_count_contract"] == 3
-    assert summary["equivalent_rate_contract"] == 3 / 21
-    assert summary["invalid_contract_attempts"] == 3
-    assert len(summary["contract_shielded"]) == 3
-    assert len(summary["probe_target_mutant_ids"]) == 18
+    assert summary["real_gap_count_contract"] == 20
+    assert summary["probable_equivalent_count_contract"] == 1
+    assert summary["equivalent_rate_contract"] == 1 / 21
+    assert summary["invalid_contract_attempts"] == 1
+    assert len(summary["contract_shielded"]) == 1
+    assert len(summary["probe_target_mutant_ids"]) == 20
     assert "false-negative risk" in summary["contract_limitation"].lower()
     assert "hide a genuine behavioral gap" in summary["contract_limitation"]
     assert summary["triage_complete"] is True

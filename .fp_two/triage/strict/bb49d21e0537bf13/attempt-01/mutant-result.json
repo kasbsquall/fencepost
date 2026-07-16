@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.9215524230003211,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_percentile_uses_true_division_for_index_calculation():\n>       assert analytics.percentile([10, 20], _Percent(50)) == 20\nE       assert 10 == 20\nE        +  where 10 = <function percentile at 0x7d72aa354220>([10, 20], 50.0)\nE        +    where <function percentile at 0x7d72aa354220> = analytics.percentile\nE        +    and   50.0 = _Percent(50)\n\n.fencepost-generated-0018/test_adversarial.py:20: AssertionError",
+    "kind": "failure",
+    "message": "assert 10 == 20\n +  where 10 = <function percentile at 0x7d72aa354220>([10, 20], 50.0)\n +    where <function percentile at 0x7d72aa354220> = analytics.percentile\n +    and   50.0 = _Percent(50)",
+    "nodeid": ".fencepost-generated-0018.test_adversarial::test_percentile_uses_true_division_for_index_calculation"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_percentile_uses_true_division_for_index_calculation ___________\n\n    def test_percentile_uses_true_division_for_index_calculation():\n>       assert analytics.percentile([10, 20], _Percent(50)) == 20\nE       assert 10 == 20\nE        +  where 10 = <function percentile at 0x7d72aa354220>([10, 20], 50.0)\nE        +    where <function percentile at 0x7d72aa354220> = analytics.percentile\nE        +    and   50.0 = _Percent(50)\n\n.fencepost-generated-0018/test_adversarial.py:20: AssertionError\n----- generated xml file: /work/jobs/triage-0018-k24lj0tr/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0018/test_adversarial.py::test_percentile_uses_true_division_for_index_calculation\n1 failed in 0.03s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

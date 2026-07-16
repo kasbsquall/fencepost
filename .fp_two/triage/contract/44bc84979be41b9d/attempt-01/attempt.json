@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 9.890999999999622,
+    "input_tokens": 12959,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 223,
+    "provider": "codex-cli",
+    "response_id": "019f6a77-9d91-7da3-beb6-3ae14df3babc",
+    "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_preserves_positive_fraction_below_one():\n    assert gradebook.analytics.clamp_percent(0.5) == 0.5",
+    "targeted_behavior": "A positive percentage strictly between 0 and 1 must be returned unchanged."
+  },
+  "mutant": {
+    "duration_seconds": 0.8198942930011981,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert gradebook.analytics.clamp_percent(0.5) == 0.5\nE       AssertionError: assert 0 == 0.5\nE        +  where 0 = <function clamp_percent at 0x7bb4ce48c040>(0.5)\nE        +    where <function clamp_percent at 0x7bb4ce48c040> = <module 'gradebook.analytics' from '/work/jobs/triage-0014-phj32unf/mutant/tree/gradebook/analytics.py'>.clamp_percent\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0014-phj32unf/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0014/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 0 == 0.5\n +  where 0 = <function clamp_percent at 0x7bb4ce48c040>(0.5)\n +    where <function clamp_percent at 0x7bb4ce48c040> = <module 'gradebook.analytics' from '/work/jobs/triage-0014-phj32unf/mutant/tree/gradebook/analytics.py'>.clamp_percent\n +      where <module 'gradebook.analytics' from '/work/jobs/triage-0014-phj32unf/mutant/tree/gradebook/analytics.py'> = gradebook.analytics",
+      "nodeid": ".fencepost-generated-0014.test_adversarial::test_clamp_percent_preserves_positive_fraction_below_one"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_clamp_percent_preserves_positive_fraction_below_one ___________\n\n    def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert gradebook.analytics.clamp_percent(0.5) == 0.5\nE       AssertionError: assert 0 == 0.5\nE        +  where 0 = <function clamp_percent at 0x7bb4ce48c040>(0.5)\nE        +    where <function clamp_percent at 0x7bb4ce48c040> = <module 'gradebook.analytics' from '/work/jobs/triage-0014-phj32unf/mutant/tree/gradebook/analytics.py'>.clamp_percent\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0014-phj32unf/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0014/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0014-phj32unf/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0014/test_adversarial.py::test_clamp_percent_preserves_positive_fraction_below_one\n1 failed in 0.03s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.7070497169988812,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0014-phj32unf/original/junit.xml ----\n1 passed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

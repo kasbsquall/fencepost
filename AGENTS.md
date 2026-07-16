@@ -50,7 +50,10 @@ Fencepost asks has a ground truth we obtained by running code.
    - **CONTRACT** permits only tests a plain caller could write. Generated tests
      are statically validated from their AST: no classes or nested helpers, no
      identity or type-inspection operations, no imports beyond pytest and the
-     module under test, and only builtin scalar/container literal inputs.
+     module under test, only builtin scalar/container literal inputs, and no
+     monkeypatch, mocks, attribute rebinding, or other replacement of the
+     program under test. A test that replaces part of the program is no longer
+     evidence about the program.
 
    In both modes, a test must pass on the original before it can kill a mutant.
    A CONTRACT violation is `INVALID_CONTRACT`: it never executes, never counts
@@ -113,19 +116,25 @@ commits. The student's 10 tests all pass. Known ground truth in that repo:
 - `rank`, `top_n`: their mutants are **killed**. The tool must not flag these.
   A tool that flags everything is a tool that found nothing.
 - `clamp_percent`: `p < 0` -> `p <= 0` and `p > 100` -> `p >= 100`
-  **survive** the submitted suite. Our original claim that they were universally
-  equivalent was wrong. STRICT Codex killed the upper mutant with
-  `Decimal("100")`: the original preserves the Decimal object while the mutant
-  assigns and returns integer `100`. It killed the lower mutant with an object
-  whose `__lt__` and `__le__` deliberately disagree. They are STRICT real gaps
-  but CONTRACT probable-equivalents under plain literal inputs.
+  **survive** the submitted suite and are real gaps in both modes. Our original
+  claim that they were universally equivalent was wrong twice: a plain caller
+  can distinguish the upper boundary with `str(clamp_percent(100.0)) ==
+  "100.0"`, because the mutant returns integer `100`; and it can distinguish the
+  lower boundary with `str(clamp_percent(-0.0)) == "-0.0"`, because `-0.0 < 0`
+  is false while `-0.0 <= 0` is true. These require neither custom objects nor
+  type/identity inspection, so they are legitimate CONTRACT real gaps.
 - Because `percentile` now clamps `p` before computing its index, its surviving
-  `/` -> `//` arithmetic mutant is indistinguishable for plain numeric
-  percentages but distinguishable through a custom object whose true-division
-  and floor-division protocols differ. It is likewise a STRICT real gap and a
-  CONTRACT probable-equivalent. The real unrestricted run therefore found all
-  21 survivors to be STRICT real gaps; the gap between modes is the finding,
-  not an error to collapse away.
+  `/` -> `//` arithmetic mutant is a STRICT real gap through a custom object
+  whose true-division and floor-division protocols differ. A first CONTRACT
+  witness monkeypatched out `clamp_percent` to expose a negative numerator, but
+  that replaces the program and is `INVALID_CONTRACT`. With the clamp intact,
+  exhaustive verification over about 36,180 combinations (list lengths 0..59;
+  percentages -50..150 as integers, halves, and quarter fractions) found zero
+  differences between `int(n * p / 100)` and `int(n * p // 100)`. It is therefore
+  expected to become a CONTRACT probable-equivalent after three valid plain
+  attempts, but the label remains execution-decided rather than hardcoded. The
+  real unrestricted run found all 21 survivors to be STRICT real gaps; the gap
+  between modes is the finding, not an error to collapse away.
 
 Use this repo as the fixture. If Fencepost cannot reproduce the classifications
 above, it is wrong.

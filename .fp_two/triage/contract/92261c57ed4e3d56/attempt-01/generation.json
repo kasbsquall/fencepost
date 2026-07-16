@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 23.39099999999962,
+  "input_tokens": 12961,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 509,
+  "provider": "codex-cli",
+  "response_id": "019f6a77-c452-7051-af24-2109b6593705",
+  "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_preserves_float_at_inclusive_upper_bound():\n    assert str(gradebook.analytics.clamp_percent(100.0)) == \"100.0\"",
+  "targeted_behavior": "At the inclusive upper bound supplied as a float, the original preserves `100.0`, while the mutant replaces it with integer `100`; their string representations differ."
+}

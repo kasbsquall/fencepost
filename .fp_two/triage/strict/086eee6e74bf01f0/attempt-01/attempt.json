@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 9.609000000000378,
+    "input_tokens": 12647,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 236,
+    "provider": "codex-cli",
+    "response_id": "019f6a73-bc86-7610-b943-10e954129119",
+    "source": "import pytest\nfrom decimal import Decimal\n\nfrom gradebook.analytics import clamp_percent\n\n\ndef test_exact_decimal_hundred_is_preserved_by_identity():\n    value = Decimal(\"100\")\n    assert clamp_percent(value) is value",
+    "targeted_behavior": "An exact-boundary Decimal percentage (100) must be returned unchanged; the mutant replaces it with the integer literal 100."
+  },
+  "mutant": {
+    "duration_seconds": 0.8845425319996139,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_exact_decimal_hundred_is_preserved_by_identity():\n        value = Decimal(\"100\")\n>       assert clamp_percent(value) is value\nE       AssertionError: assert 100 is Decimal('100')\nE        +  where 100 = clamp_percent(Decimal('100'))\n\n.fencepost-generated-0016/test_adversarial.py:9: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 100 is Decimal('100')\n +  where 100 = clamp_percent(Decimal('100'))",
+      "nodeid": ".fencepost-generated-0016.test_adversarial::test_exact_decimal_hundred_is_preserved_by_identity"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_____________ test_exact_decimal_hundred_is_preserved_by_identity ______________\n\n    def test_exact_decimal_hundred_is_preserved_by_identity():\n        value = Decimal(\"100\")\n>       assert clamp_percent(value) is value\nE       AssertionError: assert 100 is Decimal('100')\nE        +  where 100 = clamp_percent(Decimal('100'))\n\n.fencepost-generated-0016/test_adversarial.py:9: AssertionError\n----- generated xml file: /work/jobs/triage-0016-lbm689j2/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0016/test_adversarial.py::test_exact_decimal_hundred_is_preserved_by_identity\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.8066180829991936,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0016-lbm689j2/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

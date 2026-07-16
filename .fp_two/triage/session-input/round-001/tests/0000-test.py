@@ -1,0 +1,5 @@
+import gradebook.analytics as analytics
+
+
+def test_letter_grade_includes_ninety_in_a_range():
+    assert analytics.letter_grade(90) == 'A'

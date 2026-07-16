@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.953000000001339,
+  "input_tokens": 12881,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 146,
+  "provider": "codex-cli",
+  "response_id": "019f6a72-2450-7793-9f19-5be47445a8d8",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_assigns_b_at_exact_lower_boundary():\n    assert analytics.letter_grade(80) == \"B\"",
+  "targeted_behavior": "The exact lower boundary for a B grade is score 80; the original returns 'B' while the mutant falls through to 'C'."
+}

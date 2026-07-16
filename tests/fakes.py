@@ -20,7 +20,7 @@ class FixtureAdversarialTestGenerator:
         )
         self.keys.append(key)
         semantic_key = key[:4]
-        shielded_keys = {
+        clamp_compare_keys = {
             (
                 "gradebook/analytics.py",
                 "compare",
@@ -33,13 +33,13 @@ class FixtureAdversarialTestGenerator:
                 "p > 100",
                 "GtE",
             ),
-            (
-                "gradebook/analytics.py",
-                "arithmetic",
-                "len(ordered) * p / 100",
-                "FloorDiv",
-            ),
         }
+        arithmetic_key = (
+            "gradebook/analytics.py",
+            "arithmetic",
+            "len(ordered) * p / 100",
+            "FloorDiv",
+        )
         boundaries = {
             (
                 "gradebook/analytics.py",
@@ -49,75 +49,54 @@ class FixtureAdversarialTestGenerator:
             ): score
             for score in (90, 80, 70, 60)
         }
-        if semantic_key in shielded_keys:
-            # STRICT gets a genuine dynamic-Python witness. CONTRACT attempt 1
-            # intentionally repeats it so the AST validator and retry feedback
-            # are exercised; later attempts stay inside the plain-value policy.
-            use_strict_witness = request.mode == "STRICT" or request.attempt == 1
-            if semantic_key[2] == "p > 100" and use_strict_witness:
-                source = (
-                    "from decimal import Decimal\n"
-                    "from gradebook.analytics import clamp_percent\n\n"
-                    "def test_upper_boundary_preserves_decimal_instance():\n"
-                    "    boundary = Decimal('100')\n"
-                    "    result = clamp_percent(boundary)\n"
-                    "    assert result is boundary\n"
-                )
-                behavior = "Decimal type and identity at the upper boundary"
-            elif semantic_key[2] == "p < 0" and use_strict_witness:
+        if semantic_key in clamp_compare_keys:
+            if semantic_key[2] == "p < 0":
                 source = (
                     "from gradebook.analytics import clamp_percent\n\n"
-                    "class AsymmetricNumber:\n"
-                    "    def __lt__(self, other):\n"
-                    "        return False\n"
-                    "    def __le__(self, other):\n"
-                    "        return True\n"
-                    "    def __gt__(self, other):\n"
-                    "        return False\n\n"
-                    "def test_lower_boundary_custom_comparison():\n"
-                    "    value = AsymmetricNumber()\n"
-                    "    assert clamp_percent(value) is value\n"
+                    "def test_lower_boundary_preserves_negative_zero():\n"
+                    "    assert str(clamp_percent(-0.0)) == '-0.0'\n"
                 )
-                behavior = "asymmetric custom comparison methods"
-            elif semantic_key[1] == "arithmetic" and use_strict_witness:
-                source = (
-                    "from gradebook.analytics import percentile\n\n"
-                    "class DivergentDivision:\n"
-                    "    def __lt__(self, other):\n"
-                    "        return False\n"
-                    "    def __gt__(self, other):\n"
-                    "        return False\n"
-                    "    def __rmul__(self, other):\n"
-                    "        return self\n"
-                    "    def __truediv__(self, other):\n"
-                    "        return 1\n"
-                    "    def __floordiv__(self, other):\n"
-                    "        return 0\n\n"
-                    "def test_custom_division_protocol():\n"
-                    "    assert percentile([10, 20], DivergentDivision()) == 20\n"
-                )
-                behavior = "custom true-division versus floor-division protocol"
-            elif semantic_key[2] == "p < 0":
-                source = (
-                    "from gradebook.analytics import clamp_percent\n\n"
-                    "def test_plain_lower_boundary():\n"
-                    "    assert clamp_percent(0) == 0\n"
-                )
-                behavior = "plain integer lower boundary"
-            elif semantic_key[2] == "p > 100":
-                source = (
-                    "from gradebook.analytics import clamp_percent\n\n"
-                    "def test_plain_upper_boundary():\n"
-                    "    assert clamp_percent(100) == 100\n"
-                )
-                behavior = "plain integer upper boundary"
+                behavior = "clamp_percent preserves plain negative zero"
             else:
                 source = (
-                    "from gradebook.analytics import percentile\n\n"
-                    "def test_plain_percentile_index():\n"
-                    "    assert percentile([10, 20, 30], 50) == 20\n"
+                    "from gradebook.analytics import clamp_percent\n\n"
+                    "def test_upper_boundary_preserves_float_representation():\n"
+                    "    assert str(clamp_percent(100.0)) == '100.0'\n"
                 )
-                behavior = "plain numeric percentile index"
+                behavior = "clamp_percent preserves plain upper-boundary float"
+        elif semantic_key == arithmetic_key and request.mode == "STRICT":
+            source = (
+                "from gradebook.analytics import percentile\n\n"
+                "class DivergentDivision:\n"
+                "    def __lt__(self, other):\n"
+                "        return False\n"
+                "    def __gt__(self, other):\n"
+                "        return False\n"
+                "    def __rmul__(self, other):\n"
+                "        return self\n"
+                "    def __truediv__(self, other):\n"
+                "        return 1\n"
+                "    def __floordiv__(self, other):\n"
+                "        return 0\n\n"
+                "def test_custom_division_protocol():\n"
+                "    assert percentile([10, 20], DivergentDivision()) == 20\n"
+            )
+            behavior = "custom true-division versus floor-division protocol"
+        elif semantic_key == arithmetic_key and request.attempt == 1:
+            source = (
+                "import gradebook.analytics as analytics\n\n"
+                "def test_percentile_without_its_clamp(monkeypatch):\n"
+                "    monkeypatch.setattr(analytics, 'clamp_percent', float)\n"
+                "    assert analytics.percentile([10, 20, 30, 40], -12.5) == 10\n"
+            )
+            behavior = "intentionally invalid attempt that replaces the program clamp"
+        elif semantic_key == arithmetic_key:
+            source = (
+                "from gradebook.analytics import percentile\n\n"
+                "def test_plain_percentile_index():\n"
+                "    assert percentile([10, 20, 30], 50) == 20\n"
+            )
+            behavior = "plain numeric percentile index"
         elif semantic_key in boundaries:
             score = boundaries[semantic_key]
             expected = {90: "A", 80: "B", 70: "C", 60: "D"}[score]

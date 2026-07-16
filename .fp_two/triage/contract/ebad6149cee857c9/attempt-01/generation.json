@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.985000000000582,
+  "input_tokens": 13032,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 172,
+  "provider": "codex-cli",
+  "response_id": "019f6a7a-b21c-7c12-b23c-f06bd0bb8476",
+  "source": "import gradebook.analytics\n\n\ndef test_percentile_at_100_returns_largest_score():\n    assert gradebook.analytics.percentile([7], 100) == 7",
+  "targeted_behavior": "At p=100, the computed index equals len(scores), so the original clamps it to the final element while the mutant leaves it out of range."
+}

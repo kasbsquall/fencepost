@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.110000000000582,
+  "input_tokens": 12877,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 141,
+  "provider": "codex-cli",
+  "response_id": "019f6a72-00c6-7012-8976-3d92b15013e6",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_79_is_a_c_grade():\n    assert letter_grade(79) == \"C\"",
+  "targeted_behavior": "At score 79, the original returns C while the mutant incorrectly returns B."
+}

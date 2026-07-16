@@ -1,0 +1,38 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 129.45300000000134,
+    "input_tokens": 104915,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 5620,
+    "provider": "codex-cli",
+    "response_id": "019f6a78-60bd-75a3-b622-4de40e012d4e",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_truncated_fractional_rank():\n    assert analytics.percentile([10, 20, 30, 40], 62.5) == 30",
+    "targeted_behavior": "Select the value at a non-integral percentile rank after truncating the computed rank."
+  },
+  "mutant": {
+    "duration_seconds": 0.7643989009993675,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0018-ugqzibkx/mutant/junit.xml -----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.8177979199990659,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-ugqzibkx/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "NOT_DISTINGUISHED",
+  "valid_attempt_number": 1
+}
