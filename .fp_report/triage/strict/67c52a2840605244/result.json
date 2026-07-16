@@ -1,0 +1,120 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 10.75,
+        "input_tokens": 12649,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 293,
+        "provider": "codex-cli",
+        "response_id": "019f6ab2-8dc8-7e51-bbdb-0105c41b6fb9",
+        "source": "import pytest\n\nfrom gradebook.analytics import clamp_percent\n\n\nclass ZeroInt(int):\n    pass\n\n\ndef test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n    value = ZeroInt(0)\n\n    result = clamp_percent(value)\n\n    assert result is value",
+        "targeted_behavior": "At the lower boundary, the original preserves an int-subclass instance equal to zero, while the mutant replaces it with the built-in integer literal 0."
+      },
+      "mutant": {
+        "duration_seconds": 0.84264155800156,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n        value = ZeroInt(0)\n    \n        result = clamp_percent(value)\n    \n>       assert result is value\nE       assert 0 is 0\n\n.fencepost-generated-0012/test_adversarial.py:15: AssertionError",
+          "kind": "failure",
+          "message": "assert 0 is 0",
+          "nodeid": ".fencepost-generated-0012.test_adversarial::test_zero_int_subclass_identity_is_preserved_at_lower_boundary"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________ test_zero_int_subclass_identity_is_preserved_at_lower_boundary ________\n\n    def test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n        value = ZeroInt(0)\n    \n        result = clamp_percent(value)\n    \n>       assert result is value\nE       assert 0 is 0\n\n.fencepost-generated-0012/test_adversarial.py:15: AssertionError\n----- generated xml file: /work/jobs/triage-0012-8jf3f5uu/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0012/test_adversarial.py::test_zero_int_subclass_identity_is_preserved_at_lower_boundary\n1 failed in 0.04s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.7229631449990848,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0012-8jf3f5uu/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n        value = ZeroInt(0)\n    \n        result = clamp_percent(value)\n    \n>       assert result is value\nE       assert 0 is 0\n\n.fencepost-generated-0012/test_adversarial.py:15: AssertionError",
+    "kind": "failure",
+    "message": "assert 0 is 0",
+    "nodeid": ".fencepost-generated-0012.test_adversarial::test_zero_int_subclass_identity_is_preserved_at_lower_boundary"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mode": "STRICT",
+  "mutant": {
+    "candidate": {
+      "after": "LtE",
+      "anchor": {
+        "column": 7,
+        "end_column": 12,
+        "end_line": 27,
+        "line": 27
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "Lt",
+      "id": "67c52a2840605244",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "p < 0"
+    },
+    "execution": {
+      "duration_seconds": 0.9289295159996982,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0020-7wkyq3mo/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 7,
+      "end_column": 13,
+      "end_line": 25,
+      "line": 25
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 10.75,
+    "input_tokens": 12649,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 293,
+    "provider": "codex-cli",
+    "response_id": "019f6ab2-8dc8-7e51-bbdb-0105c41b6fb9",
+    "source": "import pytest\n\nfrom gradebook.analytics import clamp_percent\n\n\nclass ZeroInt(int):\n    pass\n\n\ndef test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n    value = ZeroInt(0)\n\n    result = clamp_percent(value)\n\n    assert result is value",
+    "targeted_behavior": "At the lower boundary, the original preserves an int-subclass instance equal to zero, while the mutant replaces it with the built-in integer literal 0."
+  }
+}

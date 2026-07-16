@@ -1,0 +1,126 @@
+{
+  "contract_rules": {
+    "allowed_function_definitions": "top-level synchronous test_* functions only",
+    "allowed_imports": [
+      "pytest",
+      "<module-under-test>"
+    ],
+    "allowed_input_values": [
+      "int",
+      "float",
+      "str",
+      "bool",
+      "None",
+      "list",
+      "tuple",
+      "dict",
+      "set"
+    ],
+    "forbidden_comparison_operators": [
+      "Is",
+      "IsNot"
+    ],
+    "forbidden_definition_nodes": [
+      "ClassDef",
+      "AsyncFunctionDef",
+      "Lambda"
+    ],
+    "forbidden_fixture_names": [
+      "monkeypatch"
+    ],
+    "forbidden_inspection_attributes": [
+      "__class__"
+    ],
+    "forbidden_inspection_calls": [
+      "isinstance",
+      "type",
+      "id"
+    ],
+    "forbidden_mock_modules": [
+      "unittest.mock",
+      "mock"
+    ],
+    "forbidden_mock_names": [
+      "mock",
+      "patch",
+      "monkeypatch"
+    ],
+    "forbidden_mutation_calls": [
+      "setattr",
+      "delattr",
+      "setitem"
+    ],
+    "limitation": "CONTRACT mode can hide a genuine behavioral gap when the only witness uses type, identity, a custom object, or another excluded input. This deliberate false-negative risk means its rate is execution-grounded only under the stated caller contract, not universal truth.",
+    "program_replacement_rationale": "A test that replaces part of the program is no longer evidence about the program.",
+    "resolved_allowed_imports": [
+      "pytest",
+      "gradebook.analytics"
+    ],
+    "target_arguments": "plain literals, containers of plain literals, unary signed numeric literals, or local names bound directly to those values"
+  },
+  "mode": "CONTRACT",
+  "module_path": "gradebook.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "99",
+      "anchor": {
+        "column": 31,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        },
+        {
+          "field": "right",
+          "index": null
+        }
+      ],
+      "before": "100",
+      "id": "764a18c525e359d6",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    "execution": {
+      "duration_seconds": 1.0167549420002615,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0033-g1rs280_/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 31,
+      "end_column": 33,
+      "end_line": 35,
+      "line": 35
+    }
+  },
+  "mutated_function": "def percentile(scores, p):\n    \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n    p = clamp_percent(p)\n    ordered = sorted(scores)\n    k = int(len(ordered) * p / 99)\n    if k >= len(ordered):\n        k = len(ordered) - 1\n    return ordered[k]",
+  "original_function": "def percentile(scores, p):\n    \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n    p = clamp_percent(p)\n    ordered = sorted(scores)\n    k = int(len(ordered) * p / 100)\n    if k >= len(ordered):\n        k = len(ordered) - 1\n    return ordered[k]",
+  "qualified_function_name": "percentile",
+  "unified_diff": "--- original\n+++ mutant\n@@ -2,7 +2,7 @@\n     \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n     p = clamp_percent(p)\n     ordered = sorted(scores)\n-    k = int(len(ordered) * p / 100)\n+    k = int(len(ordered) * p / 99)\n     if k >= len(ordered):\n         k = len(ordered) - 1\n     return ordered[k]"
+}

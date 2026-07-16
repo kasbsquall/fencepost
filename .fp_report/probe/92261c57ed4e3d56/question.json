@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 11.812999999994645,
+  "input_tokens": 12932,
+  "model": "gpt-5.6-terra",
+  "mutation_description": "Consider changing `p > 100` to `p >= 100`.",
+  "output_tokens": 190,
+  "provider": "codex-cli",
+  "question_text": "In commit 1fe8a85 on 2026-07-10, you wrote line 29 of gradebook/analytics.py:\n29:     if p > 100:\n\nConsider changing `p > 100` to `p >= 100`.\n\nFor an input exactly equal to 100.0, what observable difference in `clamp_percent`\u2019s returned value results from changing `p > 100` to `p >= 100`, and why?",
+  "response_id": "019f6ac2-2b4d-7200-9ded-f0bc128a91a8"
+}

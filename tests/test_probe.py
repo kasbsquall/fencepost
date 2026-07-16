@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 
 from fencepost.adversarial import CodexStructuredResponse
 from fencepost.models import (
@@ -19,7 +20,11 @@ from fencepost.models import (
     TriageModeSummary,
     TriageSummary,
 )
-from fencepost.probe import CodexCliComprehensionProbeAgent, run_probes
+from fencepost.probe import (
+    CodexCliComprehensionProbeAgent,
+    probe_site_id,
+    run_probes,
+)
 from fencepost.report import build_report
 from fencepost.triage import SurvivorContext
 from tests.fakes import FixtureComprehensionProbeAgent
@@ -257,36 +262,100 @@ def _records():
     return triage, contexts, blame
 
 
-def test_probe_targets_contract_gaps_and_grades_with_execution_citation(tmp_path) -> None:
+def _records_with_two_gaps_at_one_site():
+    """Add a second execution-decided gap without changing its source site."""
     triage, contexts, blame = _records()
+    first = triage.results[0]
+    second_candidate = replace(
+        first.mutant.candidate,
+        id="contract-gap-2",
+        anchor=SourceSpan(2, 20, 2, 21),
+        kind="numeric_boundary",
+        before="1",
+        after="2",
+        source_segment="1",
+    )
+    second_mutant = replace(
+        first.mutant,
+        candidate=second_candidate,
+        generated_anchor=SourceSpan(2, 20, 2, 21),
+    )
+    second_strict = replace(first.strict, mutant=second_mutant)
+    second_contract = replace(first.contract, mutant=second_mutant)
+    second_pair = replace(
+        first,
+        mutant=second_mutant,
+        strict=second_strict,
+        contract=second_contract,
+    )
+    second_mutated_source = "def f(value):\n    return value >= 2\n"
+    second_context = replace(
+        contexts[0],
+        mutant=second_mutant,
+        mutated_source=second_mutated_source,
+        mutated_function=second_mutated_source.strip(),
+        unified_diff="-    return value >= 1\n+    return value >= 2",
+    )
+    triage = replace(
+        triage,
+        total_survivors=3,
+        selected_survivor_count=3,
+        real_gap_count_strict=3,
+        real_gap_count_contract=2,
+        results=(first, second_pair, triage.results[1]),
+        probe_target_mutant_ids=("contract-gap", "contract-gap-2"),
+    )
+    return triage, (contexts[0], second_context, contexts[1]), blame
+
+
+def test_probe_targets_contract_gaps_and_grades_with_execution_citation(tmp_path) -> None:
+    triage, contexts, blame = _records_with_two_gaps_at_one_site()
     agent = FixtureComprehensionProbeAgent()
+    site_id = probe_site_id("pkg/analytics.py", 2)
     summary = run_probes(
         triage,
         contexts,
         blame=blame,
         agent=agent,
-        answers={"contract-gap": "I don't know"},
+        answers={site_id: "I don't know"},
         artifact_dir=tmp_path,
     )
 
-    assert [request.mutant.candidate.id for request in agent.question_requests] == [
-        "contract-gap"
-    ]
+    assert len(agent.question_requests) == 1
+    assert agent.question_requests[0].site_id == site_id
+    assert {mutant.mutant_id for mutant in agent.question_requests[0].mutants} == {
+        "contract-gap",
+        "contract-gap-2",
+    }
     assert all(
-        request.mutant.candidate.id != "strict-only"
+        mutant.mutant_id != "strict-only"
         for request in agent.question_requests
+        for mutant in request.mutants
     )
-    assert summary.total_targets == 1
+    assert summary.total_targets == 2
+    assert summary.total_sites == 1
+    assert summary.accounted_mutant_count == 2
     assert summary.question_count == 1
     assert summary.graded_answer_count == 1
     result = summary.results[0]
     assert result.status == "GRADED"
+    assert result.site_id == site_id
+    assert result.survivor_count == 2
+    assert len(result.mutants) == 2
     assert result.assessment is not None
     assert result.assessment.verdict == "INSUFFICIENT"
-    assert result.assessment.citations
-    citation = result.assessment.citations[0]
-    assert citation.message == result.evidence.failing_assertion.message
-    assert citation.artifact_ref == result.evidence.triage_artifact_ref
+    assert len(result.assessment.citations) == result.survivor_count
+    expected_citations = {
+        (
+            mutant.evidence.failing_assertion.message,
+            mutant.evidence.triage_artifact_ref,
+        )
+        for mutant in result.mutants
+    }
+    assert {
+        (citation.message, citation.artifact_ref)
+        for citation in result.assessment.citations
+    } == expected_citations
 
     report = build_report(
         commit="fixture-commit",
@@ -298,20 +367,30 @@ def test_probe_targets_contract_gaps_and_grades_with_execution_citation(tmp_path
         artifact_dir=tmp_path,
     )
     assert report.unverified_place_count == 1
+    assert report.question_count == 1
+    assert sum(place.survivor_count for place in report.places) == 2
     assert len(report.deliberately_not_asked) == 1
     assert report.deliberately_not_asked[0].mutant_id == "strict-only"
     payload = json.loads(
         (tmp_path / "report" / "report.json").read_text(encoding="utf-8")
     )
-    assert payload["schema_version"] == "1.0"
+    assert payload["schema_version"] == "2.0"
+    assert payload["places"][0]["survivor_count"] == 2
+    assert len(payload["places"][0]["mutants"]) == 2
     assert payload["places"][0]["assessment"]["citations"][0]["message"] == "assert False"
     rendered = (tmp_path / "report" / "report.md").read_text(encoding="utf-8")
     assert "Deliberately not asked" in rendered
     assert "CONTRACT limitation" in rendered
+    assert "```python\n   2 |     return value >= 1\n```" in rendered
+    assert "`value >= 1`" in rendered
+    assert "&gt;" not in rendered
+    assert r"\." not in rendered
+    assert result.question is not None
+    assert rendered.count(result.question.question_text) == 1
 
 
 def test_codex_probe_agent_uses_shared_structured_client(tmp_path) -> None:
-    triage, contexts, blame = _records()
+    triage, contexts, blame = _records_with_two_gaps_at_one_site()
 
     class SharedClient:
         model = "gpt-5.6-terra"
@@ -348,11 +427,56 @@ def test_codex_probe_agent_uses_shared_structured_client(tmp_path) -> None:
         contexts,
         blame=blame,
         agent=agent,
-        answers={"contract-gap": "The equality boundary no longer passes."},
+        answers={
+            probe_site_id("pkg/analytics.py", 2): (
+                "The equality boundary no longer passes."
+            )
+        },
         artifact_dir=tmp_path,
     )
 
     assert len(client.calls) == 2
     assert summary.graded_answer_count == 1
+    assert summary.results[0].question is not None
     assert summary.results[0].question.model == "gpt-5.6-terra"
-    assert "execution_ground_truth" in client.calls[1][0]
+    assert "surviving_mutants" in client.calls[0][0]
+    assert "surviving_mutants" in client.calls[1][0]
+    assert "contract-gap-2" in client.calls[0][0]
+    assert "contract-gap-2" in client.calls[1][0]
+
+
+def test_codex_probe_rejects_question_that_repeats_report_grounding(tmp_path) -> None:
+    triage, contexts, blame = _records()
+
+    class RepeatingClient:
+        model = "gpt-5.6-terra"
+
+        def run(self, *, prompt, schema):
+            return CodexStructuredResponse(
+                payload={
+                    "question_prompt": (
+                        "In commit 4a3f000 on 2026-07-07, what changes on line 2?"
+                    )
+                },
+                response_id="fixture-thread",
+                duration_seconds=0.01,
+                input_tokens=10,
+                output_tokens=5,
+            )
+
+    agent = CodexCliComprehensionProbeAgent(
+        model="gpt-5.6-terra", client=RepeatingClient()
+    )
+    summary = run_probes(
+        triage,
+        contexts,
+        blame=blame,
+        agent=agent,
+        answers=None,
+        artifact_dir=tmp_path,
+    )
+
+    assert summary.question_count == 0
+    assert summary.failed_question_count == 1
+    assert summary.results[0].status == "QUESTION_FAILED"
+    assert summary.results[0].question is None

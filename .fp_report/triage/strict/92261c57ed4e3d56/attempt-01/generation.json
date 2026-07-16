@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.406000000002678,
+  "input_tokens": 12648,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 252,
+  "provider": "codex-cli",
+  "response_id": "019f6ab3-0518-7b71-9dd1-be34ee504789",
+  "source": "import gradebook.analytics as analytics\n\n\nclass Hundred(int):\n    pass\n\n\ndef test_clamp_percent_preserves_boundary_input_identity():\n    value = Hundred(100)\n    assert analytics.clamp_percent(value) is value",
+  "targeted_behavior": "At exactly 100, the original preserves and returns the input object, while the mutant replaces it with the literal integer 100."
+}

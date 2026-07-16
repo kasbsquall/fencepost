@@ -1,0 +1,128 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 11.31199999999808,
+        "input_tokens": 13165,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 195,
+        "provider": "codex-cli",
+        "response_id": "019f6abb-916c-7c60-95e1-9cfed9e654fe",
+        "source": "import gradebook.analytics\n\n\ndef test_percentile_uses_hundred_based_indexing():\n    assert gradebook.analytics.percentile([10, 20, 30], 66) == 20",
+        "targeted_behavior": "Percentile index must use a denominator of 100; for three ordered scores at p=66, it selects index 1 rather than index 2."
+      },
+      "mutant": {
+        "duration_seconds": 0.7545404990014504,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_percentile_uses_hundred_based_indexing():\n>       assert gradebook.analytics.percentile([10, 20, 30], 66) == 20\nE       AssertionError: assert 30 == 20\nE        +  where 30 = <function percentile at 0x7951c4b60220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x7951c4b60220> = <module 'gradebook.analytics' from '/work/jobs/triage-0019-bn6fgxh0/mutant/tree/gradebook/analytics.py'>.percentile\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0019-bn6fgxh0/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 30 == 20\n +  where 30 = <function percentile at 0x7951c4b60220>([10, 20, 30], 66)\n +    where <function percentile at 0x7951c4b60220> = <module 'gradebook.analytics' from '/work/jobs/triage-0019-bn6fgxh0/mutant/tree/gradebook/analytics.py'>.percentile\n +      where <module 'gradebook.analytics' from '/work/jobs/triage-0019-bn6fgxh0/mutant/tree/gradebook/analytics.py'> = gradebook.analytics",
+          "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_based_indexing"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_percentile_uses_hundred_based_indexing __________________\n\n    def test_percentile_uses_hundred_based_indexing():\n>       assert gradebook.analytics.percentile([10, 20, 30], 66) == 20\nE       AssertionError: assert 30 == 20\nE        +  where 30 = <function percentile at 0x7951c4b60220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x7951c4b60220> = <module 'gradebook.analytics' from '/work/jobs/triage-0019-bn6fgxh0/mutant/tree/gradebook/analytics.py'>.percentile\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0019-bn6fgxh0/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0019-bn6fgxh0/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_uses_hundred_based_indexing\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.9303767999990669,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-bn6fgxh0/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_percentile_uses_hundred_based_indexing():\n>       assert gradebook.analytics.percentile([10, 20, 30], 66) == 20\nE       AssertionError: assert 30 == 20\nE        +  where 30 = <function percentile at 0x7951c4b60220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x7951c4b60220> = <module 'gradebook.analytics' from '/work/jobs/triage-0019-bn6fgxh0/mutant/tree/gradebook/analytics.py'>.percentile\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0019-bn6fgxh0/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 30 == 20\n +  where 30 = <function percentile at 0x7951c4b60220>([10, 20, 30], 66)\n +    where <function percentile at 0x7951c4b60220> = <module 'gradebook.analytics' from '/work/jobs/triage-0019-bn6fgxh0/mutant/tree/gradebook/analytics.py'>.percentile\n +      where <module 'gradebook.analytics' from '/work/jobs/triage-0019-bn6fgxh0/mutant/tree/gradebook/analytics.py'> = gradebook.analytics",
+    "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_based_indexing"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mode": "CONTRACT",
+  "mutant": {
+    "candidate": {
+      "after": "99",
+      "anchor": {
+        "column": 31,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        },
+        {
+          "field": "right",
+          "index": null
+        }
+      ],
+      "before": "100",
+      "id": "764a18c525e359d6",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    "execution": {
+      "duration_seconds": 1.0167549420002615,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0033-g1rs280_/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 31,
+      "end_column": 33,
+      "end_line": 35,
+      "line": 35
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 11.31199999999808,
+    "input_tokens": 13165,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 195,
+    "provider": "codex-cli",
+    "response_id": "019f6abb-916c-7c60-95e1-9cfed9e654fe",
+    "source": "import gradebook.analytics\n\n\ndef test_percentile_uses_hundred_based_indexing():\n    assert gradebook.analytics.percentile([10, 20, 30], 66) == 20",
+    "targeted_behavior": "Percentile index must use a denominator of 100; for three ordered scores at p=66, it selects index 1 rather than index 2."
+  }
+}

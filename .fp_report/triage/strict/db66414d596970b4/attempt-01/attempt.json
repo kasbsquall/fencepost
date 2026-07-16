@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 8.578000000001339,
+    "input_tokens": 12879,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 146,
+    "provider": "codex-cli",
+    "response_id": "019f6ab2-4d94-7ae2-bcf1-ca2312d712fc",
+    "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_score_just_below_d_threshold_is_f():\n    assert letter_grade(59) == \"F\"",
+    "targeted_behavior": "The exact lower boundary for a D is 60, so a score of 59 must receive F."
+  },
+  "mutant": {
+    "duration_seconds": 0.9239116869994177,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_score_just_below_d_threshold_is_f():\n>       assert letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:7: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'D' == 'F'\n  \n  - F\n  + D",
+      "nodeid": ".fencepost-generated-0010.test_adversarial::test_score_just_below_d_threshold_is_f"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n____________________ test_score_just_below_d_threshold_is_f ____________________\n\n    def test_score_just_below_d_threshold_is_f():\n>       assert letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0010-dwzrn_9n/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0010/test_adversarial.py::test_score_just_below_d_threshold_is_f\n1 failed in 0.03s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.7716622600000846,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0010-dwzrn_9n/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

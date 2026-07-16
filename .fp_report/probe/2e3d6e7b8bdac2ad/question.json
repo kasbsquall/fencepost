@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.625,
+  "input_tokens": 13107,
+  "model": "gpt-5.6-terra",
+  "mutation_description": "Consider changing `100` to `101`.",
+  "output_tokens": 235,
+  "provider": "codex-cli",
+  "question_text": "In commit 1fe8a85 on 2026-07-10, you wrote line 29 of gradebook/analytics.py:\n29:     if p > 100:\n\nConsider changing `100` to `101`.\n\nAfter changing the upper-bound check from `p > 100` to `p > 101`, what observable behavior does `clamp_percent` exhibit for values just above the documented inclusive 0\u2013100 range, and why?",
+  "response_id": "019f6ac2-7e7a-7cc3-90d2-61a5ba57023d"
+}

@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.078000000001339,
+  "input_tokens": 13303,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 134,
+  "provider": "codex-cli",
+  "response_id": "019f6ab5-7f7e-76f3-be4a-c64d86545a0c",
+  "source": "import pytest\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_79_is_c():\n    assert letter_grade(79) == \"C\"",
+  "targeted_behavior": "The B/C cutoff: a score of 79 must receive C, while the mutant incorrectly assigns B."
+}

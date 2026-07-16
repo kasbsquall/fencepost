@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.75,
+  "input_tokens": 12649,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 293,
+  "provider": "codex-cli",
+  "response_id": "019f6ab2-8dc8-7e51-bbdb-0105c41b6fb9",
+  "source": "import pytest\n\nfrom gradebook.analytics import clamp_percent\n\n\nclass ZeroInt(int):\n    pass\n\n\ndef test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n    value = ZeroInt(0)\n\n    result = clamp_percent(value)\n\n    assert result is value",
+  "targeted_behavior": "At the lower boundary, the original preserves an int-subclass instance equal to zero, while the mutant replaces it with the built-in integer literal 0."
+}

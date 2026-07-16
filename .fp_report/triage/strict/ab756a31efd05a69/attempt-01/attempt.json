@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 10.375,
+    "input_tokens": 12648,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 246,
+    "provider": "codex-cli",
+    "response_id": "019f6ab2-b7dd-76c1-9ef6-e3357ed9afb3",
+    "source": "from gradebook.analytics import clamp_percent\n\n\ndef test_clamps_negative_one_to_zero():\n    assert clamp_percent(-1) == 0",
+    "targeted_behavior": "A negative boundary value of -1 must be clamped to zero; the mutant incorrectly preserves it."
+  },
+  "mutant": {
+    "duration_seconds": 0.9023824100004276,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_clamps_negative_one_to_zero():\n>       assert clamp_percent(-1) == 0\nE       assert -1 == 0\nE        +  where -1 = clamp_percent(-1)\n\n.fencepost-generated-0013/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "assert -1 == 0\n +  where -1 = clamp_percent(-1)",
+      "nodeid": ".fencepost-generated-0013.test_adversarial::test_clamps_negative_one_to_zero"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______________________ test_clamps_negative_one_to_zero _______________________\n\n    def test_clamps_negative_one_to_zero():\n>       assert clamp_percent(-1) == 0\nE       assert -1 == 0\nE        +  where -1 = clamp_percent(-1)\n\n.fencepost-generated-0013/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0013-ewgpr0uw/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0013/test_adversarial.py::test_clamps_negative_one_to_zero\n1 failed in 0.04s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.7356920019992685,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0013-ewgpr0uw/original/junit.xml ----\n1 passed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

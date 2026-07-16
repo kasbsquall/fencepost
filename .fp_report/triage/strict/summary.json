@@ -1,0 +1,2666 @@
+{
+  "equivalent_rate": 0.0,
+  "generator_call_count": 21,
+  "generator_wall_clock_seconds": 255.43800000000192,
+  "invalid_contract_attempts": 0,
+  "invalid_original_attempts": 0,
+  "mode": "STRICT",
+  "probable_equivalent_count": 0,
+  "real_gap_count": 21,
+  "results": [
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 8.375,
+            "input_tokens": 12884,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 141,
+            "provider": "codex-cli",
+            "response_id": "019f6ab0-e324-7ab1-92ea-f690108b88da",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_assigns_a_at_exactly_90():\n    assert analytics.letter_grade(90) == \"A\"",
+            "targeted_behavior": "The exact A/B threshold: score 90 must receive an A, not B."
+          },
+          "mutant": {
+            "duration_seconds": 0.7867435240004852,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_letter_grade_assigns_a_at_exactly_90():\n>       assert analytics.letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+              "nodeid": ".fencepost-generated-0000.test_adversarial::test_letter_grade_assigns_a_at_exactly_90"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________________ test_letter_grade_assigns_a_at_exactly_90 ___________________\n\n    def test_letter_grade_assigns_a_at_exactly_90():\n>       assert analytics.letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0000-937b1d53/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0000/test_adversarial.py::test_letter_grade_assigns_a_at_exactly_90\n1 failed in 0.03s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7094166160004534,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-937b1d53/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_letter_grade_assigns_a_at_exactly_90():\n>       assert analytics.letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+        "nodeid": ".fencepost-generated-0000.test_adversarial::test_letter_grade_assigns_a_at_exactly_90"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "Gt",
+          "anchor": {
+            "column": 7,
+            "end_column": 18,
+            "end_line": 13,
+            "line": 13
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "test",
+              "index": null
+            }
+          ],
+          "before": "GtE",
+          "id": "86e0917e5c6bf1d8",
+          "kind": "compare",
+          "parameters": [
+            [
+              "op_index",
+              "0"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "score >= 90"
+        },
+        "execution": {
+          "duration_seconds": 1.040487424001185,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0000-clmn5cm9/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 7,
+          "end_column": 17,
+          "end_line": 12,
+          "line": 12
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 8.375,
+        "input_tokens": 12884,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 141,
+        "provider": "codex-cli",
+        "response_id": "019f6ab0-e324-7ab1-92ea-f690108b88da",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_assigns_a_at_exactly_90():\n    assert analytics.letter_grade(90) == \"A\"",
+        "targeted_behavior": "The exact A/B threshold: score 90 must receive an A, not B."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 8.984000000004016,
+            "input_tokens": 12879,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 133,
+            "provider": "codex-cli",
+            "response_id": "019f6ab1-0253-7863-b93a-8356b4a8be91",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_score_89_is_b_not_a():\n    assert analytics.letter_grade(89) == \"B\"",
+            "targeted_behavior": "The A/B boundary: a score of 89 must receive B, while A begins at 90."
+          },
+          "mutant": {
+            "duration_seconds": 0.8023874439986685,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_score_89_is_b_not_a():\n>       assert analytics.letter_grade(89) == \"B\"\nE       AssertionError: assert 'A' == 'B'\nE         \nE         - B\nE         + A\n\n.fencepost-generated-0001/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'A' == 'B'\n  \n  - B\n  + A",
+              "nodeid": ".fencepost-generated-0001.test_adversarial::test_score_89_is_b_not_a"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________________ test_score_89_is_b_not_a ___________________________\n\n    def test_score_89_is_b_not_a():\n>       assert analytics.letter_grade(89) == \"B\"\nE       AssertionError: assert 'A' == 'B'\nE         \nE         - B\nE         + A\n\n.fencepost-generated-0001/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0001-h3n1d2l1/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0001/test_adversarial.py::test_score_89_is_b_not_a\n1 failed in 0.02s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7090757120004128,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0001-h3n1d2l1/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_score_89_is_b_not_a():\n>       assert analytics.letter_grade(89) == \"B\"\nE       AssertionError: assert 'A' == 'B'\nE         \nE         - B\nE         + A\n\n.fencepost-generated-0001/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'A' == 'B'\n  \n  - B\n  + A",
+        "nodeid": ".fencepost-generated-0001.test_adversarial::test_score_89_is_b_not_a"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "89",
+          "anchor": {
+            "column": 16,
+            "end_column": 18,
+            "end_line": 13,
+            "line": 13
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "90",
+          "id": "2e231a949dfe891d",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "-1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "90"
+        },
+        "execution": {
+          "duration_seconds": 1.0589115920010954,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0001-dseq5uhk/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 16,
+          "end_column": 18,
+          "end_line": 12,
+          "line": 12
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 8.984000000004016,
+        "input_tokens": 12879,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 133,
+        "provider": "codex-cli",
+        "response_id": "019f6ab1-0253-7863-b93a-8356b4a8be91",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_score_89_is_b_not_a():\n    assert analytics.letter_grade(89) == \"B\"",
+        "targeted_behavior": "The A/B boundary: a score of 89 must receive B, while A begins at 90."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 9.781999999999243,
+            "input_tokens": 12879,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 144,
+            "provider": "codex-cli",
+            "response_id": "019f6ab1-255c-7ba3-acaa-763bbbe079f4",
+            "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_assigns_a_at_inclusive_lower_boundary():\n    assert letter_grade(90) == \"A\"",
+            "targeted_behavior": "The inclusive A-grade lower boundary: a score of exactly 90 must return 'A'."
+          },
+          "mutant": {
+            "duration_seconds": 0.7837896550008736,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_letter_grade_assigns_a_at_inclusive_lower_boundary():\n>       assert letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0002/test_adversarial.py:7: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+              "nodeid": ".fencepost-generated-0002.test_adversarial::test_letter_grade_assigns_a_at_inclusive_lower_boundary"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_letter_grade_assigns_a_at_inclusive_lower_boundary ____________\n\n    def test_letter_grade_assigns_a_at_inclusive_lower_boundary():\n>       assert letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0002/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0002-9ltgup8t/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0002/test_adversarial.py::test_letter_grade_assigns_a_at_inclusive_lower_boundary\n1 failed in 0.02s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7369365060003474,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0002-9ltgup8t/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_letter_grade_assigns_a_at_inclusive_lower_boundary():\n>       assert letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0002/test_adversarial.py:7: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+        "nodeid": ".fencepost-generated-0002.test_adversarial::test_letter_grade_assigns_a_at_inclusive_lower_boundary"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "91",
+          "anchor": {
+            "column": 16,
+            "end_column": 18,
+            "end_line": 13,
+            "line": 13
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "90",
+          "id": "1d2de104b4e2ea87",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "90"
+        },
+        "execution": {
+          "duration_seconds": 1.0660948870008724,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0002-2klaqteo/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 16,
+          "end_column": 18,
+          "end_line": 12,
+          "line": 12
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 9.781999999999243,
+        "input_tokens": 12879,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 144,
+        "provider": "codex-cli",
+        "response_id": "019f6ab1-255c-7ba3-acaa-763bbbe079f4",
+        "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_assigns_a_at_inclusive_lower_boundary():\n    assert letter_grade(90) == \"A\"",
+        "targeted_behavior": "The inclusive A-grade lower boundary: a score of exactly 90 must return 'A'."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 8.578000000001339,
+            "input_tokens": 12884,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 131,
+            "provider": "codex-cli",
+            "response_id": "019f6ab1-4ba6-7f83-9b1c-d0ea926ad38e",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_includes_80_in_b_range():\n    assert analytics.letter_grade(80) == \"B\"",
+            "targeted_behavior": "The inclusive B-grade boundary: a score of exactly 80 must return 'B'."
+          },
+          "mutant": {
+            "duration_seconds": 0.792296546000216,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_letter_grade_includes_80_in_b_range():\n>       assert analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0003/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+              "nodeid": ".fencepost-generated-0003.test_adversarial::test_letter_grade_includes_80_in_b_range"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________ test_letter_grade_includes_80_in_b_range ___________________\n\n    def test_letter_grade_includes_80_in_b_range():\n>       assert analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0003/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0003-1iurcour/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0003/test_adversarial.py::test_letter_grade_includes_80_in_b_range\n1 failed in 0.03s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.6995620019988564,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0003-1iurcour/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_letter_grade_includes_80_in_b_range():\n>       assert analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0003/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+        "nodeid": ".fencepost-generated-0003.test_adversarial::test_letter_grade_includes_80_in_b_range"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "Gt",
+          "anchor": {
+            "column": 9,
+            "end_column": 20,
+            "end_line": 15,
+            "line": 15
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "test",
+              "index": null
+            }
+          ],
+          "before": "GtE",
+          "id": "bc57b02d4b5d32a1",
+          "kind": "compare",
+          "parameters": [
+            [
+              "op_index",
+              "0"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "score >= 80"
+        },
+        "execution": {
+          "duration_seconds": 0.9592332920001354,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0005-mu3qwg6y/junit.xml ------------\n10 passed in 0.03s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 9,
+          "end_column": 19,
+          "end_line": 14,
+          "line": 14
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 8.578000000001339,
+        "input_tokens": 12884,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 131,
+        "provider": "codex-cli",
+        "response_id": "019f6ab1-4ba6-7f83-9b1c-d0ea926ad38e",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_includes_80_in_b_range():\n    assert analytics.letter_grade(80) == \"B\"",
+        "targeted_behavior": "The inclusive B-grade boundary: a score of exactly 80 must return 'B'."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 12.389999999999418,
+            "input_tokens": 12877,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 143,
+            "provider": "codex-cli",
+            "response_id": "019f6ab1-6d1d-71c0-a568-38fbb8c482dc",
+            "source": "from gradebook.analytics import letter_grade\n\n\ndef test_score_79_is_c_not_b():\n    assert letter_grade(79) == \"C\"",
+            "targeted_behavior": "The exact lower boundary for a B is 80; a score of 79 must remain a C."
+          },
+          "mutant": {
+            "duration_seconds": 0.7888365190010518,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_score_79_is_c_not_b():\n>       assert letter_grade(79) == \"C\"\nE       AssertionError: assert 'B' == 'C'\nE         \nE         - C\nE         + B\n\n.fencepost-generated-0004/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'B' == 'C'\n  \n  - C\n  + B",
+              "nodeid": ".fencepost-generated-0004.test_adversarial::test_score_79_is_c_not_b"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________________ test_score_79_is_c_not_b ___________________________\n\n    def test_score_79_is_c_not_b():\n>       assert letter_grade(79) == \"C\"\nE       AssertionError: assert 'B' == 'C'\nE         \nE         - C\nE         + B\n\n.fencepost-generated-0004/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0004-cdfi0ae9/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0004/test_adversarial.py::test_score_79_is_c_not_b\n1 failed in 0.03s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7303772520008351,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0004-cdfi0ae9/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_score_79_is_c_not_b():\n>       assert letter_grade(79) == \"C\"\nE       AssertionError: assert 'B' == 'C'\nE         \nE         - C\nE         + B\n\n.fencepost-generated-0004/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'B' == 'C'\n  \n  - C\n  + B",
+        "nodeid": ".fencepost-generated-0004.test_adversarial::test_score_79_is_c_not_b"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "79",
+          "anchor": {
+            "column": 18,
+            "end_column": 20,
+            "end_line": 15,
+            "line": 15
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "80",
+          "id": "de6e7433e88c46a6",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "-1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "80"
+        },
+        "execution": {
+          "duration_seconds": 0.980786435000482,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0006-xao6tmhk/junit.xml ------------\n10 passed in 0.02s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 18,
+          "end_column": 20,
+          "end_line": 14,
+          "line": 14
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 12.389999999999418,
+        "input_tokens": 12877,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 143,
+        "provider": "codex-cli",
+        "response_id": "019f6ab1-6d1d-71c0-a568-38fbb8c482dc",
+        "source": "from gradebook.analytics import letter_grade\n\n\ndef test_score_79_is_c_not_b():\n    assert letter_grade(79) == \"C\"",
+        "targeted_behavior": "The exact lower boundary for a B is 80; a score of 79 must remain a C."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 8.046999999998661,
+            "input_tokens": 12879,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 129,
+            "provider": "codex-cli",
+            "response_id": "019f6ab1-9d85-7053-8177-9a2c44c9fb4e",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_includes_80_in_b_range():\n    assert analytics.letter_grade(80) == \"B\"",
+            "targeted_behavior": "The inclusive B-grade cutoff: a score of exactly 80 must return 'B'."
+          },
+          "mutant": {
+            "duration_seconds": 0.8349123869993491,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_letter_grade_includes_80_in_b_range():\n>       assert analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+              "nodeid": ".fencepost-generated-0005.test_adversarial::test_letter_grade_includes_80_in_b_range"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________ test_letter_grade_includes_80_in_b_range ___________________\n\n    def test_letter_grade_includes_80_in_b_range():\n>       assert analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0005-nguxjdcw/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0005/test_adversarial.py::test_letter_grade_includes_80_in_b_range\n1 failed in 0.03s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7179347420005797,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0005-nguxjdcw/original/junit.xml ----\n1 passed in 0.02s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_letter_grade_includes_80_in_b_range():\n>       assert analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+        "nodeid": ".fencepost-generated-0005.test_adversarial::test_letter_grade_includes_80_in_b_range"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "81",
+          "anchor": {
+            "column": 18,
+            "end_column": 20,
+            "end_line": 15,
+            "line": 15
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "80",
+          "id": "ce1508b29bd64233",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "80"
+        },
+        "execution": {
+          "duration_seconds": 0.9849169550016086,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0007-nijs9tz5/junit.xml ------------\n10 passed in 0.02s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 18,
+          "end_column": 20,
+          "end_line": 14,
+          "line": 14
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 8.046999999998661,
+        "input_tokens": 12879,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 129,
+        "provider": "codex-cli",
+        "response_id": "019f6ab1-9d85-7053-8177-9a2c44c9fb4e",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_includes_80_in_b_range():\n    assert analytics.letter_grade(80) == \"B\"",
+        "targeted_behavior": "The inclusive B-grade cutoff: a score of exactly 80 must return 'B'."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 11.656999999999243,
+            "input_tokens": 12882,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 153,
+            "provider": "codex-cli",
+            "response_id": "019f6ab1-bcf2-7eb1-9e31-65e4f6d347c3",
+            "source": "from gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_assigns_c_at_exactly_70():\n    assert letter_grade(70) == \"C\"",
+            "targeted_behavior": "The inclusive lower bound for a C grade: exactly 70 must yield 'C'."
+          },
+          "mutant": {
+            "duration_seconds": 0.8253691299996717,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_letter_grade_assigns_c_at_exactly_70():\n>       assert letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0006/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+              "nodeid": ".fencepost-generated-0006.test_adversarial::test_letter_grade_assigns_c_at_exactly_70"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________________ test_letter_grade_assigns_c_at_exactly_70 ___________________\n\n    def test_letter_grade_assigns_c_at_exactly_70():\n>       assert letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0006/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0006-z8dgci2m/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0006/test_adversarial.py::test_letter_grade_assigns_c_at_exactly_70\n1 failed in 0.02s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7333246739999595,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0006-z8dgci2m/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_letter_grade_assigns_c_at_exactly_70():\n>       assert letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0006/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+        "nodeid": ".fencepost-generated-0006.test_adversarial::test_letter_grade_assigns_c_at_exactly_70"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "Gt",
+          "anchor": {
+            "column": 9,
+            "end_column": 20,
+            "end_line": 17,
+            "line": 17
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "test",
+              "index": null
+            }
+          ],
+          "before": "GtE",
+          "id": "75b9f689f32ac45a",
+          "kind": "compare",
+          "parameters": [
+            [
+              "op_index",
+              "0"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "score >= 70"
+        },
+        "execution": {
+          "duration_seconds": 0.9920185230002971,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0010-8_bpjtv4/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 9,
+          "end_column": 19,
+          "end_line": 16,
+          "line": 16
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 11.656999999999243,
+        "input_tokens": 12882,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 153,
+        "provider": "codex-cli",
+        "response_id": "019f6ab1-bcf2-7eb1-9e31-65e4f6d347c3",
+        "source": "from gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_assigns_c_at_exactly_70():\n    assert letter_grade(70) == \"C\"",
+        "targeted_behavior": "The inclusive lower bound for a C grade: exactly 70 must yield 'C'."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 8.139999999999418,
+            "input_tokens": 12877,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 120,
+            "provider": "codex-cli",
+            "response_id": "019f6ab1-eabc-71c3-8bc4-6265986248b0",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_score_69_is_a_d():\n    assert analytics.letter_grade(69) == \"D\"",
+            "targeted_behavior": "At score 69, the original function returns D while the mutation returns C."
+          },
+          "mutant": {
+            "duration_seconds": 0.8008606719995441,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_score_69_is_a_d():\n>       assert analytics.letter_grade(69) == \"D\"\nE       AssertionError: assert 'C' == 'D'\nE         \nE         - D\nE         + C\n\n.fencepost-generated-0007/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'C' == 'D'\n  \n  - D\n  + C",
+              "nodeid": ".fencepost-generated-0007.test_adversarial::test_score_69_is_a_d"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_____________________________ test_score_69_is_a_d _____________________________\n\n    def test_score_69_is_a_d():\n>       assert analytics.letter_grade(69) == \"D\"\nE       AssertionError: assert 'C' == 'D'\nE         \nE         - D\nE         + C\n\n.fencepost-generated-0007/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0007-s9_2k0xe/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0007/test_adversarial.py::test_score_69_is_a_d - ...\n1 failed in 0.03s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7443907889992261,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0007-s9_2k0xe/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_score_69_is_a_d():\n>       assert analytics.letter_grade(69) == \"D\"\nE       AssertionError: assert 'C' == 'D'\nE         \nE         - D\nE         + C\n\n.fencepost-generated-0007/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'C' == 'D'\n  \n  - D\n  + C",
+        "nodeid": ".fencepost-generated-0007.test_adversarial::test_score_69_is_a_d"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "69",
+          "anchor": {
+            "column": 18,
+            "end_column": 20,
+            "end_line": 17,
+            "line": 17
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "70",
+          "id": "dbb83dad668b1b68",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "-1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "70"
+        },
+        "execution": {
+          "duration_seconds": 0.9630464799993206,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0011-g8bw6hp2/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 18,
+          "end_column": 20,
+          "end_line": 16,
+          "line": 16
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 8.139999999999418,
+        "input_tokens": 12877,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 120,
+        "provider": "codex-cli",
+        "response_id": "019f6ab1-eabc-71c3-8bc4-6265986248b0",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_score_69_is_a_d():\n    assert analytics.letter_grade(69) == \"D\"",
+        "targeted_behavior": "At score 69, the original function returns D while the mutation returns C."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 8.953000000001339,
+            "input_tokens": 12877,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 150,
+            "provider": "codex-cli",
+            "response_id": "019f6ab2-0a41-77f1-a4bd-d9c99e9c18c9",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_assigns_c_at_inclusive_lower_boundary():\n    assert analytics.letter_grade(70) == \"C\"",
+            "targeted_behavior": "The inclusive C-grade lower boundary is exactly 70."
+          },
+          "mutant": {
+            "duration_seconds": 0.919889733000673,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_letter_grade_assigns_c_at_inclusive_lower_boundary():\n>       assert analytics.letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+              "nodeid": ".fencepost-generated-0008.test_adversarial::test_letter_grade_assigns_c_at_inclusive_lower_boundary"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_letter_grade_assigns_c_at_inclusive_lower_boundary ____________\n\n    def test_letter_grade_assigns_c_at_inclusive_lower_boundary():\n>       assert analytics.letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0008-28dynvkk/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0008/test_adversarial.py::test_letter_grade_assigns_c_at_inclusive_lower_boundary\n1 failed in 0.03s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7768354309991992,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0008-28dynvkk/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_letter_grade_assigns_c_at_inclusive_lower_boundary():\n>       assert analytics.letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+        "nodeid": ".fencepost-generated-0008.test_adversarial::test_letter_grade_assigns_c_at_inclusive_lower_boundary"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "71",
+          "anchor": {
+            "column": 18,
+            "end_column": 20,
+            "end_line": 17,
+            "line": 17
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "70",
+          "id": "8e3bb3b74b5e7623",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "70"
+        },
+        "execution": {
+          "duration_seconds": 0.9126542539997899,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0012-0kbc90a7/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 18,
+          "end_column": 20,
+          "end_line": 16,
+          "line": 16
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 8.953000000001339,
+        "input_tokens": 12877,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 150,
+        "provider": "codex-cli",
+        "response_id": "019f6ab2-0a41-77f1-a4bd-d9c99e9c18c9",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_assigns_c_at_inclusive_lower_boundary():\n    assert analytics.letter_grade(70) == \"C\"",
+        "targeted_behavior": "The inclusive C-grade lower boundary is exactly 70."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 8.235000000000582,
+            "input_tokens": 12882,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 153,
+            "provider": "codex-cli",
+            "response_id": "019f6ab2-2d41-7563-95a5-f6bd9cacfa1b",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_includes_sixty_in_d_range():\n    assert analytics.letter_grade(60) == \"D\"",
+            "targeted_behavior": "At the exact lower boundary for a D grade, 60 is included by the original `>= 60` comparison but excluded by the mutant's `> 60` comparison."
+          },
+          "mutant": {
+            "duration_seconds": 0.9142857030001323,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_letter_grade_includes_sixty_in_d_range():\n>       assert analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+              "nodeid": ".fencepost-generated-0009.test_adversarial::test_letter_grade_includes_sixty_in_d_range"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_letter_grade_includes_sixty_in_d_range __________________\n\n    def test_letter_grade_includes_sixty_in_d_range():\n>       assert analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0009-u0_znf1v/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0009/test_adversarial.py::test_letter_grade_includes_sixty_in_d_range\n1 failed in 0.03s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7766575690002355,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0009-u0_znf1v/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_letter_grade_includes_sixty_in_d_range():\n>       assert analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+        "nodeid": ".fencepost-generated-0009.test_adversarial::test_letter_grade_includes_sixty_in_d_range"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "Gt",
+          "anchor": {
+            "column": 9,
+            "end_column": 20,
+            "end_line": 19,
+            "line": 19
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "test",
+              "index": null
+            }
+          ],
+          "before": "GtE",
+          "id": "9e215f782bcfc8e3",
+          "kind": "compare",
+          "parameters": [
+            [
+              "op_index",
+              "0"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "score >= 60"
+        },
+        "execution": {
+          "duration_seconds": 0.9095451400007732,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0015-7a4h_q5t/junit.xml ------------\n10 passed in 4.28s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 9,
+          "end_column": 19,
+          "end_line": 18,
+          "line": 18
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 8.235000000000582,
+        "input_tokens": 12882,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 153,
+        "provider": "codex-cli",
+        "response_id": "019f6ab2-2d41-7563-95a5-f6bd9cacfa1b",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_includes_sixty_in_d_range():\n    assert analytics.letter_grade(60) == \"D\"",
+        "targeted_behavior": "At the exact lower boundary for a D grade, 60 is included by the original `>= 60` comparison but excluded by the mutant's `> 60` comparison."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 8.578000000001339,
+            "input_tokens": 12879,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 146,
+            "provider": "codex-cli",
+            "response_id": "019f6ab2-4d94-7ae2-bcf1-ca2312d712fc",
+            "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_score_just_below_d_threshold_is_f():\n    assert letter_grade(59) == \"F\"",
+            "targeted_behavior": "The exact lower boundary for a D is 60, so a score of 59 must receive F."
+          },
+          "mutant": {
+            "duration_seconds": 0.9239116869994177,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_score_just_below_d_threshold_is_f():\n>       assert letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:7: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'D' == 'F'\n  \n  - F\n  + D",
+              "nodeid": ".fencepost-generated-0010.test_adversarial::test_score_just_below_d_threshold_is_f"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n____________________ test_score_just_below_d_threshold_is_f ____________________\n\n    def test_score_just_below_d_threshold_is_f():\n>       assert letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0010-dwzrn_9n/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0010/test_adversarial.py::test_score_just_below_d_threshold_is_f\n1 failed in 0.03s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7716622600000846,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0010-dwzrn_9n/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_score_just_below_d_threshold_is_f():\n>       assert letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:7: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'D' == 'F'\n  \n  - F\n  + D",
+        "nodeid": ".fencepost-generated-0010.test_adversarial::test_score_just_below_d_threshold_is_f"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "59",
+          "anchor": {
+            "column": 18,
+            "end_column": 20,
+            "end_line": 19,
+            "line": 19
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "60",
+          "id": "db66414d596970b4",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "-1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "60"
+        },
+        "execution": {
+          "duration_seconds": 0.9502992699999595,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0016-z8uifhze/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 18,
+          "end_column": 20,
+          "end_line": 18,
+          "line": 18
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 8.578000000001339,
+        "input_tokens": 12879,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 146,
+        "provider": "codex-cli",
+        "response_id": "019f6ab2-4d94-7ae2-bcf1-ca2312d712fc",
+        "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_score_just_below_d_threshold_is_f():\n    assert letter_grade(59) == \"F\"",
+        "targeted_behavior": "The exact lower boundary for a D is 60, so a score of 59 must receive F."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 7.889999999999418,
+            "input_tokens": 12877,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 124,
+            "provider": "codex-cli",
+            "response_id": "019f6ab2-6eef-74c2-82f5-aaf281f4c2d4",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_assigns_d_at_exactly_sixty():\n    assert analytics.letter_grade(60) == \"D\"",
+            "targeted_behavior": "The D/F threshold includes a score of exactly 60."
+          },
+          "mutant": {
+            "duration_seconds": 0.9236665449989232,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_letter_grade_assigns_d_at_exactly_sixty():\n>       assert analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0011/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+              "nodeid": ".fencepost-generated-0011.test_adversarial::test_letter_grade_assigns_d_at_exactly_sixty"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_letter_grade_assigns_d_at_exactly_sixty _________________\n\n    def test_letter_grade_assigns_d_at_exactly_sixty():\n>       assert analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0011/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0011-ge840zvi/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0011/test_adversarial.py::test_letter_grade_assigns_d_at_exactly_sixty\n1 failed in 0.02s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7419455569997808,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0011-ge840zvi/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_letter_grade_assigns_d_at_exactly_sixty():\n>       assert analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0011/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+        "nodeid": ".fencepost-generated-0011.test_adversarial::test_letter_grade_assigns_d_at_exactly_sixty"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "61",
+          "anchor": {
+            "column": 18,
+            "end_column": 20,
+            "end_line": 19,
+            "line": 19
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "orelse",
+              "index": 0
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "60",
+          "id": "7d45e006f2ec7b27",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "60"
+        },
+        "execution": {
+          "duration_seconds": 0.9381186989994603,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0017-t_y18tmg/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 18,
+          "end_column": 20,
+          "end_line": 18,
+          "line": 18
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 7.889999999999418,
+        "input_tokens": 12877,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 124,
+        "provider": "codex-cli",
+        "response_id": "019f6ab2-6eef-74c2-82f5-aaf281f4c2d4",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_assigns_d_at_exactly_sixty():\n    assert analytics.letter_grade(60) == \"D\"",
+        "targeted_behavior": "The D/F threshold includes a score of exactly 60."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 10.75,
+            "input_tokens": 12649,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 293,
+            "provider": "codex-cli",
+            "response_id": "019f6ab2-8dc8-7e51-bbdb-0105c41b6fb9",
+            "source": "import pytest\n\nfrom gradebook.analytics import clamp_percent\n\n\nclass ZeroInt(int):\n    pass\n\n\ndef test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n    value = ZeroInt(0)\n\n    result = clamp_percent(value)\n\n    assert result is value",
+            "targeted_behavior": "At the lower boundary, the original preserves an int-subclass instance equal to zero, while the mutant replaces it with the built-in integer literal 0."
+          },
+          "mutant": {
+            "duration_seconds": 0.84264155800156,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n        value = ZeroInt(0)\n    \n        result = clamp_percent(value)\n    \n>       assert result is value\nE       assert 0 is 0\n\n.fencepost-generated-0012/test_adversarial.py:15: AssertionError",
+              "kind": "failure",
+              "message": "assert 0 is 0",
+              "nodeid": ".fencepost-generated-0012.test_adversarial::test_zero_int_subclass_identity_is_preserved_at_lower_boundary"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________ test_zero_int_subclass_identity_is_preserved_at_lower_boundary ________\n\n    def test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n        value = ZeroInt(0)\n    \n        result = clamp_percent(value)\n    \n>       assert result is value\nE       assert 0 is 0\n\n.fencepost-generated-0012/test_adversarial.py:15: AssertionError\n----- generated xml file: /work/jobs/triage-0012-8jf3f5uu/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0012/test_adversarial.py::test_zero_int_subclass_identity_is_preserved_at_lower_boundary\n1 failed in 0.04s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7229631449990848,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0012-8jf3f5uu/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n        value = ZeroInt(0)\n    \n        result = clamp_percent(value)\n    \n>       assert result is value\nE       assert 0 is 0\n\n.fencepost-generated-0012/test_adversarial.py:15: AssertionError",
+        "kind": "failure",
+        "message": "assert 0 is 0",
+        "nodeid": ".fencepost-generated-0012.test_adversarial::test_zero_int_subclass_identity_is_preserved_at_lower_boundary"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "LtE",
+          "anchor": {
+            "column": 7,
+            "end_column": 12,
+            "end_line": 27,
+            "line": 27
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "test",
+              "index": null
+            }
+          ],
+          "before": "Lt",
+          "id": "67c52a2840605244",
+          "kind": "compare",
+          "parameters": [
+            [
+              "op_index",
+              "0"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "p < 0"
+        },
+        "execution": {
+          "duration_seconds": 0.9289295159996982,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0020-7wkyq3mo/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 7,
+          "end_column": 13,
+          "end_line": 25,
+          "line": 25
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 10.75,
+        "input_tokens": 12649,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 293,
+        "provider": "codex-cli",
+        "response_id": "019f6ab2-8dc8-7e51-bbdb-0105c41b6fb9",
+        "source": "import pytest\n\nfrom gradebook.analytics import clamp_percent\n\n\nclass ZeroInt(int):\n    pass\n\n\ndef test_zero_int_subclass_identity_is_preserved_at_lower_boundary():\n    value = ZeroInt(0)\n\n    result = clamp_percent(value)\n\n    assert result is value",
+        "targeted_behavior": "At the lower boundary, the original preserves an int-subclass instance equal to zero, while the mutant replaces it with the built-in integer literal 0."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 10.375,
+            "input_tokens": 12648,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 246,
+            "provider": "codex-cli",
+            "response_id": "019f6ab2-b7dd-76c1-9ef6-e3357ed9afb3",
+            "source": "from gradebook.analytics import clamp_percent\n\n\ndef test_clamps_negative_one_to_zero():\n    assert clamp_percent(-1) == 0",
+            "targeted_behavior": "A negative boundary value of -1 must be clamped to zero; the mutant incorrectly preserves it."
+          },
+          "mutant": {
+            "duration_seconds": 0.9023824100004276,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_clamps_negative_one_to_zero():\n>       assert clamp_percent(-1) == 0\nE       assert -1 == 0\nE        +  where -1 = clamp_percent(-1)\n\n.fencepost-generated-0013/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "assert -1 == 0\n +  where -1 = clamp_percent(-1)",
+              "nodeid": ".fencepost-generated-0013.test_adversarial::test_clamps_negative_one_to_zero"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______________________ test_clamps_negative_one_to_zero _______________________\n\n    def test_clamps_negative_one_to_zero():\n>       assert clamp_percent(-1) == 0\nE       assert -1 == 0\nE        +  where -1 = clamp_percent(-1)\n\n.fencepost-generated-0013/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0013-ewgpr0uw/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0013/test_adversarial.py::test_clamps_negative_one_to_zero\n1 failed in 0.04s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7356920019992685,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0013-ewgpr0uw/original/junit.xml ----\n1 passed in 0.02s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_clamps_negative_one_to_zero():\n>       assert clamp_percent(-1) == 0\nE       assert -1 == 0\nE        +  where -1 = clamp_percent(-1)\n\n.fencepost-generated-0013/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "assert -1 == 0\n +  where -1 = clamp_percent(-1)",
+        "nodeid": ".fencepost-generated-0013.test_adversarial::test_clamps_negative_one_to_zero"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "-1",
+          "anchor": {
+            "column": 11,
+            "end_column": 12,
+            "end_line": 27,
+            "line": 27
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "0",
+          "id": "ab756a31efd05a69",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "-1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "0"
+        },
+        "execution": {
+          "duration_seconds": 0.9307233519994043,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0021-a300psx9/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 11,
+          "end_column": 13,
+          "end_line": 25,
+          "line": 25
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 10.375,
+        "input_tokens": 12648,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 246,
+        "provider": "codex-cli",
+        "response_id": "019f6ab2-b7dd-76c1-9ef6-e3357ed9afb3",
+        "source": "from gradebook.analytics import clamp_percent\n\n\ndef test_clamps_negative_one_to_zero():\n    assert clamp_percent(-1) == 0",
+        "targeted_behavior": "A negative boundary value of -1 must be clamped to zero; the mutant incorrectly preserves it."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 9.328999999997905,
+            "input_tokens": 12648,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 186,
+            "provider": "codex-cli",
+            "response_id": "019f6ab2-e045-7290-809f-71bc53366153",
+            "source": "import pytest\n\nfrom gradebook.analytics import clamp_percent\n\n\ndef test_clamp_percent_preserves_positive_fraction_below_one():\n    assert clamp_percent(0.5) == pytest.approx(0.5)",
+            "targeted_behavior": "A positive percentage below 1 must be preserved rather than clamped to zero."
+          },
+          "mutant": {
+            "duration_seconds": 0.9182170679996489,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert clamp_percent(0.5) == pytest.approx(0.5)\nE       assert 0 == 0.5 \u00b1 5.0e-07\nE         \nE         comparison failed\nE         Obtained: 0\nE         Expected: 0.5 \u00b1 5.0e-07\n\n.fencepost-generated-0014/test_adversarial.py:7: AssertionError",
+              "kind": "failure",
+              "message": "assert 0 == 0.5 \u00b1 5.0e-07\n  \n  comparison failed\n  Obtained: 0\n  Expected: 0.5 \u00b1 5.0e-07",
+              "nodeid": ".fencepost-generated-0014.test_adversarial::test_clamp_percent_preserves_positive_fraction_below_one"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_clamp_percent_preserves_positive_fraction_below_one ___________\n\n    def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert clamp_percent(0.5) == pytest.approx(0.5)\nE       assert 0 == 0.5 \u00b1 5.0e-07\nE         \nE         comparison failed\nE         Obtained: 0\nE         Expected: 0.5 \u00b1 5.0e-07\n\n.fencepost-generated-0014/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0014-eps1q4ox/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0014/test_adversarial.py::test_clamp_percent_preserves_positive_fraction_below_one\n1 failed in 0.06s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7197275199996511,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0014-eps1q4ox/original/junit.xml ----\n1 passed in 0.02s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert clamp_percent(0.5) == pytest.approx(0.5)\nE       assert 0 == 0.5 \u00b1 5.0e-07\nE         \nE         comparison failed\nE         Obtained: 0\nE         Expected: 0.5 \u00b1 5.0e-07\n\n.fencepost-generated-0014/test_adversarial.py:7: AssertionError",
+        "kind": "failure",
+        "message": "assert 0 == 0.5 \u00b1 5.0e-07\n  \n  comparison failed\n  Obtained: 0\n  Expected: 0.5 \u00b1 5.0e-07",
+        "nodeid": ".fencepost-generated-0014.test_adversarial::test_clamp_percent_preserves_positive_fraction_below_one"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "1",
+          "anchor": {
+            "column": 11,
+            "end_column": 12,
+            "end_line": 27,
+            "line": 27
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "body",
+              "index": 1
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "0",
+          "id": "44bc84979be41b9d",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "0"
+        },
+        "execution": {
+          "duration_seconds": 0.9074304360001406,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0022-8gzk6j6v/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 11,
+          "end_column": 12,
+          "end_line": 25,
+          "line": 25
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 9.328999999997905,
+        "input_tokens": 12648,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 186,
+        "provider": "codex-cli",
+        "response_id": "019f6ab2-e045-7290-809f-71bc53366153",
+        "source": "import pytest\n\nfrom gradebook.analytics import clamp_percent\n\n\ndef test_clamp_percent_preserves_positive_fraction_below_one():\n    assert clamp_percent(0.5) == pytest.approx(0.5)",
+        "targeted_behavior": "A positive percentage below 1 must be preserved rather than clamped to zero."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 10.406000000002678,
+            "input_tokens": 12648,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 252,
+            "provider": "codex-cli",
+            "response_id": "019f6ab3-0518-7b71-9dd1-be34ee504789",
+            "source": "import gradebook.analytics as analytics\n\n\nclass Hundred(int):\n    pass\n\n\ndef test_clamp_percent_preserves_boundary_input_identity():\n    value = Hundred(100)\n    assert analytics.clamp_percent(value) is value",
+            "targeted_behavior": "At exactly 100, the original preserves and returns the input object, while the mutant replaces it with the literal integer 100."
+          },
+          "mutant": {
+            "duration_seconds": 0.9103527490005945,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_clamp_percent_preserves_boundary_input_identity():\n        value = Hundred(100)\n>       assert analytics.clamp_percent(value) is value\nE       assert 100 is 100\nE        +  where 100 = <function clamp_percent at 0x7ab6b71b0180>(100)\nE        +    where <function clamp_percent at 0x7ab6b71b0180> = analytics.clamp_percent\n\n.fencepost-generated-0015/test_adversarial.py:10: AssertionError",
+              "kind": "failure",
+              "message": "assert 100 is 100\n +  where 100 = <function clamp_percent at 0x7ab6b71b0180>(100)\n +    where <function clamp_percent at 0x7ab6b71b0180> = analytics.clamp_percent",
+              "nodeid": ".fencepost-generated-0015.test_adversarial::test_clamp_percent_preserves_boundary_input_identity"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_____________ test_clamp_percent_preserves_boundary_input_identity _____________\n\n    def test_clamp_percent_preserves_boundary_input_identity():\n        value = Hundred(100)\n>       assert analytics.clamp_percent(value) is value\nE       assert 100 is 100\nE        +  where 100 = <function clamp_percent at 0x7ab6b71b0180>(100)\nE        +    where <function clamp_percent at 0x7ab6b71b0180> = analytics.clamp_percent\n\n.fencepost-generated-0015/test_adversarial.py:10: AssertionError\n----- generated xml file: /work/jobs/triage-0015-mi6kva7z/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0015/test_adversarial.py::test_clamp_percent_preserves_boundary_input_identity\n1 failed in 0.05s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7105899399994087,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0015-mi6kva7z/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_clamp_percent_preserves_boundary_input_identity():\n        value = Hundred(100)\n>       assert analytics.clamp_percent(value) is value\nE       assert 100 is 100\nE        +  where 100 = <function clamp_percent at 0x7ab6b71b0180>(100)\nE        +    where <function clamp_percent at 0x7ab6b71b0180> = analytics.clamp_percent\n\n.fencepost-generated-0015/test_adversarial.py:10: AssertionError",
+        "kind": "failure",
+        "message": "assert 100 is 100\n +  where 100 = <function clamp_percent at 0x7ab6b71b0180>(100)\n +    where <function clamp_percent at 0x7ab6b71b0180> = analytics.clamp_percent",
+        "nodeid": ".fencepost-generated-0015.test_adversarial::test_clamp_percent_preserves_boundary_input_identity"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "GtE",
+          "anchor": {
+            "column": 7,
+            "end_column": 14,
+            "end_line": 29,
+            "line": 29
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "test",
+              "index": null
+            }
+          ],
+          "before": "Gt",
+          "id": "92261c57ed4e3d56",
+          "kind": "compare",
+          "parameters": [
+            [
+              "op_index",
+              "0"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "p > 100"
+        },
+        "execution": {
+          "duration_seconds": 1.0638683939996554,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.02s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0025-yjdzq4_2/junit.xml ------------\n10 passed in 0.02s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 7,
+          "end_column": 15,
+          "end_line": 27,
+          "line": 27
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 10.406000000002678,
+        "input_tokens": 12648,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 252,
+        "provider": "codex-cli",
+        "response_id": "019f6ab3-0518-7b71-9dd1-be34ee504789",
+        "source": "import gradebook.analytics as analytics\n\n\nclass Hundred(int):\n    pass\n\n\ndef test_clamp_percent_preserves_boundary_input_identity():\n    value = Hundred(100)\n    assert analytics.clamp_percent(value) is value",
+        "targeted_behavior": "At exactly 100, the original preserves and returns the input object, while the mutant replaces it with the literal integer 100."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 13.968999999997322,
+            "input_tokens": 12641,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 459,
+            "provider": "codex-cli",
+            "response_id": "019f6ab3-2d5e-7bb3-8c82-49b14b2d1e8e",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_exact_float_upper_bound_is_returned_unchanged():\n    value = float(\"100\")\n\n    result = analytics.clamp_percent(value)\n\n    assert result is value",
+            "targeted_behavior": "An input exactly at the inclusive upper bound must be returned unchanged, including its type and identity; only values greater than 100 are clamped."
+          },
+          "mutant": {
+            "duration_seconds": 0.72357067700068,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_exact_float_upper_bound_is_returned_unchanged():\n        value = float(\"100\")\n    \n        result = analytics.clamp_percent(value)\n    \n>       assert result is value\nE       assert 100 is 100.0\n\n.fencepost-generated-0016/test_adversarial.py:9: AssertionError",
+              "kind": "failure",
+              "message": "assert 100 is 100.0",
+              "nodeid": ".fencepost-generated-0016.test_adversarial::test_exact_float_upper_bound_is_returned_unchanged"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________ test_exact_float_upper_bound_is_returned_unchanged ______________\n\n    def test_exact_float_upper_bound_is_returned_unchanged():\n        value = float(\"100\")\n    \n        result = analytics.clamp_percent(value)\n    \n>       assert result is value\nE       assert 100 is 100.0\n\n.fencepost-generated-0016/test_adversarial.py:9: AssertionError\n----- generated xml file: /work/jobs/triage-0016-hsua48mq/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0016/test_adversarial.py::test_exact_float_upper_bound_is_returned_unchanged\n1 failed in 0.03s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7718264820014156,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0016-hsua48mq/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_exact_float_upper_bound_is_returned_unchanged():\n        value = float(\"100\")\n    \n        result = analytics.clamp_percent(value)\n    \n>       assert result is value\nE       assert 100 is 100.0\n\n.fencepost-generated-0016/test_adversarial.py:9: AssertionError",
+        "kind": "failure",
+        "message": "assert 100 is 100.0",
+        "nodeid": ".fencepost-generated-0016.test_adversarial::test_exact_float_upper_bound_is_returned_unchanged"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "99",
+          "anchor": {
+            "column": 11,
+            "end_column": 14,
+            "end_line": 29,
+            "line": 29
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "100",
+          "id": "086eee6e74bf01f0",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "-1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "100"
+        },
+        "execution": {
+          "duration_seconds": 1.071330537999529,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0026-6f5viqv0/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 11,
+          "end_column": 13,
+          "end_line": 27,
+          "line": 27
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 13.968999999997322,
+        "input_tokens": 12641,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 459,
+        "provider": "codex-cli",
+        "response_id": "019f6ab3-2d5e-7bb3-8c82-49b14b2d1e8e",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_exact_float_upper_bound_is_returned_unchanged():\n    value = float(\"100\")\n\n    result = analytics.clamp_percent(value)\n\n    assert result is value",
+        "targeted_behavior": "An input exactly at the inclusive upper bound must be returned unchanged, including its type and identity; only values greater than 100 are clamped."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 8.406000000002678,
+            "input_tokens": 12647,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 130,
+            "provider": "codex-cli",
+            "response_id": "019f6ab3-63eb-7260-a6ae-87035342dc3c",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_clamps_101_to_100():\n    assert analytics.clamp_percent(101) == 100",
+            "targeted_behavior": "Values strictly above 100 must clamp to 100; 101 must not be returned unchanged."
+          },
+          "mutant": {
+            "duration_seconds": 0.7478120039995702,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_clamp_percent_clamps_101_to_100():\n>       assert analytics.clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = <function clamp_percent at 0x7be78eb70180>(101)\nE        +    where <function clamp_percent at 0x7be78eb70180> = analytics.clamp_percent\n\n.fencepost-generated-0017/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "assert 101 == 100\n +  where 101 = <function clamp_percent at 0x7be78eb70180>(101)\n +    where <function clamp_percent at 0x7be78eb70180> = analytics.clamp_percent",
+              "nodeid": ".fencepost-generated-0017.test_adversarial::test_clamp_percent_clamps_101_to_100"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_____________________ test_clamp_percent_clamps_101_to_100 _____________________\n\n    def test_clamp_percent_clamps_101_to_100():\n>       assert analytics.clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = <function clamp_percent at 0x7be78eb70180>(101)\nE        +    where <function clamp_percent at 0x7be78eb70180> = analytics.clamp_percent\n\n.fencepost-generated-0017/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0017-bmovq8b_/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0017/test_adversarial.py::test_clamp_percent_clamps_101_to_100\n1 failed in 0.03s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7622261479991721,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0017-bmovq8b_/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_clamp_percent_clamps_101_to_100():\n>       assert analytics.clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = <function clamp_percent at 0x7be78eb70180>(101)\nE        +    where <function clamp_percent at 0x7be78eb70180> = analytics.clamp_percent\n\n.fencepost-generated-0017/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "assert 101 == 100\n +  where 101 = <function clamp_percent at 0x7be78eb70180>(101)\n +    where <function clamp_percent at 0x7be78eb70180> = analytics.clamp_percent",
+        "nodeid": ".fencepost-generated-0017.test_adversarial::test_clamp_percent_clamps_101_to_100"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "101",
+          "anchor": {
+            "column": 11,
+            "end_column": 14,
+            "end_line": 29,
+            "line": 29
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "100",
+          "id": "2e3d6e7b8bdac2ad",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "100"
+        },
+        "execution": {
+          "duration_seconds": 1.0699909689992637,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0027-9s49xx5w/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 11,
+          "end_column": 14,
+          "end_line": 27,
+          "line": 27
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 8.406000000002678,
+        "input_tokens": 12647,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 130,
+        "provider": "codex-cli",
+        "response_id": "019f6ab3-63eb-7260-a6ae-87035342dc3c",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_clamps_101_to_100():\n    assert analytics.clamp_percent(101) == 100",
+        "targeted_behavior": "Values strictly above 100 must clamp to 100; 101 must not be returned unchanged."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 63.38999999999942,
+            "input_tokens": 40359,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 2927,
+            "provider": "codex-cli",
+            "response_id": "019f6ab3-84c0-7202-aab4-e9744caea578",
+            "source": "import gradebook.analytics as analytics\n\n\nclass _Percent(float):\n    def __rmul__(self, other):\n        return _Product()\n\n\nclass _Product:\n    def __truediv__(self, other):\n        return 0\n\n    def __floordiv__(self, other):\n        return 1\n\n\ndef test_percentile_uses_true_division_before_integer_conversion():\n    assert analytics.percentile([10, 20], _Percent(50.0)) == 10",
+            "targeted_behavior": "Use a float subclass that passes ordinary clamping comparisons but supplies divergent true-division and floor-division results for percentile index computation."
+          },
+          "mutant": {
+            "duration_seconds": 0.7086095699996804,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_percentile_uses_true_division_before_integer_conversion():\n>       assert analytics.percentile([10, 20], _Percent(50.0)) == 10\nE       assert 20 == 10\nE        +  where 20 = <function percentile at 0x7d9af4c74220>([10, 20], 50.0)\nE        +    where <function percentile at 0x7d9af4c74220> = analytics.percentile\nE        +    and   50.0 = _Percent(50.0)\n\n.fencepost-generated-0018/test_adversarial.py:18: AssertionError",
+              "kind": "failure",
+              "message": "assert 20 == 10\n +  where 20 = <function percentile at 0x7d9af4c74220>([10, 20], 50.0)\n +    where <function percentile at 0x7d9af4c74220> = analytics.percentile\n +    and   50.0 = _Percent(50.0)",
+              "nodeid": ".fencepost-generated-0018.test_adversarial::test_percentile_uses_true_division_before_integer_conversion"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________ test_percentile_uses_true_division_before_integer_conversion _________\n\n    def test_percentile_uses_true_division_before_integer_conversion():\n>       assert analytics.percentile([10, 20], _Percent(50.0)) == 10\nE       assert 20 == 10\nE        +  where 20 = <function percentile at 0x7d9af4c74220>([10, 20], 50.0)\nE        +    where <function percentile at 0x7d9af4c74220> = analytics.percentile\nE        +    and   50.0 = _Percent(50.0)\n\n.fencepost-generated-0018/test_adversarial.py:18: AssertionError\n----- generated xml file: /work/jobs/triage-0018-wc7fvyta/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0018/test_adversarial.py::test_percentile_uses_true_division_before_integer_conversion\n1 failed in 0.02s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7415206390014646,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-wc7fvyta/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_percentile_uses_true_division_before_integer_conversion():\n>       assert analytics.percentile([10, 20], _Percent(50.0)) == 10\nE       assert 20 == 10\nE        +  where 20 = <function percentile at 0x7d9af4c74220>([10, 20], 50.0)\nE        +    where <function percentile at 0x7d9af4c74220> = analytics.percentile\nE        +    and   50.0 = _Percent(50.0)\n\n.fencepost-generated-0018/test_adversarial.py:18: AssertionError",
+        "kind": "failure",
+        "message": "assert 20 == 10\n +  where 20 = <function percentile at 0x7d9af4c74220>([10, 20], 50.0)\n +    where <function percentile at 0x7d9af4c74220> = analytics.percentile\n +    and   50.0 = _Percent(50.0)",
+        "nodeid": ".fencepost-generated-0018.test_adversarial::test_percentile_uses_true_division_before_integer_conversion"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "FloorDiv",
+          "anchor": {
+            "column": 12,
+            "end_column": 34,
+            "end_line": 38,
+            "line": 38
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 3
+            },
+            {
+              "field": "body",
+              "index": 3
+            },
+            {
+              "field": "value",
+              "index": null
+            },
+            {
+              "field": "args",
+              "index": 0
+            }
+          ],
+          "before": "Div",
+          "id": "bb49d21e0537bf13",
+          "kind": "arithmetic",
+          "parameters": [],
+          "path": "gradebook/analytics.py",
+          "source_segment": "len(ordered) * p / 100"
+        },
+        "execution": {
+          "duration_seconds": 1.212760831000196,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0031-snabfci9/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 12,
+          "end_column": 35,
+          "end_line": 35,
+          "line": 35
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 63.38999999999942,
+        "input_tokens": 40359,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 2927,
+        "provider": "codex-cli",
+        "response_id": "019f6ab3-84c0-7202-aab4-e9744caea578",
+        "source": "import gradebook.analytics as analytics\n\n\nclass _Percent(float):\n    def __rmul__(self, other):\n        return _Product()\n\n\nclass _Product:\n    def __truediv__(self, other):\n        return 0\n\n    def __floordiv__(self, other):\n        return 1\n\n\ndef test_percentile_uses_true_division_before_integer_conversion():\n    assert analytics.percentile([10, 20], _Percent(50.0)) == 10",
+        "targeted_behavior": "Use a float subclass that passes ordinary clamping comparisons but supplies divergent true-division and floor-division results for percentile index computation."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 10.593999999997322,
+            "input_tokens": 12743,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 223,
+            "provider": "codex-cli",
+            "response_id": "019f6ab4-7c5b-71f2-9183-c4d4a6ff2089",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_100_as_the_percent_scale():\n    assert analytics.percentile([10, 20, 30], 66) == 20",
+            "targeted_behavior": "For a three-element sequence, percentile 66 selects index 1 with the /100 calculation but index 2 with the /99 mutation."
+          },
+          "mutant": {
+            "duration_seconds": 0.7248628469988034,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_percentile_uses_100_as_the_percent_scale():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x7583d4d18220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x7583d4d18220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+              "kind": "failure",
+              "message": "assert 30 == 20\n +  where 30 = <function percentile at 0x7583d4d18220>([10, 20, 30], 66)\n +    where <function percentile at 0x7583d4d18220> = analytics.percentile",
+              "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_100_as_the_percent_scale"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________ test_percentile_uses_100_as_the_percent_scale _________________\n\n    def test_percentile_uses_100_as_the_percent_scale():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x7583d4d18220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x7583d4d18220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0019-31cp34ma/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_uses_100_as_the_percent_scale\n1 failed in 0.02s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.7451943809992372,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-31cp34ma/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_percentile_uses_100_as_the_percent_scale():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x7583d4d18220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x7583d4d18220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "assert 30 == 20\n +  where 30 = <function percentile at 0x7583d4d18220>([10, 20, 30], 66)\n +    where <function percentile at 0x7583d4d18220> = analytics.percentile",
+        "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_100_as_the_percent_scale"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "99",
+          "anchor": {
+            "column": 31,
+            "end_column": 34,
+            "end_line": 38,
+            "line": 38
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 3
+            },
+            {
+              "field": "body",
+              "index": 3
+            },
+            {
+              "field": "value",
+              "index": null
+            },
+            {
+              "field": "args",
+              "index": 0
+            },
+            {
+              "field": "right",
+              "index": null
+            }
+          ],
+          "before": "100",
+          "id": "764a18c525e359d6",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "-1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "100"
+        },
+        "execution": {
+          "duration_seconds": 1.0167549420002615,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0033-g1rs280_/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 31,
+          "end_column": 33,
+          "end_line": 35,
+          "line": 35
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 10.593999999997322,
+        "input_tokens": 12743,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 223,
+        "provider": "codex-cli",
+        "response_id": "019f6ab4-7c5b-71f2-9183-c4d4a6ff2089",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_100_as_the_percent_scale():\n    assert analytics.percentile([10, 20, 30], 66) == 20",
+        "targeted_behavior": "For a three-element sequence, percentile 66 selects index 1 with the /100 calculation but index 2 with the /99 mutation."
+      }
+    },
+    {
+      "attempts": [
+        {
+          "attempt": 1,
+          "contract_violations": [],
+          "generated_test": {
+            "generation_duration_seconds": 8.610000000000582,
+            "input_tokens": 12717,
+            "model": "gpt-5.6-terra",
+            "output_tokens": 170,
+            "provider": "codex-cli",
+            "response_id": "019f6ab4-a5b2-7911-bd79-7e21ad3c4ab9",
+            "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_at_100_returns_final_score():\n    assert analytics.percentile([10, 20, 30], 100) == 30",
+            "targeted_behavior": "At p=100, the computed index equals len(scores), which the original clamps to the final element while the mutant raises IndexError."
+          },
+          "mutant": {
+            "duration_seconds": 0.5469002520003414,
+            "exit_code": 1,
+            "failure": {
+              "detail": "def test_percentile_at_100_returns_final_score():\n>       assert analytics.percentile([10, 20, 30], 100) == 30\n\n.fencepost-generated-0020/test_adversarial.py:5: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [10, 20, 30], p = 100\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n        k = int(len(ordered) * p / 100)\n        if k > len(ordered):\n            k = len(ordered) - 1\n>       return ordered[k]\nE       IndexError: list index out of range\n\ngradebook/analytics.py:38: IndexError",
+              "kind": "failure",
+              "message": "IndexError: list index out of range",
+              "nodeid": ".fencepost-generated-0020.test_adversarial::test_percentile_at_100_returns_final_score"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________________ test_percentile_at_100_returns_final_score __________________\n\n    def test_percentile_at_100_returns_final_score():\n>       assert analytics.percentile([10, 20, 30], 100) == 30\n\n.fencepost-generated-0020/test_adversarial.py:5: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [10, 20, 30], p = 100\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n        k = int(len(ordered) * p / 100)\n        if k > len(ordered):\n            k = len(ordered) - 1\n>       return ordered[k]\nE       IndexError: list index out of range\n\ngradebook/analytics.py:38: IndexError\n----- generated xml file: /work/jobs/triage-0020-veatnafh/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0020/test_adversarial.py::test_percentile_at_100_returns_final_score\n1 failed in 0.02s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original": {
+            "duration_seconds": 0.5412219419995381,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0020-veatnafh/original/junit.xml ----\n1 passed in 0.01s\n",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "outcome": "DISTINGUISHED",
+          "valid_attempt_number": 1
+        }
+      ],
+      "attempts_used": 1,
+      "failure_evidence": {
+        "detail": "def test_percentile_at_100_returns_final_score():\n>       assert analytics.percentile([10, 20, 30], 100) == 30\n\n.fencepost-generated-0020/test_adversarial.py:5: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [10, 20, 30], p = 100\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n        k = int(len(ordered) * p / 100)\n        if k > len(ordered):\n            k = len(ordered) - 1\n>       return ordered[k]\nE       IndexError: list index out of range\n\ngradebook/analytics.py:38: IndexError",
+        "kind": "failure",
+        "message": "IndexError: list index out of range",
+        "nodeid": ".fencepost-generated-0020.test_adversarial::test_percentile_at_100_returns_final_score"
+      },
+      "invalid_attempts": 0,
+      "label": "REAL_GAP",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "Gt",
+          "anchor": {
+            "column": 7,
+            "end_column": 24,
+            "end_line": 39,
+            "line": 39
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 3
+            },
+            {
+              "field": "body",
+              "index": 4
+            },
+            {
+              "field": "test",
+              "index": null
+            }
+          ],
+          "before": "GtE",
+          "id": "ebad6149cee857c9",
+          "kind": "compare",
+          "parameters": [
+            [
+              "op_index",
+              "0"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "k >= len(ordered)"
+        },
+        "execution": {
+          "duration_seconds": 1.0127717979994486,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0035-nkn8shzm/junit.xml ------------\n10 passed in 0.02s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 7,
+          "end_column": 23,
+          "end_line": 36,
+          "line": 36
+        }
+      },
+      "unresolved_reason": null,
+      "valid_attempts": 1,
+      "winning_test": {
+        "generation_duration_seconds": 8.610000000000582,
+        "input_tokens": 12717,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 170,
+        "provider": "codex-cli",
+        "response_id": "019f6ab4-a5b2-7911-bd79-7e21ad3c4ab9",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_at_100_returns_final_score():\n    assert analytics.percentile([10, 20, 30], 100) == 30",
+        "targeted_behavior": "At p=100, the computed index equals len(scores), which the original clamps to the final element while the mutant raises IndexError."
+      }
+    }
+  ],
+  "selected_survivor_count": 21,
+  "total_attempts": 21,
+  "total_survivors": 21,
+  "triage_complete": true,
+  "triage_wall_clock_seconds": 268.9850000000006,
+  "unresolved_count": 0,
+  "valid_attempts": 21
+}

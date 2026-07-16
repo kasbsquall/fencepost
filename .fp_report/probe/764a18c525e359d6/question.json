@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.218999999997322,
+  "input_tokens": 13248,
+  "model": "gpt-5.6-terra",
+  "mutation_description": "Consider changing `100` to `99`.",
+  "output_tokens": 187,
+  "provider": "codex-cli",
+  "question_text": "In commit dceec68 on 2026-07-09, you wrote line 38 of gradebook/analytics.py:\n38:     k = int(len(ordered) * p / 100)\n\nConsider changing `100` to `99`.\n\nAfter changing the percentile index calculation\u2019s divisor from 100 to 99, which percentile requests can return a different sorted score, and why does that altered denominator shift the computed index?",
+  "response_id": "019f6ac2-d82d-7450-8a36-d737931781a2"
+}

@@ -1,0 +1,38 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 256.7810000000027,
+    "input_tokens": 211723,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 8751,
+    "provider": "codex-cli",
+    "response_id": "019f6ab7-a649-7b63-bdb1-2e5365641079",
+    "source": "import gradebook.analytics\n\n\ndef test_percentile_negative_percentage_uses_zero_truncation_index():\n    assert gradebook.analytics.percentile([10, 20], -1.0) == 10",
+    "targeted_behavior": "Negative fractional-index boundary: true division truncates toward zero while floor division selects the preceding element when a negative percentage reaches the arithmetic expression."
+  },
+  "mutant": {
+    "duration_seconds": 0.766602753999905,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0018-ll9b9q99/mutant/junit.xml -----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.921362899000087,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-ll9b9q99/original/junit.xml ----\n1 passed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "NOT_DISTINGUISHED",
+  "valid_attempt_number": 1
+}

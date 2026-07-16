@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.389999999999418,
+  "input_tokens": 13113,
+  "model": "gpt-5.6-terra",
+  "mutation_description": "Consider changing `90` to `91`.",
+  "output_tokens": 262,
+  "provider": "codex-cli",
+  "question_text": "In commit a0f7cba on 2026-07-07, you wrote line 13 of gradebook/analytics.py:\n13:     if score >= 90:\n\nConsider changing `90` to `91`.\n\nAfter changing the A-grade condition from `score >= 90` to `score >= 91`, what behavior breaks at the documented lower boundary of the A range, and why?",
+  "response_id": "019f6ac0-2081-7b51-b0be-0c18be888087"
+}

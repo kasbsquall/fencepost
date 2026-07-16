@@ -1,0 +1,120 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 16.42199999999866,
+        "input_tokens": 13077,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 606,
+        "provider": "codex-cli",
+        "response_id": "019f6ab6-9bff-7b03-a558-8fd65cb039c9",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_negative_zero_float():\n    assert analytics.clamp_percent(-0.0).hex() == \"-0x0.0p+0\"",
+        "targeted_behavior": "Negative zero is already within range and must be returned unchanged; the mutant normalizes it to integer zero."
+      },
+      "mutant": {
+        "duration_seconds": 0.7692897690012614,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_clamp_percent_preserves_negative_zero_float():\n>       assert analytics.clamp_percent(-0.0).hex() == \"-0x0.0p+0\"\nE       AttributeError: 'int' object has no attribute 'hex'\n\n.fencepost-generated-0012/test_adversarial.py:5: AttributeError",
+          "kind": "failure",
+          "message": "AttributeError: 'int' object has no attribute 'hex'",
+          "nodeid": ".fencepost-generated-0012.test_adversarial::test_clamp_percent_preserves_negative_zero_float"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______________ test_clamp_percent_preserves_negative_zero_float _______________\n\n    def test_clamp_percent_preserves_negative_zero_float():\n>       assert analytics.clamp_percent(-0.0).hex() == \"-0x0.0p+0\"\nE       AttributeError: 'int' object has no attribute 'hex'\n\n.fencepost-generated-0012/test_adversarial.py:5: AttributeError\n----- generated xml file: /work/jobs/triage-0012-gtlorlbt/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0012/test_adversarial.py::test_clamp_percent_preserves_negative_zero_float\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.7324608439994336,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0012-gtlorlbt/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_clamp_percent_preserves_negative_zero_float():\n>       assert analytics.clamp_percent(-0.0).hex() == \"-0x0.0p+0\"\nE       AttributeError: 'int' object has no attribute 'hex'\n\n.fencepost-generated-0012/test_adversarial.py:5: AttributeError",
+    "kind": "failure",
+    "message": "AttributeError: 'int' object has no attribute 'hex'",
+    "nodeid": ".fencepost-generated-0012.test_adversarial::test_clamp_percent_preserves_negative_zero_float"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mode": "CONTRACT",
+  "mutant": {
+    "candidate": {
+      "after": "LtE",
+      "anchor": {
+        "column": 7,
+        "end_column": 12,
+        "end_line": 27,
+        "line": 27
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "Lt",
+      "id": "67c52a2840605244",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "p < 0"
+    },
+    "execution": {
+      "duration_seconds": 0.9289295159996982,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0020-7wkyq3mo/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 7,
+      "end_column": 13,
+      "end_line": 25,
+      "line": 25
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 16.42199999999866,
+    "input_tokens": 13077,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 606,
+    "provider": "codex-cli",
+    "response_id": "019f6ab6-9bff-7b03-a558-8fd65cb039c9",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_negative_zero_float():\n    assert analytics.clamp_percent(-0.0).hex() == \"-0x0.0p+0\"",
+    "targeted_behavior": "Negative zero is already within range and must be returned unchanged; the mutant normalizes it to integer zero."
+  }
+}

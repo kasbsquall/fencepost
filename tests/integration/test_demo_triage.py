@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 from fencepost import RunConfig, TriageConfig, run_analysis
-from fencepost.mutation import enumerate_candidates
+from fencepost.probe import probe_site_id
 from tests.fakes import (
     FixtureAdversarialTestGenerator,
     FixtureComprehensionProbeAgent,
@@ -27,18 +27,6 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     )
     generator = FixtureAdversarialTestGenerator()
     probe_agent = FixtureComprehensionProbeAgent()
-    analytics_source = (repo / "gradebook" / "analytics.py").read_text(
-        encoding="utf-8"
-    )
-    answered_candidate = next(
-        candidate
-        for candidate in enumerate_candidates(
-            analytics_source, "gradebook/analytics.py"
-        )
-        if candidate.kind == "compare"
-        and candidate.source_segment.strip() == "score >= 90"
-        and candidate.after == "Gt"
-    )
     result = run_analysis(
         RunConfig(
             repo=repo,
@@ -49,7 +37,7 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
         triage_config=TriageConfig(valid_attempts=3, invalid_retry_limit=3),
         probe_agent=probe_agent,
         probe_answers={
-            answered_candidate.id: (
+            probe_site_id("gradebook/analytics.py", 13): (
                 "At exactly 90 the strict comparison skips A and returns B because "
                 "equality no longer satisfies the boundary."
             )
@@ -195,22 +183,44 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     assert result.probe is not None
     probe = result.probe
     assert probe.total_targets == 20
-    assert probe.question_count == 20
+    expected_sites = {
+        (item.mutant.candidate.path, item.mutant.candidate.anchor.line)
+        for item in triage.results
+        if item.label_contract == "REAL_GAP"
+    }
+    assert probe.total_sites == len(expected_sites)
+    assert probe.question_count == probe.total_sites
+    assert probe.accounted_mutant_count == triage.real_gap_count_contract
+    assert sum(item.survivor_count for item in probe.results) == 20
+    assert sum(len(item.mutants) for item in probe.results) == 20
+    assert len(
+        {
+            (item.grounding.path, item.grounding.start_line)
+            for item in probe.results
+        }
+    ) == probe.total_sites
     assert probe.submitted_answer_count == 1
     assert probe.graded_answer_count == 1
     assert probe.complete is True
     questioned_ids = {
-        request.mutant.candidate.id for request in probe_agent.question_requests
+        mutant.mutant_id
+        for request in probe_agent.question_requests
+        for mutant in request.mutants
     }
     assert questioned_ids == set(triage.probe_target_mutant_ids)
+    assert len(probe_agent.question_requests) == probe.total_sites
+    assert len({request.site_id for request in probe_agent.question_requests}) == (
+        probe.total_sites
+    )
     strict_only_ids = {
         item.mutant.candidate.id for item in triage.contract_shielded
     }
     assert questioned_ids.isdisjoint(strict_only_ids)
     assert all(
-        item.evidence.original_execution.status == "passed"
-        and item.evidence.mutant_execution.status in {"failed", "timed_out"}
+        mutant.evidence.original_execution.status == "passed"
+        and mutant.evidence.mutant_execution.status in {"failed", "timed_out"}
         for item in probe.results
+        for mutant in item.mutants
     )
     assert all(
         item.grounding.authored_lines
@@ -224,16 +234,24 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     assert len(graded) == 1
     for item in graded:
         assert item.assessment.citations
-        assert all(
-            citation.artifact_ref == item.evidence.triage_artifact_ref
-            and citation.message == item.evidence.failing_assertion.message
+        assert len(item.assessment.citations) == item.survivor_count
+        expected_citations = {
+            (
+                mutant.evidence.triage_artifact_ref,
+                mutant.evidence.failing_assertion.message,
+            )
+            for mutant in item.mutants
+        }
+        assert {
+            (citation.artifact_ref, citation.message)
             for citation in item.assessment.citations
-        )
+        } == expected_citations
 
     assert result.report is not None
     report = result.report
-    assert report.unverified_place_count == 20
-    assert report.question_count == 20
+    assert report.unverified_place_count == probe.total_sites
+    assert report.question_count == probe.total_sites
+    assert sum(place.survivor_count for place in report.places) == 20
     assert len(report.deliberately_not_asked) == 1
     assert report.equivalent_rate_strict == 0.0
     assert report.equivalent_rate_contract == 1 / 21
@@ -242,7 +260,9 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
             encoding="utf-8"
         )
     )
-    assert report_payload["schema_version"] == "1.0"
-    assert len(report_payload["places"]) == 20
+    assert report_payload["schema_version"] == "2.0"
+    assert len(report_payload["places"]) == probe.total_sites
+    assert sum(place["survivor_count"] for place in report_payload["places"]) == 20
+    assert sum(len(place["mutants"]) for place in report_payload["places"]) == 20
     assert len(report_payload["deliberately_not_asked"]) == 1
     assert (result.artifact_dir / "report" / "report.md").exists()

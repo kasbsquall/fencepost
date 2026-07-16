@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 14.796999999998661,
+  "input_tokens": 13072,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 504,
+  "provider": "codex-cli",
+  "response_id": "019f6ab7-2505-70d2-9d7a-f1c7891bd5c9",
+  "source": "import pytest\nimport gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_upper_boundary_float_representation():\n    assert str(analytics.clamp_percent(100.0)) == \"100.0\"",
+  "targeted_behavior": "At the exact upper float boundary, the original preserves 100.0 while the mutant replaces it with integer 100; their string representations differ."
+}

@@ -1,0 +1,92 @@
+{
+  "answer": null,
+  "artifact_refs": [
+    "run.json",
+    "triage/contract/ce1508b29bd64233/attempt-01/attempt.json",
+    "probe/ce1508b29bd64233/result.json"
+  ],
+  "assessment": null,
+  "error": null,
+  "evidence": {
+    "adversarial_test": {
+      "generation_duration_seconds": 8.5,
+      "input_tokens": 13303,
+      "model": "gpt-5.6-terra",
+      "output_tokens": 114,
+      "provider": "codex-cli",
+      "response_id": "019f6ab5-9f13-7561-ab69-0ff3d1707b9d",
+      "source": "import gradebook.analytics\n\n\ndef test_letter_grade_assigns_b_at_inclusive_lower_boundary():\n    assert gradebook.analytics.letter_grade(80) == \"B\"",
+      "targeted_behavior": "The inclusive B-grade threshold must classify a score of 80 as 'B'."
+    },
+    "failing_assertion": {
+      "detail": "def test_letter_grade_assigns_b_at_inclusive_lower_boundary():\n>       assert gradebook.analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+      "nodeid": ".fencepost-generated-0005.test_adversarial::test_letter_grade_assigns_b_at_inclusive_lower_boundary"
+    },
+    "mutant_execution": {
+      "duration_seconds": 0.7869625210005324,
+      "exit_code": 1,
+      "failure": {
+        "detail": "def test_letter_grade_assigns_b_at_inclusive_lower_boundary():\n>       assert gradebook.analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+        "nodeid": ".fencepost-generated-0005.test_adversarial::test_letter_grade_assigns_b_at_inclusive_lower_boundary"
+      },
+      "status": "failed",
+      "stderr": "",
+      "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_letter_grade_assigns_b_at_inclusive_lower_boundary ____________\n\n    def test_letter_grade_assigns_b_at_inclusive_lower_boundary():\n>       assert gradebook.analytics.letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0005-qtvm5hpl/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0005/test_adversarial.py::test_letter_grade_assigns_b_at_inclusive_lower_boundary\n1 failed in 0.02s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "original_execution": {
+      "duration_seconds": 0.8122409530005825,
+      "exit_code": 0,
+      "failure": null,
+      "status": "passed",
+      "stderr": "",
+      "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0005-qtvm5hpl/original/junit.xml ----\n1 passed in 0.02s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "triage_artifact_ref": "triage/contract/ce1508b29bd64233/attempt-01/attempt.json"
+  },
+  "grounding": {
+    "attribution_artifact_ref": "run.json",
+    "authored_lines": [
+      {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "commit_summary": "implement letter_grade",
+        "line": 15,
+        "path": "gradebook/analytics.py",
+        "text": "    elif score >= 80:"
+      }
+    ],
+    "end_line": 15,
+    "original_segment": "80",
+    "path": "gradebook/analytics.py",
+    "start_line": 15
+  },
+  "mutant_id": "ce1508b29bd64233",
+  "mutation": {
+    "mutated_segment": "81",
+    "original_segment": "80",
+    "unified_diff": "--- original\n+++ mutant\n@@ -4,12 +4,12 @@\n     A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n     \"\"\"\n     if score >= 90:\n-        return \"A\"\n-    elif score >= 80:\n-        return \"B\"\n+        return 'A'\n+    elif score >= 81:\n+        return 'B'\n     elif score >= 70:\n-        return \"C\"\n+        return 'C'\n     elif score >= 60:\n-        return \"D\"\n+        return 'D'\n     else:\n-        return \"F\"\n+        return 'F'"
+  },
+  "question": {
+    "generation_duration_seconds": 10.39100000000326,
+    "input_tokens": 13120,
+    "model": "gpt-5.6-terra",
+    "mutation_description": "Consider changing `80` to `81`.",
+    "output_tokens": 260,
+    "provider": "codex-cli",
+    "question_text": "In commit a0f7cba on 2026-07-07, you wrote line 15 of gradebook/analytics.py:\n15:     elif score >= 80:\n\nConsider changing `80` to `81`.\n\nAfter changing `elif score >= 80` to `elif score >= 81` in `letter_grade`, which score range now receives a different letter grade, what does it receive, and why does execution reach that branch?",
+    "response_id": "019f6ac0-ac89-7621-91a7-a8c26ec73ae6"
+  },
+  "status": "READY"
+}

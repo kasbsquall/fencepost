@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 256.7810000000027,
+  "input_tokens": 211723,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 8751,
+  "provider": "codex-cli",
+  "response_id": "019f6ab7-a649-7b63-bdb1-2e5365641079",
+  "source": "import gradebook.analytics\n\n\ndef test_percentile_negative_percentage_uses_zero_truncation_index():\n    assert gradebook.analytics.percentile([10, 20], -1.0) == 10",
+  "targeted_behavior": "Negative fractional-index boundary: true division truncates toward zero while floor division selects the preceding element when a negative percentage reaches the arithmetic expression."
+}

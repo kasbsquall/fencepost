@@ -1,0 +1,92 @@
+{
+  "answer": null,
+  "artifact_refs": [
+    "run.json",
+    "triage/contract/1d2de104b4e2ea87/attempt-01/attempt.json",
+    "probe/1d2de104b4e2ea87/result.json"
+  ],
+  "assessment": null,
+  "error": null,
+  "evidence": {
+    "adversarial_test": {
+      "generation_duration_seconds": 9.171999999998661,
+      "input_tokens": 13303,
+      "model": "gpt-5.6-terra",
+      "output_tokens": 196,
+      "provider": "codex-cli",
+      "response_id": "019f6ab5-3206-7531-8d17-10ed7353f272",
+      "source": "from gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_assigns_a_at_exact_lower_boundary():\n    assert letter_grade(90) == \"A\"",
+      "targeted_behavior": "Distinguish the A-grade lower boundary at exactly score 90."
+    },
+    "failing_assertion": {
+      "detail": "def test_letter_grade_assigns_a_at_exact_lower_boundary():\n>       assert letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0002/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+      "nodeid": ".fencepost-generated-0002.test_adversarial::test_letter_grade_assigns_a_at_exact_lower_boundary"
+    },
+    "mutant_execution": {
+      "duration_seconds": 0.8777929240004596,
+      "exit_code": 1,
+      "failure": {
+        "detail": "def test_letter_grade_assigns_a_at_exact_lower_boundary():\n>       assert letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0002/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+        "nodeid": ".fencepost-generated-0002.test_adversarial::test_letter_grade_assigns_a_at_exact_lower_boundary"
+      },
+      "status": "failed",
+      "stderr": "",
+      "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_____________ test_letter_grade_assigns_a_at_exact_lower_boundary ______________\n\n    def test_letter_grade_assigns_a_at_exact_lower_boundary():\n>       assert letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0002/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0002-y4fs68hq/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0002/test_adversarial.py::test_letter_grade_assigns_a_at_exact_lower_boundary\n1 failed in 0.02s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "original_execution": {
+      "duration_seconds": 0.7805135819999123,
+      "exit_code": 0,
+      "failure": null,
+      "status": "passed",
+      "stderr": "",
+      "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0002-y4fs68hq/original/junit.xml ----\n1 passed in 0.01s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "triage_artifact_ref": "triage/contract/1d2de104b4e2ea87/attempt-01/attempt.json"
+  },
+  "grounding": {
+    "attribution_artifact_ref": "run.json",
+    "authored_lines": [
+      {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "commit_summary": "implement letter_grade",
+        "line": 13,
+        "path": "gradebook/analytics.py",
+        "text": "    if score >= 90:"
+      }
+    ],
+    "end_line": 13,
+    "original_segment": "90",
+    "path": "gradebook/analytics.py",
+    "start_line": 13
+  },
+  "mutant_id": "1d2de104b4e2ea87",
+  "mutation": {
+    "mutated_segment": "91",
+    "original_segment": "90",
+    "unified_diff": "--- original\n+++ mutant\n@@ -3,13 +3,13 @@\n \n     A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n     \"\"\"\n-    if score >= 90:\n-        return \"A\"\n+    if score >= 91:\n+        return 'A'\n     elif score >= 80:\n-        return \"B\"\n+        return 'B'\n     elif score >= 70:\n-        return \"C\"\n+        return 'C'\n     elif score >= 60:\n-        return \"D\"\n+        return 'D'\n     else:\n-        return \"F\"\n+        return 'F'"
+  },
+  "question": {
+    "generation_duration_seconds": 10.389999999999418,
+    "input_tokens": 13113,
+    "model": "gpt-5.6-terra",
+    "mutation_description": "Consider changing `90` to `91`.",
+    "output_tokens": 262,
+    "provider": "codex-cli",
+    "question_text": "In commit a0f7cba on 2026-07-07, you wrote line 13 of gradebook/analytics.py:\n13:     if score >= 90:\n\nConsider changing `90` to `91`.\n\nAfter changing the A-grade condition from `score >= 90` to `score >= 91`, what behavior breaks at the documented lower boundary of the A range, and why?",
+    "response_id": "019f6ac0-2081-7b51-b0be-0c18be888087"
+  },
+  "status": "READY"
+}

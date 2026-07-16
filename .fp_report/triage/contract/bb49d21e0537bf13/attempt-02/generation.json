@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 243.88999999999942,
+  "input_tokens": 180146,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 10476,
+  "provider": "codex-cli",
+  "response_id": "019f6abc-123e-7cc3-9917-c602d945327d",
+  "source": "import gradebook.analytics\n\n\ndef test_percentile_index_uses_true_division_opcode():\n    assert \"7a0b0000\" in gradebook.analytics.percentile.__code__.co_code.hex()",
+  "targeted_behavior": "Verifies that percentile is compiled with true division at the index calculation."
+}

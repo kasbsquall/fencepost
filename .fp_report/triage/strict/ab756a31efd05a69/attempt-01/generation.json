@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.375,
+  "input_tokens": 12648,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 246,
+  "provider": "codex-cli",
+  "response_id": "019f6ab2-b7dd-76c1-9ef6-e3357ed9afb3",
+  "source": "from gradebook.analytics import clamp_percent\n\n\ndef test_clamps_negative_one_to_zero():\n    assert clamp_percent(-1) == 0",
+  "targeted_behavior": "A negative boundary value of -1 must be clamped to zero; the mutant incorrectly preserves it."
+}

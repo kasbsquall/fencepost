@@ -226,20 +226,10 @@ class FixtureComprehensionProbeAgent:
 
     def generate_question(self, request):
         self.question_requests.append(request)
-        first = request.grounding.authored_lines[0]
-        mutation = (
-            f"Consider changing `{request.mutation.original_segment}` to "
-            f"`{request.mutation.mutated_segment}`."
-        )
-        question = (
-            f"In commit {first.commit[:7]} on {first.author_date}, you wrote "
-            f"line {first.line} of {request.grounding.path}.\n\n"
-            f"{mutation}\n\n"
-            "What observable behavior changes, and why?"
-        )
         return GeneratedProbeQuestion(
-            question_text=question,
-            mutation_description=mutation,
+            question_text=(
+                "What observable behavior at this source boundary can change, and why?"
+            ),
             provider="fixture-fake",
             model=None,
             response_id=None,
@@ -248,7 +238,9 @@ class FixtureComprehensionProbeAgent:
 
     def grade_answer(self, request):
         self.grade_requests.append(request)
-        failure = request.evidence.failing_assertion
+        failures = [
+            mutant.evidence.failing_assertion for mutant in request.mutants
+        ]
         normalized = request.answer.strip().casefold()
         verdict = (
             "INSUFFICIENT"
@@ -261,7 +253,10 @@ class FixtureComprehensionProbeAgent:
                 "Review the answer against the execution-grounded boundary behavior."
             ),
             evidence_explanation=(
-                f"The mutant failed {failure.nodeid}: {failure.message}"
+                "The supporting mutants failed: "
+                + "; ".join(
+                    f"{failure.nodeid}: {failure.message}" for failure in failures
+                )
             ),
             provider="fixture-fake",
             model=None,

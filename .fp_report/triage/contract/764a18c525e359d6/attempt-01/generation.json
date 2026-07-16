@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 11.31199999999808,
+  "input_tokens": 13165,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 195,
+  "provider": "codex-cli",
+  "response_id": "019f6abb-916c-7c60-95e1-9cfed9e654fe",
+  "source": "import gradebook.analytics\n\n\ndef test_percentile_uses_hundred_based_indexing():\n    assert gradebook.analytics.percentile([10, 20, 30], 66) == 20",
+  "targeted_behavior": "Percentile index must use a denominator of 100; for three ordered scores at p=66, it selects index 1 rather than index 2."
+}

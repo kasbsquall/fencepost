@@ -1,0 +1,92 @@
+{
+  "answer": null,
+  "artifact_refs": [
+    "run.json",
+    "triage/contract/db66414d596970b4/attempt-01/attempt.json",
+    "probe/db66414d596970b4/result.json"
+  ],
+  "assessment": null,
+  "error": null,
+  "evidence": {
+    "adversarial_test": {
+      "generation_duration_seconds": 10.031000000002678,
+      "input_tokens": 13303,
+      "model": "gpt-5.6-terra",
+      "output_tokens": 138,
+      "provider": "codex-cli",
+      "response_id": "019f6ab6-4f9a-7e41-a67e-70d75c64c432",
+      "source": "import gradebook.analytics\n\n\ndef test_score_59_is_failing_grade():\n    assert gradebook.analytics.letter_grade(59) == \"F\"",
+      "targeted_behavior": "Distinguishes the altered lower boundary for a D grade at score 59."
+    },
+    "failing_assertion": {
+      "detail": "def test_score_59_is_failing_grade():\n>       assert gradebook.analytics.letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'D' == 'F'\n  \n  - F\n  + D",
+      "nodeid": ".fencepost-generated-0010.test_adversarial::test_score_59_is_failing_grade"
+    },
+    "mutant_execution": {
+      "duration_seconds": 0.7936008960004983,
+      "exit_code": 1,
+      "failure": {
+        "detail": "def test_score_59_is_failing_grade():\n>       assert gradebook.analytics.letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert 'D' == 'F'\n  \n  - F\n  + D",
+        "nodeid": ".fencepost-generated-0010.test_adversarial::test_score_59_is_failing_grade"
+      },
+      "status": "failed",
+      "stderr": "",
+      "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________________ test_score_59_is_failing_grade ________________________\n\n    def test_score_59_is_failing_grade():\n>       assert gradebook.analytics.letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0010-5qlvu1h8/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0010/test_adversarial.py::test_score_59_is_failing_grade\n1 failed in 0.03s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "original_execution": {
+      "duration_seconds": 0.7070169170001463,
+      "exit_code": 0,
+      "failure": null,
+      "status": "passed",
+      "stderr": "",
+      "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0010-5qlvu1h8/original/junit.xml ----\n1 passed in 0.02s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "triage_artifact_ref": "triage/contract/db66414d596970b4/attempt-01/attempt.json"
+  },
+  "grounding": {
+    "attribution_artifact_ref": "run.json",
+    "authored_lines": [
+      {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "commit_summary": "implement letter_grade",
+        "line": 19,
+        "path": "gradebook/analytics.py",
+        "text": "    elif score >= 60:"
+      }
+    ],
+    "end_line": 19,
+    "original_segment": "60",
+    "path": "gradebook/analytics.py",
+    "start_line": 19
+  },
+  "mutant_id": "db66414d596970b4",
+  "mutation": {
+    "mutated_segment": "59",
+    "original_segment": "60",
+    "unified_diff": "--- original\n+++ mutant\n@@ -4,12 +4,12 @@\n     A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n     \"\"\"\n     if score >= 90:\n-        return \"A\"\n+        return 'A'\n     elif score >= 80:\n-        return \"B\"\n+        return 'B'\n     elif score >= 70:\n-        return \"C\"\n-    elif score >= 60:\n-        return \"D\"\n+        return 'C'\n+    elif score >= 59:\n+        return 'D'\n     else:\n-        return \"F\"\n+        return 'F'"
+  },
+  "question": {
+    "generation_duration_seconds": 8.656999999999243,
+    "input_tokens": 13111,
+    "model": "gpt-5.6-terra",
+    "mutation_description": "Consider changing `60` to `59`.",
+    "output_tokens": 169,
+    "provider": "codex-cli",
+    "question_text": "In commit a0f7cba on 2026-07-07, you wrote line 19 of gradebook/analytics.py:\n19:     elif score >= 60:\n\nConsider changing `60` to `59`.\n\nWhat observable grading behavior changes for a score at the boundary just below 60 after the D-grade condition changes from `>= 60` to `>= 59`, and why?",
+    "response_id": "019f6ac1-6bed-7f20-9339-5b6dd8340393"
+  },
+  "status": "READY"
+}

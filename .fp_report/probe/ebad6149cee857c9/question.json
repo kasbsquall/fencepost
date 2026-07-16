@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.39100000000326,
+  "input_tokens": 13122,
+  "model": "gpt-5.6-terra",
+  "mutation_description": "Consider changing `k >= len(ordered)` to `k > len(ordered)`.",
+  "output_tokens": 146,
+  "provider": "codex-cli",
+  "question_text": "In commit c59d8e6 on 2026-07-09, you wrote line 39 of gradebook/analytics.py:\n39:     if k >= len(ordered):\n\nConsider changing `k >= len(ordered)` to `k > len(ordered)`.\n\nHow does changing the bounds check from `k >= len(ordered)` to `k > len(ordered)` affect `percentile` when `p` is 100 for a non-empty score list, and why?",
+  "response_id": "019f6ac2-fc28-75f3-8c52-cf66d996127a"
+}

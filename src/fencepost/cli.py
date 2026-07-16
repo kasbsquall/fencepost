@@ -101,7 +101,10 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--answers",
         type=Path,
-        help="JSON object mapping probe mutant IDs to typed student answers",
+        help=(
+            "JSON object mapping probe site IDs to typed student answers "
+            "(a member mutant ID is also accepted for compatibility)"
+        ),
     )
     return parser
 
@@ -263,7 +266,9 @@ def main(argv: list[str] | None = None) -> int:
         )
     if result.probe is not None:
         print(
-            f"probe: targets={result.probe.total_targets} "
+            f"probe: mutants={result.probe.total_targets} "
+            f"sites={result.probe.total_sites} "
+            f"accounted={result.probe.accounted_mutant_count} "
             f"questions={result.probe.question_count} "
             f"answers={result.probe.submitted_answer_count} "
             f"graded={result.probe.graded_answer_count} "

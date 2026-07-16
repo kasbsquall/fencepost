@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import html
 import json
 import re
 from pathlib import Path
@@ -19,7 +18,7 @@ from .probe import source_span_segment
 from .triage import SurvivorContext
 
 
-REPORT_SCHEMA_VERSION = "1.0"
+REPORT_SCHEMA_VERSION = "2.0"
 
 
 def _write_json(path: Path, value: object) -> None:
@@ -28,15 +27,6 @@ def _write_json(path: Path, value: object) -> None:
         json.dumps(json_value(value), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-
-
-def _markdown_text(value: object) -> str:
-    text = html.escape(str(value), quote=False).replace("\r", " ").replace("\n", " ")
-    return re.sub(r"([\\`*_{}\[\]()#+.!|>\-])", r"\\\1", text)
-
-
-def _markdown_code(value: str) -> str:
-    return "\n".join("    " + html.escape(line, quote=False) for line in value.splitlines())
 
 
 def build_report(
@@ -95,7 +85,7 @@ def build_report(
         repository_commit=commit,
         submitted_suite_status="PASSED",
         baseline_artifact_ref="baseline/result.json",
-        unverified_place_count=probe.total_targets,
+        unverified_place_count=probe.total_sites,
         question_count=probe.question_count,
         submitted_answer_count=probe.submitted_answer_count,
         graded_answer_count=probe.graded_answer_count,
@@ -131,92 +121,123 @@ def _rate(value: float | None) -> str:
     return "unavailable" if value is None else f"{value:.3f}"
 
 
+def _prose(value: object) -> str:
+    """Keep readable prose literal while removing carriage-return artifacts."""
+    return str(value).replace("\r\n", "\n").replace("\r", "\n")
+
+
+def _code_span(value: object) -> str:
+    text = _prose(value).replace("\n", " ")
+    longest = max((len(run) for run in re.findall(r"`+", text)), default=0)
+    delimiter = "`" * max(1, longest + 1)
+    padding = " " if text.startswith("`") or text.endswith("`") else ""
+    return f"{delimiter}{padding}{text}{padding}{delimiter}"
+
+
+def _source_block(authored_lines) -> str:
+    source = "\n".join(
+        f"{line.line:>4} | {line.text}" for line in authored_lines
+    )
+    longest = max((len(run) for run in re.findall(r"`+", source)), default=0)
+    fence = "`" * max(3, longest + 1)
+    return f"{fence}python\n{source}\n{fence}"
+
+
 def render_report_markdown(report: FencepostReport) -> str:
     subject = report.student_name or report.student_email
     lines = [
         "# Fencepost comprehension report",
         "",
-        _markdown_text(report.formative_notice),
+        _prose(report.formative_notice),
         "",
         "## Summary",
         "",
         (
-            f"{_markdown_text(subject)}'s submitted pytest suite passed. "
+            f"{_prose(subject)}'s submitted pytest suite passed. "
             f"Fencepost found {report.unverified_place_count} execution-grounded "
-            "places where understanding remains unverified."
+            "source sites where understanding remains unverified."
         ),
         "",
-        f"Analyzed repository commit: `{_markdown_text(report.repository_commit)}`.",
+        f"Analyzed repository commit: {_code_span(report.repository_commit)}.",
         "",
         "## Places to discuss",
         "",
     ]
     if not report.places:
-        lines.extend(["No CONTRACT-mode real gaps were available for questions.", ""])
-    for index, item in enumerate(report.places, start=1):
+        lines.extend(["No CONTRACT-mode real-gap sites were available for questions.", ""])
+
+    for index, site in enumerate(report.places, start=1):
         attribution = "; ".join(
-            f"line {line.line}: commit {line.commit[:7]} on {line.author_date} "
+            f"line {line.line}, commit {line.commit[:7]} on {line.author_date} "
             f"({line.commit_summary})"
-            for line in item.grounding.authored_lines
+            for line in site.grounding.authored_lines
         )
         lines.extend(
             [
-                f"### {index}. {_markdown_text(item.grounding.path)}:{item.grounding.start_line}",
+                f"### {index}. {site.grounding.path}:{site.grounding.start_line}",
                 "",
-                _markdown_text(attribution) + ".",
+                attribution + ".",
                 "",
                 "Authored source:",
                 "",
-                _markdown_code("\n".join(line.text for line in item.grounding.authored_lines)),
-                "",
-                (
-                    "Change considered: `"
-                    + _markdown_text(item.mutation.original_segment)
-                    + "` → `"
-                    + _markdown_text(item.mutation.mutated_segment)
-                    + "`."
-                ),
+                _source_block(site.grounding.authored_lines),
                 "",
             ]
         )
-        if item.question is not None:
-            lines.extend(["Question:", "", _markdown_text(item.question.question_text), ""])
+        if site.question is not None:
+            lines.extend(["Question:", "", _prose(site.question.question_text), ""])
         else:
-            lines.extend(["Question generation did not complete for this item.", ""])
-        failure = item.evidence.failing_assertion
+            lines.extend(["Question generation did not complete for this site.", ""])
+
         lines.extend(
             [
-                "Execution evidence:",
-                "",
                 (
-                    f"Original passed; mutant failed at `{_markdown_text(failure.nodeid)}`: "
-                    f"{_markdown_text(failure.message)}"
+                    f"Supporting execution evidence ({site.survivor_count} surviving "
+                    f"mutation{'s' if site.survivor_count != 1 else ''}):"
                 ),
-                "",
-                f"Artifact: `{_markdown_text(item.evidence.triage_artifact_ref)}`.",
                 "",
             ]
         )
-        if item.answer is None:
+        for evidence_index, mutant in enumerate(site.mutants, start=1):
+            failure = mutant.evidence.failing_assertion
+            lines.extend(
+                [
+                    (
+                        f"{evidence_index}. {_code_span(mutant.mutation.original_segment)} "
+                        f"-> {_code_span(mutant.mutation.mutated_segment)}"
+                    ),
+                    "",
+                    (
+                        "   Original passed; mutant failed at "
+                        f"{_code_span(failure.nodeid)}: {_prose(failure.message)}"
+                    ),
+                    "",
+                    f"   Artifact: {_code_span(mutant.evidence.triage_artifact_ref)}.",
+                    "",
+                ]
+            )
+
+        if site.answer is None:
             lines.extend(["No student answer was supplied in this run.", ""])
         else:
-            lines.extend(["Student answer:", "", _markdown_text(item.answer), ""])
-            if item.assessment is not None:
-                citation = item.assessment.citations[0]
+            lines.extend(["Student answer:", "", _prose(site.answer), ""])
+            if site.assessment is not None:
                 lines.extend(
                     [
-                        f"Formative assessment: **{_markdown_text(item.assessment.verdict)}**",
+                        f"Formative assessment: **{site.assessment.verdict}**",
                         "",
-                        _markdown_text(item.assessment.feedback),
+                        _prose(site.assessment.feedback),
                         "",
-                        (
-                            f"Evidence cited: `{_markdown_text(citation.nodeid)}` — "
-                            f"{_markdown_text(citation.message)} "
-                            f"(`{_markdown_text(citation.artifact_ref)}`)."
-                        ),
+                        "Evidence cited:",
                         "",
                     ]
                 )
+                for citation in site.assessment.citations:
+                    lines.append(
+                        f"- {_code_span(citation.nodeid)} -- {_prose(citation.message)} "
+                        f"({_code_span(citation.artifact_ref)})"
+                    )
+                lines.append("")
             else:
                 lines.extend(["The submitted answer could not be assessed in this run.", ""])
 
@@ -226,19 +247,19 @@ def render_report_markdown(report: FencepostReport) -> str:
     for item in report.deliberately_not_asked:
         lines.extend(
             [
-                f"### {_markdown_text(item.path)}:{item.line}",
+                f"### {item.path}:{item.line}",
                 "",
                 (
-                    f"`{_markdown_text(item.original_segment)}` → "
-                    f"`{_markdown_text(item.mutated_segment)}`"
+                    f"{_code_span(item.original_segment)} -> "
+                    f"{_code_span(item.mutated_segment)}"
                 ),
                 "",
-                _markdown_text(item.reason),
+                _prose(item.reason),
                 "",
                 (
                     "STRICT evidence retained: "
-                    f"`{_markdown_text(item.strict_failure_evidence.nodeid)}` — "
-                    f"{_markdown_text(item.strict_failure_evidence.message)}."
+                    f"{_code_span(item.strict_failure_evidence.nodeid)} -- "
+                    f"{_prose(item.strict_failure_evidence.message)}."
                 ),
                 "",
             ]
@@ -262,7 +283,7 @@ def render_report_markdown(report: FencepostReport) -> str:
                 f"{report.unresolved_count_contract} unresolved)."
             ),
             "",
-            "CONTRACT limitation: " + _markdown_text(report.contract_limitation),
+            "CONTRACT limitation: " + _prose(report.contract_limitation),
             "",
             "## Traceability",
             "",
@@ -270,6 +291,6 @@ def render_report_markdown(report: FencepostReport) -> str:
             "",
         ]
     )
-    lines.extend(f"- `{_markdown_text(path)}`" for path in report.traceability_artifacts)
+    lines.extend(f"- {_code_span(path)}" for path in report.traceability_artifacts)
     lines.append("")
     return "\n".join(lines)

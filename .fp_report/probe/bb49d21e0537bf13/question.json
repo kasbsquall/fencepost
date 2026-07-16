@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 12.343000000000757,
+  "input_tokens": 14690,
+  "model": "gpt-5.6-terra",
+  "mutation_description": "Consider changing `len(ordered) * p / 100` to `len(ordered) * p // 100`.",
+  "output_tokens": 318,
+  "provider": "codex-cli",
+  "question_text": "In commit dceec68 on 2026-07-09, you wrote line 38 of gradebook/analytics.py:\n38:     k = int(len(ordered) * p / 100)\n\nConsider changing `len(ordered) * p / 100` to `len(ordered) * p // 100`.\n\nAfter changing `len(ordered) * p / 100` to `len(ordered) * p // 100`, what percentile results break when that calculation has a fractional value, and why does applying `int()` afterward no longer preserve the original index?",
+  "response_id": "019f6ac2-a7ea-7261-8bf5-26299fd392ff"
+}

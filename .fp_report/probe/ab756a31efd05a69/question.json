@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.764999999999418,
+  "input_tokens": 13103,
+  "model": "gpt-5.6-terra",
+  "mutation_description": "Consider changing `0` to `-1`.",
+  "output_tokens": 232,
+  "provider": "codex-cli",
+  "question_text": "In commit 1fe8a85 on 2026-07-10, you wrote line 27 of gradebook/analytics.py:\n27:     if p < 0:\n\nConsider changing `0` to `-1`.\n\nAfter changing `if p < 0` to `if p < -1`, what observable behavior breaks for negative percentages closest to zero, and why?",
+  "response_id": "019f6ac1-e56e-75c0-ab56-4eb379547990"
+}

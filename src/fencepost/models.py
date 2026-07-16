@@ -321,21 +321,28 @@ class ProbeExecutionEvidence:
 
 
 @dataclass(frozen=True)
-class ProbeQuestionRequest:
+class ProbeMutantEvidence:
+    mutant_id: str
     mutant: MutantResult
     module_path: str
     qualified_function_name: str
     original_function: str
     mutated_function: str
-    grounding: ProbeGrounding
     mutation: ProbeMutation
     evidence: ProbeExecutionEvidence
+    artifact_refs: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class ProbeQuestionRequest:
+    site_id: str
+    grounding: ProbeGrounding
+    mutants: tuple[ProbeMutantEvidence, ...]
 
 
 @dataclass(frozen=True)
 class GeneratedProbeQuestion:
     question_text: str
-    mutation_description: str
     provider: str
     model: str | None
     response_id: str | None
@@ -346,11 +353,11 @@ class GeneratedProbeQuestion:
 
 @dataclass(frozen=True)
 class ProbeGradeRequest:
+    site_id: str
     question: GeneratedProbeQuestion
     answer: str
     grounding: ProbeGrounding
-    mutation: ProbeMutation
-    evidence: ProbeExecutionEvidence
+    mutants: tuple[ProbeMutantEvidence, ...]
 
 
 @dataclass(frozen=True)
@@ -386,11 +393,11 @@ class ProbeAssessment:
 
 @dataclass(frozen=True)
 class ProbeResult:
-    mutant_id: str
+    site_id: str
     status: ProbeStatus
     grounding: ProbeGrounding
-    mutation: ProbeMutation
-    evidence: ProbeExecutionEvidence
+    survivor_count: int
+    mutants: tuple[ProbeMutantEvidence, ...]
     question: GeneratedProbeQuestion | None
     answer: str | None
     assessment: ProbeAssessment | None
@@ -401,6 +408,8 @@ class ProbeResult:
 @dataclass(frozen=True)
 class ProbeSummary:
     total_targets: int
+    total_sites: int
+    accounted_mutant_count: int
     question_count: int
     submitted_answer_count: int
     graded_answer_count: int

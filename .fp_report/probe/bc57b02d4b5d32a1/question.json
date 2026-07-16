@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 15.75,
+  "input_tokens": 13120,
+  "model": "gpt-5.6-terra",
+  "mutation_description": "Consider changing `score >= 80` to `score > 80`.",
+  "output_tokens": 287,
+  "provider": "codex-cli",
+  "question_text": "In commit a0f7cba on 2026-07-07, you wrote line 15 of gradebook/analytics.py:\n15:     elif score >= 80:\n\nConsider changing `score >= 80` to `score > 80`.\n\nAfter changing `elif score >= 80` to `elif score > 80`, what observable behavior breaks at the B-grade lower boundary, and why does the next condition determine the returned grade?",
+  "response_id": "019f6ac0-4912-7f52-8aa9-3ae960abaae8"
+}

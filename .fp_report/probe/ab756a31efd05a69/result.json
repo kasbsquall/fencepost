@@ -1,0 +1,92 @@
+{
+  "answer": null,
+  "artifact_refs": [
+    "run.json",
+    "triage/contract/ab756a31efd05a69/attempt-01/attempt.json",
+    "probe/ab756a31efd05a69/result.json"
+  ],
+  "assessment": null,
+  "error": null,
+  "evidence": {
+    "adversarial_test": {
+      "generation_duration_seconds": 9.625,
+      "input_tokens": 13070,
+      "model": "gpt-5.6-terra",
+      "output_tokens": 153,
+      "provider": "codex-cli",
+      "response_id": "019f6ab6-dc1e-7501-b986-3e65c3759048",
+      "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_clamps_negative_one_to_zero():\n    assert gradebook.analytics.clamp_percent(-1) == 0",
+      "targeted_behavior": "Negative boundary: -1 must clamp to 0."
+    },
+    "failing_assertion": {
+      "detail": "def test_clamp_percent_clamps_negative_one_to_zero():\n>       assert gradebook.analytics.clamp_percent(-1) == 0\nE       AssertionError: assert -1 == 0\nE        +  where -1 = <function clamp_percent at 0x7aa2dae04040>(-1)\nE        +    where <function clamp_percent at 0x7aa2dae04040> = <module 'gradebook.analytics' from '/work/jobs/triage-0013-oegrhbew/mutant/tree/gradebook/analytics.py'>.clamp_percent\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0013-oegrhbew/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0013/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert -1 == 0\n +  where -1 = <function clamp_percent at 0x7aa2dae04040>(-1)\n +    where <function clamp_percent at 0x7aa2dae04040> = <module 'gradebook.analytics' from '/work/jobs/triage-0013-oegrhbew/mutant/tree/gradebook/analytics.py'>.clamp_percent\n +      where <module 'gradebook.analytics' from '/work/jobs/triage-0013-oegrhbew/mutant/tree/gradebook/analytics.py'> = gradebook.analytics",
+      "nodeid": ".fencepost-generated-0013.test_adversarial::test_clamp_percent_clamps_negative_one_to_zero"
+    },
+    "mutant_execution": {
+      "duration_seconds": 0.7685315050002828,
+      "exit_code": 1,
+      "failure": {
+        "detail": "def test_clamp_percent_clamps_negative_one_to_zero():\n>       assert gradebook.analytics.clamp_percent(-1) == 0\nE       AssertionError: assert -1 == 0\nE        +  where -1 = <function clamp_percent at 0x7aa2dae04040>(-1)\nE        +    where <function clamp_percent at 0x7aa2dae04040> = <module 'gradebook.analytics' from '/work/jobs/triage-0013-oegrhbew/mutant/tree/gradebook/analytics.py'>.clamp_percent\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0013-oegrhbew/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0013/test_adversarial.py:5: AssertionError",
+        "kind": "failure",
+        "message": "AssertionError: assert -1 == 0\n +  where -1 = <function clamp_percent at 0x7aa2dae04040>(-1)\n +    where <function clamp_percent at 0x7aa2dae04040> = <module 'gradebook.analytics' from '/work/jobs/triage-0013-oegrhbew/mutant/tree/gradebook/analytics.py'>.clamp_percent\n +      where <module 'gradebook.analytics' from '/work/jobs/triage-0013-oegrhbew/mutant/tree/gradebook/analytics.py'> = gradebook.analytics",
+        "nodeid": ".fencepost-generated-0013.test_adversarial::test_clamp_percent_clamps_negative_one_to_zero"
+      },
+      "status": "failed",
+      "stderr": "",
+      "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________ test_clamp_percent_clamps_negative_one_to_zero ________________\n\n    def test_clamp_percent_clamps_negative_one_to_zero():\n>       assert gradebook.analytics.clamp_percent(-1) == 0\nE       AssertionError: assert -1 == 0\nE        +  where -1 = <function clamp_percent at 0x7aa2dae04040>(-1)\nE        +    where <function clamp_percent at 0x7aa2dae04040> = <module 'gradebook.analytics' from '/work/jobs/triage-0013-oegrhbew/mutant/tree/gradebook/analytics.py'>.clamp_percent\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0013-oegrhbew/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0013/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0013-oegrhbew/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0013/test_adversarial.py::test_clamp_percent_clamps_negative_one_to_zero\n1 failed in 0.02s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "original_execution": {
+      "duration_seconds": 0.731130755999402,
+      "exit_code": 0,
+      "failure": null,
+      "status": "passed",
+      "stderr": "",
+      "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0013-oegrhbew/original/junit.xml ----\n1 passed in 0.01s\n",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "triage_artifact_ref": "triage/contract/ab756a31efd05a69/attempt-01/attempt.json"
+  },
+  "grounding": {
+    "attribution_artifact_ref": "run.json",
+    "authored_lines": [
+      {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "commit_summary": "clamp percentile inputs to the valid interval",
+        "line": 27,
+        "path": "gradebook/analytics.py",
+        "text": "    if p < 0:"
+      }
+    ],
+    "end_line": 27,
+    "original_segment": "0",
+    "path": "gradebook/analytics.py",
+    "start_line": 27
+  },
+  "mutant_id": "ab756a31efd05a69",
+  "mutation": {
+    "mutated_segment": "-1",
+    "original_segment": "0",
+    "unified_diff": "--- original\n+++ mutant\n@@ -1,6 +1,6 @@\n def clamp_percent(p):\n     \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n-    if p < 0:\n+    if p < -1:\n         p = 0\n     if p > 100:\n         p = 100"
+  },
+  "question": {
+    "generation_duration_seconds": 9.764999999999418,
+    "input_tokens": 13103,
+    "model": "gpt-5.6-terra",
+    "mutation_description": "Consider changing `0` to `-1`.",
+    "output_tokens": 232,
+    "provider": "codex-cli",
+    "question_text": "In commit 1fe8a85 on 2026-07-10, you wrote line 27 of gradebook/analytics.py:\n27:     if p < 0:\n\nConsider changing `0` to `-1`.\n\nAfter changing `if p < 0` to `if p < -1`, what observable behavior breaks for negative percentages closest to zero, and why?",
+    "response_id": "019f6ac1-e56e-75c0-ab56-4eb379547990"
+  },
+  "status": "READY"
+}
