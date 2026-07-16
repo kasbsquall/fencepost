@@ -464,6 +464,8 @@ class FunctionAssessment:
     survived_submitted_tests: int
     broken_mutants: int
     contract_real_gap_mutants: int
+    question_mutants: int
+    not_questioned_mutants: int
     question_site_count: int
     artifact_refs: tuple[str, ...]
 
@@ -529,6 +531,8 @@ class FencepostReport:
     pedagogically_not_asked: tuple[PedagogicallyWithheldTarget, ...]
     traceability_artifacts: tuple[str, ...]
     complete: bool
+    repository_path: str | None = None
+    run_started_at: str | None = None
 
 
 @dataclass(frozen=True)

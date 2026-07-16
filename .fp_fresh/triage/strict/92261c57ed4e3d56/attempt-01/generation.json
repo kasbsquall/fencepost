@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 0.0,
+  "input_tokens": null,
+  "model": null,
+  "output_tokens": null,
+  "provider": "fixture-fake",
+  "response_id": null,
+  "source": "from gradebook.analytics import clamp_percent\n\ndef test_upper_boundary_preserves_float_representation():\n    assert str(clamp_percent(100.0)) == '100.0'\n",
+  "targeted_behavior": "clamp_percent preserves plain upper-boundary float"
+}

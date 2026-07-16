@@ -1,0 +1,60 @@
+{
+  "contract_rules": null,
+  "mode": "STRICT",
+  "module_path": "gradebook.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "GtE",
+      "anchor": {
+        "column": 7,
+        "end_column": 14,
+        "end_line": 29,
+        "line": 29
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "Gt",
+      "id": "92261c57ed4e3d56",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "p > 100"
+    },
+    "execution": {
+      "duration_seconds": 0.9164028369999642,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0025-sx2yu5e4/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 7,
+      "end_column": 15,
+      "end_line": 27,
+      "line": 27
+    }
+  },
+  "mutated_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 0:\n        p = 0\n    if p >= 100:\n        p = 100\n    return p",
+  "original_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 0:\n        p = 0\n    if p > 100:\n        p = 100\n    return p",
+  "qualified_function_name": "clamp_percent",
+  "unified_diff": "--- original\n+++ mutant\n@@ -2,6 +2,6 @@\n     \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n     if p < 0:\n         p = 0\n-    if p > 100:\n+    if p >= 100:\n         p = 100\n     return p"
+}

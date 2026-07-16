@@ -1,0 +1,401 @@
+{
+  "answer": null,
+  "artifact_refs": [
+    "run.json",
+    "triage/contract/92261c57ed4e3d56/attempt-01/attempt.json",
+    "triage/contract/086eee6e74bf01f0/attempt-01/attempt.json",
+    "triage/contract/2e3d6e7b8bdac2ad/attempt-01/attempt.json",
+    "probe/sites/site-aabfe715a857de6d/result.json"
+  ],
+  "assessment": null,
+  "error": null,
+  "grounding": {
+    "attribution_artifact_ref": "run.json",
+    "authored_lines": [
+      {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "commit_summary": "clamp percentile inputs to the valid interval",
+        "line": 29,
+        "path": "gradebook/analytics.py",
+        "text": "    if p > 100:"
+      }
+    ],
+    "end_line": 29,
+    "original_segment": "    if p > 100:",
+    "path": "gradebook/analytics.py",
+    "start_line": 29
+  },
+  "mutants": [
+    {
+      "artifact_refs": [
+        "mutants/92261c57ed4e3d56/result.json",
+        "triage/contract/92261c57ed4e3d56/attempt-01/attempt.json",
+        "probe/sites/site-aabfe715a857de6d/mutants/92261c57ed4e3d56.json"
+      ],
+      "evidence": {
+        "adversarial_test": {
+          "generation_duration_seconds": 0.0,
+          "input_tokens": null,
+          "model": null,
+          "output_tokens": null,
+          "provider": "fixture-fake",
+          "response_id": null,
+          "source": "from gradebook.analytics import clamp_percent\n\ndef test_upper_boundary_preserves_float_representation():\n    assert str(clamp_percent(100.0)) == '100.0'\n",
+          "targeted_behavior": "clamp_percent preserves plain upper-boundary float"
+        },
+        "failing_assertion": {
+          "detail": "def test_upper_boundary_preserves_float_representation():\n>       assert str(clamp_percent(100.0)) == '100.0'\nE       AssertionError: assert '100' == '100.0'\nE         \nE         - 100.0\nE         ?    --\nE         + 100\n\n.fencepost-generated-0015/test_adversarial.py:4: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert '100' == '100.0'\n  \n  - 100.0\n  ?    --\n  + 100",
+          "nodeid": ".fencepost-generated-0015.test_adversarial::test_upper_boundary_preserves_float_representation"
+        },
+        "mutant_execution": {
+          "duration_seconds": 0.7969653139999764,
+          "exit_code": 1,
+          "failure": {
+            "detail": "def test_upper_boundary_preserves_float_representation():\n>       assert str(clamp_percent(100.0)) == '100.0'\nE       AssertionError: assert '100' == '100.0'\nE         \nE         - 100.0\nE         ?    --\nE         + 100\n\n.fencepost-generated-0015/test_adversarial.py:4: AssertionError",
+            "kind": "failure",
+            "message": "AssertionError: assert '100' == '100.0'\n  \n  - 100.0\n  ?    --\n  + 100",
+            "nodeid": ".fencepost-generated-0015.test_adversarial::test_upper_boundary_preserves_float_representation"
+          },
+          "status": "failed",
+          "stderr": "",
+          "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________ test_upper_boundary_preserves_float_representation ______________\n\n    def test_upper_boundary_preserves_float_representation():\n>       assert str(clamp_percent(100.0)) == '100.0'\nE       AssertionError: assert '100' == '100.0'\nE         \nE         - 100.0\nE         ?    --\nE         + 100\n\n.fencepost-generated-0015/test_adversarial.py:4: AssertionError\n----- generated xml file: /work/jobs/triage-0015-_8xc6cfm/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0015/test_adversarial.py::test_upper_boundary_preserves_float_representation\n1 failed in 0.02s\n",
+          "tests_collected": 1,
+          "tests_skipped": 0,
+          "timed_out": false
+        },
+        "original_execution": {
+          "duration_seconds": 0.7234367849999899,
+          "exit_code": 0,
+          "failure": null,
+          "status": "passed",
+          "stderr": "",
+          "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0015-_8xc6cfm/original/junit.xml ----\n1 passed in 0.01s\n",
+          "tests_collected": 1,
+          "tests_skipped": 0,
+          "timed_out": false
+        },
+        "triage_artifact_ref": "triage/contract/92261c57ed4e3d56/attempt-01/attempt.json"
+      },
+      "module_path": "gradebook.analytics",
+      "mutant": {
+        "candidate": {
+          "after": "GtE",
+          "anchor": {
+            "column": 7,
+            "end_column": 14,
+            "end_line": 29,
+            "line": 29
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "test",
+              "index": null
+            }
+          ],
+          "before": "Gt",
+          "id": "92261c57ed4e3d56",
+          "kind": "compare",
+          "parameters": [
+            [
+              "op_index",
+              "0"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "p > 100"
+        },
+        "execution": {
+          "duration_seconds": 0.9164028369999642,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0025-sx2yu5e4/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 7,
+          "end_column": 15,
+          "end_line": 27,
+          "line": 27
+        }
+      },
+      "mutant_id": "92261c57ed4e3d56",
+      "mutated_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 0:\n        p = 0\n    if p >= 100:\n        p = 100\n    return p",
+      "mutation": {
+        "mutated_segment": "p >= 100",
+        "original_segment": "p > 100",
+        "unified_diff": "--- original\n+++ mutant\n@@ -2,6 +2,6 @@\n     \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n     if p < 0:\n         p = 0\n-    if p > 100:\n+    if p >= 100:\n         p = 100\n     return p"
+      },
+      "original_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 0:\n        p = 0\n    if p > 100:\n        p = 100\n    return p",
+      "qualified_function_name": "clamp_percent",
+      "submitted_suite_artifact_ref": "mutants/92261c57ed4e3d56/result.json",
+      "submitted_suite_tests_passed": 10
+    },
+    {
+      "artifact_refs": [
+        "mutants/086eee6e74bf01f0/result.json",
+        "triage/contract/086eee6e74bf01f0/attempt-01/attempt.json",
+        "probe/sites/site-aabfe715a857de6d/mutants/086eee6e74bf01f0.json"
+      ],
+      "evidence": {
+        "adversarial_test": {
+          "generation_duration_seconds": 0.0,
+          "input_tokens": null,
+          "model": null,
+          "output_tokens": null,
+          "provider": "fixture-fake",
+          "response_id": null,
+          "source": "from gradebook.analytics import clamp_percent, percentile\n\ndef test_upper_numeric_boundaries():\n    assert clamp_percent(99.5) == 99.5\n    assert percentile([30, 10, 20], 66) == 20\n",
+          "targeted_behavior": "upper clamp and percentile denominator boundaries"
+        },
+        "failing_assertion": {
+          "detail": "def test_upper_numeric_boundaries():\n>       assert clamp_percent(99.5) == 99.5\nE       assert 100 == 99.5\nE        +  where 100 = clamp_percent(99.5)\n\n.fencepost-generated-0016/test_adversarial.py:4: AssertionError",
+          "kind": "failure",
+          "message": "assert 100 == 99.5\n +  where 100 = clamp_percent(99.5)",
+          "nodeid": ".fencepost-generated-0016.test_adversarial::test_upper_numeric_boundaries"
+        },
+        "mutant_execution": {
+          "duration_seconds": 0.9172074559999146,
+          "exit_code": 1,
+          "failure": {
+            "detail": "def test_upper_numeric_boundaries():\n>       assert clamp_percent(99.5) == 99.5\nE       assert 100 == 99.5\nE        +  where 100 = clamp_percent(99.5)\n\n.fencepost-generated-0016/test_adversarial.py:4: AssertionError",
+            "kind": "failure",
+            "message": "assert 100 == 99.5\n +  where 100 = clamp_percent(99.5)",
+            "nodeid": ".fencepost-generated-0016.test_adversarial::test_upper_numeric_boundaries"
+          },
+          "status": "failed",
+          "stderr": "",
+          "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________________ test_upper_numeric_boundaries _________________________\n\n    def test_upper_numeric_boundaries():\n>       assert clamp_percent(99.5) == 99.5\nE       assert 100 == 99.5\nE        +  where 100 = clamp_percent(99.5)\n\n.fencepost-generated-0016/test_adversarial.py:4: AssertionError\n----- generated xml file: /work/jobs/triage-0016-wjcs6o2l/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0016/test_adversarial.py::test_upper_numeric_boundaries\n1 failed in 0.03s\n",
+          "tests_collected": 1,
+          "tests_skipped": 0,
+          "timed_out": false
+        },
+        "original_execution": {
+          "duration_seconds": 0.7191404970000121,
+          "exit_code": 0,
+          "failure": null,
+          "status": "passed",
+          "stderr": "",
+          "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0016-wjcs6o2l/original/junit.xml ----\n1 passed in 0.01s\n",
+          "tests_collected": 1,
+          "tests_skipped": 0,
+          "timed_out": false
+        },
+        "triage_artifact_ref": "triage/contract/086eee6e74bf01f0/attempt-01/attempt.json"
+      },
+      "module_path": "gradebook.analytics",
+      "mutant": {
+        "candidate": {
+          "after": "99",
+          "anchor": {
+            "column": 11,
+            "end_column": 14,
+            "end_line": 29,
+            "line": 29
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "100",
+          "id": "086eee6e74bf01f0",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "-1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "100"
+        },
+        "execution": {
+          "duration_seconds": 0.9322979759999726,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0026-1ryv5el2/junit.xml ------------\n10 passed in 0.01s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 11,
+          "end_column": 13,
+          "end_line": 27,
+          "line": 27
+        }
+      },
+      "mutant_id": "086eee6e74bf01f0",
+      "mutated_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 0:\n        p = 0\n    if p > 99:\n        p = 100\n    return p",
+      "mutation": {
+        "mutated_segment": "99",
+        "original_segment": "100",
+        "unified_diff": "--- original\n+++ mutant\n@@ -2,6 +2,6 @@\n     \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n     if p < 0:\n         p = 0\n-    if p > 100:\n+    if p > 99:\n         p = 100\n     return p"
+      },
+      "original_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 0:\n        p = 0\n    if p > 100:\n        p = 100\n    return p",
+      "qualified_function_name": "clamp_percent",
+      "submitted_suite_artifact_ref": "mutants/086eee6e74bf01f0/result.json",
+      "submitted_suite_tests_passed": 10
+    },
+    {
+      "artifact_refs": [
+        "mutants/2e3d6e7b8bdac2ad/result.json",
+        "triage/contract/2e3d6e7b8bdac2ad/attempt-01/attempt.json",
+        "probe/sites/site-aabfe715a857de6d/mutants/2e3d6e7b8bdac2ad.json"
+      ],
+      "evidence": {
+        "adversarial_test": {
+          "generation_duration_seconds": 0.0,
+          "input_tokens": null,
+          "model": null,
+          "output_tokens": null,
+          "provider": "fixture-fake",
+          "response_id": null,
+          "source": "from gradebook.analytics import clamp_percent\n\ndef test_clamp_percent_clamps_one_hundred_one():\n    assert clamp_percent(101) == 100\n",
+          "targeted_behavior": "clamp_percent upper comparison literal shifted up"
+        },
+        "failing_assertion": {
+          "detail": "def test_clamp_percent_clamps_one_hundred_one():\n>       assert clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = clamp_percent(101)\n\n.fencepost-generated-0017/test_adversarial.py:4: AssertionError",
+          "kind": "failure",
+          "message": "assert 101 == 100\n +  where 101 = clamp_percent(101)",
+          "nodeid": ".fencepost-generated-0017.test_adversarial::test_clamp_percent_clamps_one_hundred_one"
+        },
+        "mutant_execution": {
+          "duration_seconds": 0.9151493140000184,
+          "exit_code": 1,
+          "failure": {
+            "detail": "def test_clamp_percent_clamps_one_hundred_one():\n>       assert clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = clamp_percent(101)\n\n.fencepost-generated-0017/test_adversarial.py:4: AssertionError",
+            "kind": "failure",
+            "message": "assert 101 == 100\n +  where 101 = clamp_percent(101)",
+            "nodeid": ".fencepost-generated-0017.test_adversarial::test_clamp_percent_clamps_one_hundred_one"
+          },
+          "status": "failed",
+          "stderr": "",
+          "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________________ test_clamp_percent_clamps_one_hundred_one ___________________\n\n    def test_clamp_percent_clamps_one_hundred_one():\n>       assert clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = clamp_percent(101)\n\n.fencepost-generated-0017/test_adversarial.py:4: AssertionError\n----- generated xml file: /work/jobs/triage-0017-eu6q6h13/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0017/test_adversarial.py::test_clamp_percent_clamps_one_hundred_one\n1 failed in 0.03s\n",
+          "tests_collected": 1,
+          "tests_skipped": 0,
+          "timed_out": false
+        },
+        "original_execution": {
+          "duration_seconds": 0.7589625929999784,
+          "exit_code": 0,
+          "failure": null,
+          "status": "passed",
+          "stderr": "",
+          "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0017-eu6q6h13/original/junit.xml ----\n1 passed in 0.01s\n",
+          "tests_collected": 1,
+          "tests_skipped": 0,
+          "timed_out": false
+        },
+        "triage_artifact_ref": "triage/contract/2e3d6e7b8bdac2ad/attempt-01/attempt.json"
+      },
+      "module_path": "gradebook.analytics",
+      "mutant": {
+        "candidate": {
+          "after": "101",
+          "anchor": {
+            "column": 11,
+            "end_column": 14,
+            "end_line": 29,
+            "line": 29
+          },
+          "ast_path": [
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "body",
+              "index": 2
+            },
+            {
+              "field": "test",
+              "index": null
+            },
+            {
+              "field": "comparators",
+              "index": 0
+            }
+          ],
+          "before": "100",
+          "id": "2e3d6e7b8bdac2ad",
+          "kind": "numeric_boundary",
+          "parameters": [
+            [
+              "direction",
+              "1"
+            ]
+          ],
+          "path": "gradebook/analytics.py",
+          "source_segment": "100"
+        },
+        "execution": {
+          "duration_seconds": 0.9518276389999301,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0027-sluhtfgs/junit.xml ------------\n10 passed in 0.02s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 11,
+          "end_column": 14,
+          "end_line": 27,
+          "line": 27
+        }
+      },
+      "mutant_id": "2e3d6e7b8bdac2ad",
+      "mutated_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 0:\n        p = 0\n    if p > 101:\n        p = 100\n    return p",
+      "mutation": {
+        "mutated_segment": "101",
+        "original_segment": "100",
+        "unified_diff": "--- original\n+++ mutant\n@@ -2,6 +2,6 @@\n     \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n     if p < 0:\n         p = 0\n-    if p > 100:\n+    if p > 101:\n         p = 100\n     return p"
+      },
+      "original_function": "def clamp_percent(p):\n    \"\"\"Clamp a percentage to the inclusive 0-100 interval.\"\"\"\n    if p < 0:\n        p = 0\n    if p > 100:\n        p = 100\n    return p",
+      "qualified_function_name": "clamp_percent",
+      "submitted_suite_artifact_ref": "mutants/2e3d6e7b8bdac2ad/result.json",
+      "submitted_suite_tests_passed": 10
+    }
+  ],
+  "question": {
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fixture-fake",
+    "question_text": "What result changes at this boundary, and why?",
+    "response_id": null
+  },
+  "site_id": "site-aabfe715a857de6d",
+  "status": "READY",
+  "survivor_count": 3
+}

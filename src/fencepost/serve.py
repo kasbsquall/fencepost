@@ -15,6 +15,7 @@ from .ui import (
     ReportUiError,
     load_report,
     render_error_document,
+    render_landing_document,
     render_method_document,
     render_report_document,
 )
@@ -24,11 +25,16 @@ from .ui import resolve_report_path
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="fencepost serve",
-        description="Open a read-only local instructor view for a Fencepost report v2 artifact.",
+        description="Open the local home, instructor report, and method views for a Fencepost artifact.",
     )
     parser.add_argument("artifact_dir", type=Path, help="Fencepost run artifact directory")
     parser.add_argument("--host", default="127.0.0.1", help="Bind host (default: 127.0.0.1)")
     parser.add_argument("--port", type=int, default=8765, help="Bind port (default: 8765)")
+    parser.add_argument(
+        "--probe-url",
+        default="http://127.0.0.1:8766/",
+        help="Student probe link shown on the home page (default: http://127.0.0.1:8766/)",
+    )
     parser.add_argument(
         "--no-open",
         action="store_true",
@@ -50,7 +56,12 @@ def _security_headers(handler: BaseHTTPRequestHandler) -> None:
 
 
 def _handler(
-    *, page: bytes, method_page: bytes, stylesheet: bytes, report_json: bytes | None
+    *,
+    home_page: bytes,
+    report_page: bytes,
+    method_page: bytes,
+    stylesheet: bytes,
+    report_json: bytes | None,
 ) -> type[BaseHTTPRequestHandler]:
     class ReportHandler(BaseHTTPRequestHandler):
         server_version = "FencepostReport/2.0"
@@ -67,7 +78,9 @@ def _handler(
         def do_GET(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
             path = urlsplit(self.path).path
             if path in {"/", "/index.html"}:
-                self._respond(200, "text/html; charset=utf-8", page)
+                self._respond(200, "text/html; charset=utf-8", home_page)
+            elif path in {"/report", "/report/"}:
+                self._respond(200, "text/html; charset=utf-8", report_page)
             elif path in {"/method", "/method/"}:
                 self._respond(200, "text/html; charset=utf-8", method_page)
             elif path == "/assets/ledger.css":
@@ -87,25 +100,36 @@ def _handler(
 
 
 def create_server(
-    artifact_dir: Path, *, host: str = "127.0.0.1", port: int = 8765
+    artifact_dir: Path,
+    *,
+    host: str = "127.0.0.1",
+    port: int = 8765,
+    probe_url: str = "http://127.0.0.1:8766/",
 ) -> ThreadingHTTPServer:
-    """Create a server that exposes only the rendered page, CSS, and report JSON."""
+    """Create a server exposing only run views, CSS, and read-only report JSON."""
     report_json = None
     try:
         report_path = resolve_report_path(artifact_dir)
         report = load_report(report_path)
     except ReportUiError as exc:
-        page_text = render_error_document(str(exc))
-        method_text = page_text
+        home_text = render_error_document(str(exc))
+        report_text = home_text
+        method_text = home_text
     else:
-        page_text = render_report_document(report)
+        home_text = render_landing_document(
+            report,
+            artifact_dir=artifact_dir.expanduser().resolve(),
+            probe_url=probe_url,
+        )
+        report_text = render_report_document(report)
         method_text = render_method_document(report)
         report_json = (
             json.dumps(report, indent=2, sort_keys=True) + "\n"
         ).encode("utf-8")
     stylesheet = files("fencepost.ui").joinpath("ledger.css").read_bytes()
     handler = _handler(
-        page=page_text.encode("utf-8"),
+        home_page=home_text.encode("utf-8"),
+        report_page=report_text.encode("utf-8"),
         method_page=method_text.encode("utf-8"),
         stylesheet=stylesheet,
         report_json=report_json,
@@ -118,18 +142,21 @@ def serve_artifact(
     *,
     host: str = "127.0.0.1",
     port: int = 8765,
+    probe_url: str = "http://127.0.0.1:8766/",
     open_browser: bool = True,
 ) -> int:
     """Serve until interrupted; no artifact path is ever opened for writing."""
     try:
-        server = create_server(artifact_dir, host=host, port=port)
+        server = create_server(
+            artifact_dir, host=host, port=port, probe_url=probe_url
+        )
     except OSError as exc:
         print(f"fencepost serve: cannot bind {host}:{port}: {exc}", file=sys.stderr)
         return 2
     actual_host, actual_port = server.server_address[:2]
     browser_host = "127.0.0.1" if actual_host in {"0.0.0.0", "::"} else actual_host
     url = f"http://{browser_host}:{actual_port}/"
-    print(f"Fencepost report: {url}")
+    print(f"Fencepost run home: {url}")
     print("Read-only local view. Press Ctrl+C to stop.")
     if open_browser:
         webbrowser.open(url)
@@ -148,6 +175,7 @@ def main(argv: list[str] | None = None) -> int:
         args.artifact_dir,
         host=args.host,
         port=args.port,
+        probe_url=args.probe_url,
         open_browser=not args.no_open,
     )
 

@@ -1,0 +1,45 @@
+{
+  "candidate": {
+    "after": "None",
+    "anchor": {
+      "column": 4,
+      "end_column": 21,
+      "end_line": 50,
+      "line": 50
+    },
+    "ast_path": [
+      {
+        "field": "body",
+        "index": 4
+      },
+      {
+        "field": "body",
+        "index": 3
+      }
+    ],
+    "before": "higher + 1",
+    "id": "dc1c21e77d6e08da",
+    "kind": "return_none",
+    "parameters": [],
+    "path": "gradebook/analytics.py",
+    "source_segment": "return higher + 1"
+  },
+  "execution": {
+    "duration_seconds": 1.0780593729999737,
+    "exit_code": 1,
+    "failing_tests": [
+      "tests.test_analytics::test_rank_middle",
+      "tests.test_analytics::test_rank_highest"
+    ],
+    "status": "killed",
+    "stderr": "",
+    "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......FF.                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert None == 2\nE        +  where None = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n______________________________ test_rank_highest _______________________________\n\n    def test_rank_highest():\n>       assert rank([90, 80, 70], 90) == 1\nE       assert None == 1\nE        +  where None = rank([90, 80, 70], 90)\n\ntests/test_analytics.py:39: AssertionError\n------------ generated xml file: /work/jobs/0043-fbj5t03j/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert None == 2\nFAILED tests/test_analytics.py::test_rank_highest - assert None == 1\n2 failed, 8 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "generated_anchor": {
+    "column": 4,
+    "end_column": 15,
+    "end_line": 46,
+    "line": 46
+  }
+}

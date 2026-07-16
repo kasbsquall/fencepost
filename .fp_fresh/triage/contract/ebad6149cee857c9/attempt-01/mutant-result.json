@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.916448005999996,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_percentile_one_hundred_returns_maximum():\n>       assert percentile([10, 20, 30], 100) == 30\n\n.fencepost-generated-0019/test_adversarial.py:4: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [10, 20, 30], p = 100\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n        k = int(len(ordered) * p / 100)\n        if k > len(ordered):\n            k = len(ordered) - 1\n>       return ordered[k]\nE       IndexError: list index out of range\n\ngradebook/analytics.py:38: IndexError",
+    "kind": "failure",
+    "message": "IndexError: list index out of range",
+    "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_one_hundred_returns_maximum"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_percentile_one_hundred_returns_maximum __________________\n\n    def test_percentile_one_hundred_returns_maximum():\n>       assert percentile([10, 20, 30], 100) == 30\n\n.fencepost-generated-0019/test_adversarial.py:4: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nscores = [10, 20, 30], p = 100\n\n    def percentile(scores, p):\n        \"\"\"Return the p-th percentile of scores (p between 0 and 100).\"\"\"\n        p = clamp_percent(p)\n        ordered = sorted(scores)\n        k = int(len(ordered) * p / 100)\n        if k > len(ordered):\n            k = len(ordered) - 1\n>       return ordered[k]\nE       IndexError: list index out of range\n\ngradebook/analytics.py:38: IndexError\n----- generated xml file: /work/jobs/triage-0019-fxgg_74y/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_one_hundred_returns_maximum\n1 failed in 0.03s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

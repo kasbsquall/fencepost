@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 0.0,
+  "input_tokens": null,
+  "model": null,
+  "output_tokens": null,
+  "provider": "fixture-fake",
+  "response_id": null,
+  "source": "import gradebook.analytics as analytics\n\ndef test_percentile_without_its_clamp(monkeypatch):\n    monkeypatch.setattr(analytics, 'clamp_percent', float)\n    assert analytics.percentile([10, 20, 30, 40], -12.5) == 10\n",
+  "targeted_behavior": "intentionally invalid attempt that replaces the program clamp"
+}

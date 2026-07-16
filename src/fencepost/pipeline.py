@@ -9,6 +9,7 @@ import tempfile
 import time
 from collections import Counter
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Mapping
 
@@ -293,6 +294,7 @@ def run_analysis(
     The sandbox contains only the Python standard library, pytest, and coverage.
     """
     started = time.monotonic()
+    run_started_at = datetime.now(timezone.utc).isoformat()
     if triage_config is not None and adversarial_generator is None:
         raise PipelineError("triage configuration requires an adversarial generator")
     if adversarial_generator is not None and triage_config is None:
@@ -321,6 +323,8 @@ def run_analysis(
         artifact_dir / "run.json",
         {
             "commit": commit,
+            "repository_path": str(repo),
+            "run_started_at": run_started_at,
             "student_email": config.student_email,
             "image": config.image,
             "mutant_workers": workers,
@@ -562,6 +566,8 @@ def run_analysis(
                 mutant_results=mutant_results,
                 function_by_mutant_id=function_by_candidate,
                 artifact_dir=artifact_dir,
+                repository_path=str(repo),
+                run_started_at=run_started_at,
             )
 
     result = AnalysisResult(

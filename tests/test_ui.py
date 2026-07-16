@@ -5,7 +5,7 @@ import re
 import threading
 from html.parser import HTMLParser
 from urllib.error import HTTPError
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 from fencepost.probe import probe_site_id, run_probes
 from fencepost.report import build_report
@@ -29,6 +29,10 @@ class _DocumentFacts(HTMLParser):
 
     def handle_starttag(self, tag, attrs) -> None:
         self.tags.append(tag)
+        self.text.append(" ")
+
+    def handle_endtag(self, tag) -> None:
+        self.text.append(" ")
 
     def handle_data(self, data) -> None:
         self.text.append(data)
@@ -118,6 +122,87 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
     assert parsed.tags.count("details") >= 2
     assert "script" not in parsed.tags
     assert "https://" not in document
+
+    chart_report = json.loads(json.dumps(report))
+    chart_report["mutation_summary"] = {
+        "total_mutants": 51,
+        "killed_by_submitted_tests": 30,
+        "survived_submitted_tests": 21,
+        "broken_mutants": 0,
+    }
+    chart_report["question_mutant_count"] = 20
+    chart_report["not_questioned_mutant_count"] = 1
+    chart_report["function_assessments"] = [
+        {
+            "path": "pkg/analytics.py",
+            "qualified_function_name": "letter_grade",
+            "status": "GAPS_FOUND",
+            "total_mutants": 20,
+            "killed_by_submitted_tests": 8,
+            "survived_submitted_tests": 12,
+            "broken_mutants": 0,
+            "contract_real_gap_mutants": 12,
+            "question_mutants": 12,
+            "not_questioned_mutants": 0,
+            "question_site_count": 4,
+            "artifact_refs": [],
+        },
+        {
+            "path": "pkg/analytics.py",
+            "qualified_function_name": "rank",
+            "status": "CLEAN",
+            "total_mutants": 10,
+            "killed_by_submitted_tests": 10,
+            "survived_submitted_tests": 0,
+            "broken_mutants": 0,
+            "contract_real_gap_mutants": 0,
+            "question_mutants": 0,
+            "not_questioned_mutants": 0,
+            "question_site_count": 0,
+            "artifact_refs": [],
+        },
+        {
+            "path": "pkg/analytics.py",
+            "qualified_function_name": "top_n",
+            "status": "CLEAN",
+            "total_mutants": 4,
+            "killed_by_submitted_tests": 4,
+            "survived_submitted_tests": 0,
+            "broken_mutants": 0,
+            "contract_real_gap_mutants": 0,
+            "question_mutants": 0,
+            "not_questioned_mutants": 0,
+            "question_site_count": 0,
+            "artifact_refs": [],
+        },
+    ]
+    chart_document = render_report_document(chart_report)
+    chart_facts = _DocumentFacts()
+    chart_facts.feed(chart_document)
+    assert re.search(r"\b30\s+caught\b", chart_facts.visible_text)
+    assert re.search(r"\b20\s+to\s+discuss\b", chart_facts.visible_text)
+    assert re.search(r"\b1\s+withheld\b", chart_facts.visible_text)
+    overview = chart_document.split('<section class="mutation-flow"', 1)[1].split(
+        "</section>", 1
+    )[0]
+    assert overview.index("flow-caught") < overview.index("flow-discuss")
+    assert overview.index("flow-discuss") < overview.index("flow-withheld")
+    assert 'colspan="30"' in overview
+    assert 'colspan="20"' in overview
+    assert 'colspan="1"' in overview
+    function_flows = chart_document.split(
+        '<div class="function-flow-list"', 1
+    )[1]
+    assert function_flows.index("rank") < function_flows.index("letter_grade")
+    assert function_flows.index("top_n") < function_flows.index("letter_grade")
+
+    missing_segment = json.loads(json.dumps(chart_report))
+    del missing_segment["not_questioned_mutant_count"]
+    missing_document = render_report_document(missing_segment)
+    missing_overview = missing_document.split(
+        '<section class="mutation-flow"', 1
+    )[1].split("</section>", 1)[0]
+    assert "flow-withheld" not in missing_overview
 
     method = render_method_document(report)
     method_facts = _DocumentFacts()
@@ -222,7 +307,7 @@ def test_missing_and_old_reports_render_clear_full_page_errors(tmp_path) -> None
     assert "declares '1.0'" in old_facts.visible_text
 
 
-def test_local_server_exposes_only_report_page_css_and_read_only_json(tmp_path) -> None:
+def test_local_server_exposes_only_known_read_only_routes(tmp_path) -> None:
     report_path = _fixture_report(tmp_path)
     expected_report = json.loads(report_path.read_text(encoding="utf-8"))
     server = create_server(tmp_path, port=0)
@@ -239,7 +324,18 @@ def test_local_server_exposes_only_report_page_css_and_read_only_json(tmp_path) 
             assert "Diego Ramos" in page
             page_facts = _DocumentFacts()
             page_facts.feed(page)
-            _assert_headline_facts(expected_report, page_facts.visible_text)
+            assert "Choose where you enter the conversation." in page_facts.visible_text
+            assert "Instructor view" in page_facts.visible_text
+            assert "Student view" in page_facts.visible_text
+            assert 'href="/report"' in page
+            assert 'href="/method"' in page
+            assert 'href="http://127.0.0.1:8766/"' in page
+        with urlopen(base + "/report", timeout=3) as response:
+            assert response.status == 200
+            report_page = response.read().decode("utf-8")
+            report_facts = _DocumentFacts()
+            report_facts.feed(report_page)
+            _assert_headline_facts(expected_report, report_facts.visible_text)
         with urlopen(base + "/method", timeout=3) as response:
             assert response.status == 200
             method = response.read().decode("utf-8")
@@ -247,15 +343,33 @@ def test_local_server_exposes_only_report_page_css_and_read_only_json(tmp_path) 
             assert "CONTRACT equivalent rate" in method
         with urlopen(base + "/assets/ledger.css", timeout=3) as response:
             assert response.status == 200
-            assert "#b24a3c" in response.read().decode("utf-8").casefold()
+            stylesheet = response.read().decode("utf-8").casefold()
+            assert "#b24a3c" in stylesheet
+            assert "border-spacing: 2px 0" in stylesheet
         with urlopen(base + "/report.json", timeout=3) as response:
             assert json.load(response) == expected_report
+        for unknown_path in (
+            "/baseline/result.json",
+            "/run.json",
+            "/summary.json",
+            "/probe/summary.json",
+            "/answers.json",
+        ):
+            try:
+                urlopen(base + unknown_path, timeout=3)
+            except HTTPError as exc:
+                assert exc.code == 404
+            else:
+                raise AssertionError(
+                    f"the report server exposed arbitrary artifact path {unknown_path}"
+                )
         try:
-            urlopen(base + "/baseline/result.json", timeout=3)
+            urlopen(Request(base + "/report.json", data=b"{}", method="POST"), timeout=3)
         except HTTPError as exc:
-            assert exc.code == 404
+            assert exc.code == 501
         else:
-            raise AssertionError("the report server exposed an arbitrary artifact path")
+            raise AssertionError("the read-only report server accepted a write")
+        assert json.loads(report_path.read_text(encoding="utf-8")) == expected_report
     finally:
         server.shutdown()
         server.server_close()
