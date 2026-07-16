@@ -1,0 +1,126 @@
+{
+  "accounted_mutant_count": 1,
+  "agent": "FixtureComprehensionProbeAgent",
+  "call_count": 0,
+  "complete": true,
+  "eligible_target_count": 0,
+  "failed_grade_count": 0,
+  "failed_question_count": 0,
+  "graded_answer_count": 0,
+  "model": null,
+  "model_wall_clock_seconds": 0.0,
+  "pedagogically_withheld": [
+    {
+      "mutant": {
+        "artifact_refs": [
+          "mutants/contract-gap/result.json",
+          "triage/contract/contract-gap/attempt-01/attempt.json",
+          "probe/sites/site-f9113754b1ff1f00/mutants/contract-gap.json"
+        ],
+        "evidence": {
+          "adversarial_test": {
+            "generation_duration_seconds": 0.0,
+            "input_tokens": null,
+            "model": null,
+            "output_tokens": null,
+            "provider": "fixture",
+            "response_id": null,
+            "source": "from pkg.analytics import f\n\ndef test_boolean_as_number():\n    assert f(False) is False\n",
+            "targeted_behavior": "boolean numeric coercion"
+          },
+          "failing_assertion": {
+            "detail": "AssertionError",
+            "kind": "failure",
+            "message": "assert False",
+            "nodeid": "test_probe.py::test_boundary"
+          },
+          "mutant_execution": {
+            "duration_seconds": 0.01,
+            "exit_code": 1,
+            "failure": {
+              "detail": "AssertionError",
+              "kind": "failure",
+              "message": "assert False",
+              "nodeid": "test_probe.py::test_boundary"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original_execution": {
+            "duration_seconds": 0.01,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": "",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "triage_artifact_ref": "triage/contract/contract-gap/attempt-01/attempt.json"
+        },
+        "module_path": "pkg.analytics",
+        "mutant": {
+          "candidate": {
+            "after": "Gt",
+            "anchor": {
+              "column": 11,
+              "end_column": 21,
+              "end_line": 2,
+              "line": 2
+            },
+            "ast_path": [],
+            "before": "GtE",
+            "id": "contract-gap",
+            "kind": "compare",
+            "parameters": [],
+            "path": "pkg/analytics.py",
+            "source_segment": "value >= 1"
+          },
+          "execution": {
+            "duration_seconds": 0.1,
+            "exit_code": 0,
+            "failing_tests": [],
+            "status": "survived",
+            "stderr": "",
+            "stdout": ".......... [100%]\n10 passed in 0.10s\n",
+            "timed_out": false
+          },
+          "generated_anchor": {
+            "column": 11,
+            "end_column": 20,
+            "end_line": 2,
+            "line": 2
+          }
+        },
+        "mutant_id": "contract-gap",
+        "mutated_function": "def f(value):\n    return value > 1",
+        "mutation": {
+          "mutated_segment": "value > 1",
+          "original_segment": "value >= 1",
+          "unified_diff": "-    return value >= 1\n+    return value > 1"
+        },
+        "original_function": "def f(value):\n    return value >= 1",
+        "qualified_function_name": "f",
+        "submitted_suite_artifact_ref": "mutants/contract-gap/result.json",
+        "submitted_suite_tests_passed": 10
+      },
+      "reason_codes": [
+        "implicit_bool_as_number"
+      ],
+      "reasons": [
+        "A boolean may be used as a numeric argument only when the function signature explicitly declares or defaults that parameter as boolean. Treating False as integer zero is otherwise a Python quirk, not evidence of the assignment's intended numeric contract. Witness: passes a boolean literal to a parameter that is not explicitly boolean."
+      ]
+    }
+  ],
+  "pedagogically_withheld_count": 1,
+  "question_count": 0,
+  "results": [],
+  "submitted_answer_count": 0,
+  "total_sites": 0,
+  "total_targets": 1
+}

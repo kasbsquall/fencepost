@@ -1,0 +1,562 @@
+{
+  "contract": {
+    "equivalent_rate": 0.0,
+    "generator_call_count": 1,
+    "generator_wall_clock_seconds": 0.0,
+    "invalid_contract_attempts": 0,
+    "invalid_original_attempts": 0,
+    "mode": "CONTRACT",
+    "probable_equivalent_count": 0,
+    "real_gap_count": 1,
+    "results": [
+      {
+        "attempts": [
+          {
+            "attempt": 1,
+            "contract_violations": [],
+            "generated_test": {
+              "generation_duration_seconds": 0.0,
+              "input_tokens": null,
+              "model": null,
+              "output_tokens": null,
+              "provider": "fake",
+              "response_id": null,
+              "source": "def test_generated():\n    assert True\n",
+              "targeted_behavior": "fixture behavior"
+            },
+            "mutant": {
+              "duration_seconds": 0.01,
+              "exit_code": 1,
+              "failure": {
+                "detail": "AssertionError",
+                "kind": "failure",
+                "message": "assert 'B' == 'A'",
+                "nodeid": "test_adversarial::test_boundary"
+              },
+              "status": "failed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "original": {
+              "duration_seconds": 0.01,
+              "exit_code": 0,
+              "failure": null,
+              "status": "passed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "outcome": "DISTINGUISHED",
+            "valid_attempt_number": 1
+          }
+        ],
+        "attempts_used": 1,
+        "failure_evidence": {
+          "detail": "AssertionError",
+          "kind": "failure",
+          "message": "assert 'B' == 'A'",
+          "nodeid": "test_adversarial::test_boundary"
+        },
+        "invalid_attempts": 0,
+        "label": "REAL_GAP",
+        "mode": "CONTRACT",
+        "mutant": {
+          "candidate": {
+            "after": "Gt",
+            "anchor": {
+              "column": 0,
+              "end_column": 1,
+              "end_line": 1,
+              "line": 1
+            },
+            "ast_path": [],
+            "before": "GtE",
+            "id": "gap-mutant",
+            "kind": "compare",
+            "parameters": [],
+            "path": "pkg/analytics.py",
+            "source_segment": "value >= 1"
+          },
+          "execution": {
+            "duration_seconds": 0.1,
+            "exit_code": 0,
+            "failing_tests": [],
+            "status": "survived",
+            "stderr": "",
+            "stdout": "",
+            "timed_out": false
+          },
+          "generated_anchor": {
+            "column": 0,
+            "end_column": 1,
+            "end_line": 1,
+            "line": 1
+          }
+        },
+        "unresolved_reason": null,
+        "valid_attempts": 1,
+        "winning_test": {
+          "generation_duration_seconds": 0.0,
+          "input_tokens": null,
+          "model": null,
+          "output_tokens": null,
+          "provider": "fake",
+          "response_id": null,
+          "source": "def test_generated():\n    assert True\n",
+          "targeted_behavior": "fixture behavior"
+        }
+      }
+    ],
+    "selected_survivor_count": 1,
+    "total_attempts": 1,
+    "total_survivors": 1,
+    "triage_complete": true,
+    "triage_wall_clock_seconds": 0.01599999999598367,
+    "unresolved_count": 0,
+    "valid_attempts": 1
+  },
+  "contract_limitation": "CONTRACT mode can hide a genuine behavioral gap when the only witness uses type, identity, a custom object, or another excluded input. This deliberate false-negative risk means its rate is execution-grounded only under the stated caller contract, not universal truth.",
+  "contract_rules": {
+    "allowed_function_definitions": "top-level synchronous test_* functions only",
+    "allowed_imports": [
+      "pytest",
+      "<module-under-test>"
+    ],
+    "allowed_input_values": [
+      "int",
+      "float",
+      "str",
+      "bool",
+      "None",
+      "list",
+      "tuple",
+      "dict",
+      "set"
+    ],
+    "forbidden_comparison_operators": [
+      "Is",
+      "IsNot"
+    ],
+    "forbidden_definition_nodes": [
+      "ClassDef",
+      "AsyncFunctionDef",
+      "Lambda"
+    ],
+    "forbidden_fixture_names": [
+      "monkeypatch"
+    ],
+    "forbidden_inspection_attributes": [
+      "__class__"
+    ],
+    "forbidden_inspection_calls": [
+      "isinstance",
+      "type",
+      "id"
+    ],
+    "forbidden_mock_modules": [
+      "unittest.mock",
+      "mock"
+    ],
+    "forbidden_mock_names": [
+      "mock",
+      "patch",
+      "monkeypatch"
+    ],
+    "forbidden_mutation_calls": [
+      "setattr",
+      "delattr",
+      "setitem"
+    ],
+    "module_under_test": "resolved independently per survivor",
+    "program_replacement_rationale": "A test that replaces part of the program is no longer evidence about the program.",
+    "target_arguments": "plain literals, containers of plain literals, unary signed numeric literals, or local names bound directly to those values"
+  },
+  "contract_shielded": [],
+  "equivalent_rate_contract": 0.0,
+  "equivalent_rate_strict": 0.0,
+  "generator_call_count": 2,
+  "generator_wall_clock_seconds": 0.0,
+  "invalid_contract_attempts": 0,
+  "probable_equivalent_count_contract": 0,
+  "probable_equivalent_count_strict": 0,
+  "probe_target_mutant_ids": [
+    "gap-mutant"
+  ],
+  "real_gap_count_contract": 1,
+  "real_gap_count_strict": 1,
+  "results": [
+    {
+      "contract": {
+        "attempts": [
+          {
+            "attempt": 1,
+            "contract_violations": [],
+            "generated_test": {
+              "generation_duration_seconds": 0.0,
+              "input_tokens": null,
+              "model": null,
+              "output_tokens": null,
+              "provider": "fake",
+              "response_id": null,
+              "source": "def test_generated():\n    assert True\n",
+              "targeted_behavior": "fixture behavior"
+            },
+            "mutant": {
+              "duration_seconds": 0.01,
+              "exit_code": 1,
+              "failure": {
+                "detail": "AssertionError",
+                "kind": "failure",
+                "message": "assert 'B' == 'A'",
+                "nodeid": "test_adversarial::test_boundary"
+              },
+              "status": "failed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "original": {
+              "duration_seconds": 0.01,
+              "exit_code": 0,
+              "failure": null,
+              "status": "passed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "outcome": "DISTINGUISHED",
+            "valid_attempt_number": 1
+          }
+        ],
+        "attempts_used": 1,
+        "failure_evidence": {
+          "detail": "AssertionError",
+          "kind": "failure",
+          "message": "assert 'B' == 'A'",
+          "nodeid": "test_adversarial::test_boundary"
+        },
+        "invalid_attempts": 0,
+        "label": "REAL_GAP",
+        "mode": "CONTRACT",
+        "mutant": {
+          "candidate": {
+            "after": "Gt",
+            "anchor": {
+              "column": 0,
+              "end_column": 1,
+              "end_line": 1,
+              "line": 1
+            },
+            "ast_path": [],
+            "before": "GtE",
+            "id": "gap-mutant",
+            "kind": "compare",
+            "parameters": [],
+            "path": "pkg/analytics.py",
+            "source_segment": "value >= 1"
+          },
+          "execution": {
+            "duration_seconds": 0.1,
+            "exit_code": 0,
+            "failing_tests": [],
+            "status": "survived",
+            "stderr": "",
+            "stdout": "",
+            "timed_out": false
+          },
+          "generated_anchor": {
+            "column": 0,
+            "end_column": 1,
+            "end_line": 1,
+            "line": 1
+          }
+        },
+        "unresolved_reason": null,
+        "valid_attempts": 1,
+        "winning_test": {
+          "generation_duration_seconds": 0.0,
+          "input_tokens": null,
+          "model": null,
+          "output_tokens": null,
+          "provider": "fake",
+          "response_id": null,
+          "source": "def test_generated():\n    assert True\n",
+          "targeted_behavior": "fixture behavior"
+        }
+      },
+      "label_contract": "REAL_GAP",
+      "label_strict": "REAL_GAP",
+      "mutant": {
+        "candidate": {
+          "after": "Gt",
+          "anchor": {
+            "column": 0,
+            "end_column": 1,
+            "end_line": 1,
+            "line": 1
+          },
+          "ast_path": [],
+          "before": "GtE",
+          "id": "gap-mutant",
+          "kind": "compare",
+          "parameters": [],
+          "path": "pkg/analytics.py",
+          "source_segment": "value >= 1"
+        },
+        "execution": {
+          "duration_seconds": 0.1,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 0,
+          "end_column": 1,
+          "end_line": 1,
+          "line": 1
+        }
+      },
+      "strict": {
+        "attempts": [
+          {
+            "attempt": 1,
+            "contract_violations": [],
+            "generated_test": {
+              "generation_duration_seconds": 0.0,
+              "input_tokens": null,
+              "model": null,
+              "output_tokens": null,
+              "provider": "fake",
+              "response_id": null,
+              "source": "def test_generated():\n    assert True\n",
+              "targeted_behavior": "fixture behavior"
+            },
+            "mutant": {
+              "duration_seconds": 0.01,
+              "exit_code": 1,
+              "failure": {
+                "detail": "AssertionError",
+                "kind": "failure",
+                "message": "assert 'B' == 'A'",
+                "nodeid": "test_adversarial::test_boundary"
+              },
+              "status": "failed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "original": {
+              "duration_seconds": 0.01,
+              "exit_code": 0,
+              "failure": null,
+              "status": "passed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "outcome": "DISTINGUISHED",
+            "valid_attempt_number": 1
+          }
+        ],
+        "attempts_used": 1,
+        "failure_evidence": {
+          "detail": "AssertionError",
+          "kind": "failure",
+          "message": "assert 'B' == 'A'",
+          "nodeid": "test_adversarial::test_boundary"
+        },
+        "invalid_attempts": 0,
+        "label": "REAL_GAP",
+        "mode": "STRICT",
+        "mutant": {
+          "candidate": {
+            "after": "Gt",
+            "anchor": {
+              "column": 0,
+              "end_column": 1,
+              "end_line": 1,
+              "line": 1
+            },
+            "ast_path": [],
+            "before": "GtE",
+            "id": "gap-mutant",
+            "kind": "compare",
+            "parameters": [],
+            "path": "pkg/analytics.py",
+            "source_segment": "value >= 1"
+          },
+          "execution": {
+            "duration_seconds": 0.1,
+            "exit_code": 0,
+            "failing_tests": [],
+            "status": "survived",
+            "stderr": "",
+            "stdout": "",
+            "timed_out": false
+          },
+          "generated_anchor": {
+            "column": 0,
+            "end_column": 1,
+            "end_line": 1,
+            "line": 1
+          }
+        },
+        "unresolved_reason": null,
+        "valid_attempts": 1,
+        "winning_test": {
+          "generation_duration_seconds": 0.0,
+          "input_tokens": null,
+          "model": null,
+          "output_tokens": null,
+          "provider": "fake",
+          "response_id": null,
+          "source": "def test_generated():\n    assert True\n",
+          "targeted_behavior": "fixture behavior"
+        }
+      }
+    }
+  ],
+  "selected_survivor_count": 1,
+  "strict": {
+    "equivalent_rate": 0.0,
+    "generator_call_count": 1,
+    "generator_wall_clock_seconds": 0.0,
+    "invalid_contract_attempts": 0,
+    "invalid_original_attempts": 0,
+    "mode": "STRICT",
+    "probable_equivalent_count": 0,
+    "real_gap_count": 1,
+    "results": [
+      {
+        "attempts": [
+          {
+            "attempt": 1,
+            "contract_violations": [],
+            "generated_test": {
+              "generation_duration_seconds": 0.0,
+              "input_tokens": null,
+              "model": null,
+              "output_tokens": null,
+              "provider": "fake",
+              "response_id": null,
+              "source": "def test_generated():\n    assert True\n",
+              "targeted_behavior": "fixture behavior"
+            },
+            "mutant": {
+              "duration_seconds": 0.01,
+              "exit_code": 1,
+              "failure": {
+                "detail": "AssertionError",
+                "kind": "failure",
+                "message": "assert 'B' == 'A'",
+                "nodeid": "test_adversarial::test_boundary"
+              },
+              "status": "failed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "original": {
+              "duration_seconds": 0.01,
+              "exit_code": 0,
+              "failure": null,
+              "status": "passed",
+              "stderr": "",
+              "stdout": "",
+              "tests_collected": 1,
+              "tests_skipped": 0,
+              "timed_out": false
+            },
+            "outcome": "DISTINGUISHED",
+            "valid_attempt_number": 1
+          }
+        ],
+        "attempts_used": 1,
+        "failure_evidence": {
+          "detail": "AssertionError",
+          "kind": "failure",
+          "message": "assert 'B' == 'A'",
+          "nodeid": "test_adversarial::test_boundary"
+        },
+        "invalid_attempts": 0,
+        "label": "REAL_GAP",
+        "mode": "STRICT",
+        "mutant": {
+          "candidate": {
+            "after": "Gt",
+            "anchor": {
+              "column": 0,
+              "end_column": 1,
+              "end_line": 1,
+              "line": 1
+            },
+            "ast_path": [],
+            "before": "GtE",
+            "id": "gap-mutant",
+            "kind": "compare",
+            "parameters": [],
+            "path": "pkg/analytics.py",
+            "source_segment": "value >= 1"
+          },
+          "execution": {
+            "duration_seconds": 0.1,
+            "exit_code": 0,
+            "failing_tests": [],
+            "status": "survived",
+            "stderr": "",
+            "stdout": "",
+            "timed_out": false
+          },
+          "generated_anchor": {
+            "column": 0,
+            "end_column": 1,
+            "end_line": 1,
+            "line": 1
+          }
+        },
+        "unresolved_reason": null,
+        "valid_attempts": 1,
+        "winning_test": {
+          "generation_duration_seconds": 0.0,
+          "input_tokens": null,
+          "model": null,
+          "output_tokens": null,
+          "provider": "fake",
+          "response_id": null,
+          "source": "def test_generated():\n    assert True\n",
+          "targeted_behavior": "fixture behavior"
+        }
+      }
+    ],
+    "selected_survivor_count": 1,
+    "total_attempts": 1,
+    "total_survivors": 1,
+    "triage_complete": true,
+    "triage_wall_clock_seconds": 0.0,
+    "unresolved_count": 0,
+    "valid_attempts": 1
+  },
+  "total_survivors": 1,
+  "triage_complete": true,
+  "triage_wall_clock_seconds": 0.01599999999598367,
+  "unresolved_count_contract": 0,
+  "unresolved_count_strict": 0
+}

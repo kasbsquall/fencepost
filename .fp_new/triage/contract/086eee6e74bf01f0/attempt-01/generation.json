@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 0.0,
+  "input_tokens": null,
+  "model": null,
+  "output_tokens": null,
+  "provider": "fixture-fake",
+  "response_id": null,
+  "source": "from gradebook.analytics import clamp_percent, percentile\n\ndef test_upper_numeric_boundaries():\n    assert clamp_percent(99.5) == 99.5\n    assert percentile([30, 10, 20], 66) == 20\n",
+  "targeted_behavior": "upper clamp and percentile denominator boundaries"
+}

@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 0.0,
+  "input_tokens": null,
+  "model": null,
+  "output_tokens": null,
+  "provider": "fixture-fake",
+  "response_id": null,
+  "source": "from gradebook.analytics import letter_grade\n\ndef test_letter_grade_numeric_boundary_70_71():\n    assert letter_grade(70) == 'C'\n",
+  "targeted_behavior": "letter_grade threshold literal 70 -> 71"
+}

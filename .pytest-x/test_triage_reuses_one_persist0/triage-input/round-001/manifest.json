@@ -1,0 +1,16 @@
+{
+  "import_roots": [
+    "."
+  ],
+  "jobs": [
+    {
+      "attempt": 1,
+      "id": "round-001-job",
+      "path": "pkg/module.py",
+      "source_file": "0000-mutant.py",
+      "test_file": "0000-test.py"
+    }
+  ],
+  "timeout_seconds": 5.0,
+  "workers": 2
+}

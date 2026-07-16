@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 0.0,
+  "input_tokens": null,
+  "model": null,
+  "output_tokens": null,
+  "provider": "fake",
+  "response_id": null,
+  "source": "not valid python !",
+  "targeted_behavior": "fixture behavior"
+}

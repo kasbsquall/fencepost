@@ -1,0 +1,207 @@
+{
+  "authored_line_coverage": {
+    "artifact_ref": "selection.json",
+    "authored_mutatable_line_count": 1,
+    "covered_authored_mutatable_line_count": 1,
+    "minimum_rate": 0.5,
+    "rate": 1.0,
+    "sufficient_for_assessment": true
+  },
+  "baseline_artifact_ref": "baseline/result.json",
+  "complete": true,
+  "contract_limitation": "CONTRACT can hide a genuine type-only gap.",
+  "conversation_count": 0,
+  "deliberately_not_asked": [
+    {
+      "artifact_refs": [
+        "triage/strict/strict-only/attempt-01/attempt.json",
+        "triage/contract/strict-only/result.json"
+      ],
+      "line": 2,
+      "mutant_id": "strict-only",
+      "mutated_segment": "value > 1",
+      "original_segment": "value >= 1",
+      "path": "pkg/analytics.py",
+      "plain_language_reason": "We found a technical way to distinguish this change, but it falls outside the plain-caller contract used for student questions. We dropped it rather than ask about an artificial edge case.",
+      "reason": "STRICT execution found a technical distinction, but CONTRACT execution did not find a caller-conforming distinction. Fencepost therefore withholds this question from the student.",
+      "strict_failure_evidence": {
+        "detail": "AssertionError",
+        "kind": "failure",
+        "message": "assert False",
+        "nodeid": "test_probe.py::test_boundary"
+      },
+      "strict_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fixture",
+        "response_id": null,
+        "source": "from pkg.analytics import f\n\ndef test_boundary():\n    assert f(1)\n",
+        "targeted_behavior": "exact lower boundary"
+      }
+    }
+  ],
+  "equivalent_rate_contract": 0.5,
+  "equivalent_rate_strict": 0.0,
+  "formative_notice": "This report is formative and advisory. It identifies behavior changes the submitted tests did not distinguish; it is not a verdict, accusation, or standalone score. An instructor should review the evidence and decide whether a conversation would be useful.",
+  "function_assessments": [
+    {
+      "artifact_refs": [
+        "mutants/contract-gap/result.json",
+        "mutants/strict-only/result.json"
+      ],
+      "broken_mutants": 0,
+      "contract_real_gap_mutants": 1,
+      "killed_by_submitted_tests": 0,
+      "path": "pkg/analytics.py",
+      "qualified_function_name": "f",
+      "question_site_count": 0,
+      "status": "GAPS_FOUND",
+      "survived_submitted_tests": 2,
+      "total_mutants": 2
+    }
+  ],
+  "function_groups": [],
+  "graded_answer_count": 0,
+  "mutation_summary": {
+    "broken_mutants": 0,
+    "killed_by_submitted_tests": 0,
+    "survived_submitted_tests": 2,
+    "total_mutants": 2
+  },
+  "not_questioned_mutant_count": 2,
+  "pedagogically_not_asked": [
+    {
+      "mutant": {
+        "artifact_refs": [
+          "mutants/contract-gap/result.json",
+          "triage/contract/contract-gap/attempt-01/attempt.json",
+          "probe/sites/site-f9113754b1ff1f00/mutants/contract-gap.json"
+        ],
+        "evidence": {
+          "adversarial_test": {
+            "generation_duration_seconds": 0.0,
+            "input_tokens": null,
+            "model": null,
+            "output_tokens": null,
+            "provider": "fixture",
+            "response_id": null,
+            "source": "from pkg.analytics import f\n\ndef test_boolean_as_number():\n    assert f(False) is False\n",
+            "targeted_behavior": "boolean numeric coercion"
+          },
+          "failing_assertion": {
+            "detail": "AssertionError",
+            "kind": "failure",
+            "message": "assert False",
+            "nodeid": "test_probe.py::test_boundary"
+          },
+          "mutant_execution": {
+            "duration_seconds": 0.01,
+            "exit_code": 1,
+            "failure": {
+              "detail": "AssertionError",
+              "kind": "failure",
+              "message": "assert False",
+              "nodeid": "test_probe.py::test_boundary"
+            },
+            "status": "failed",
+            "stderr": "",
+            "stdout": "",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "original_execution": {
+            "duration_seconds": 0.01,
+            "exit_code": 0,
+            "failure": null,
+            "status": "passed",
+            "stderr": "",
+            "stdout": "",
+            "tests_collected": 1,
+            "tests_skipped": 0,
+            "timed_out": false
+          },
+          "triage_artifact_ref": "triage/contract/contract-gap/attempt-01/attempt.json"
+        },
+        "module_path": "pkg.analytics",
+        "mutant": {
+          "candidate": {
+            "after": "Gt",
+            "anchor": {
+              "column": 11,
+              "end_column": 21,
+              "end_line": 2,
+              "line": 2
+            },
+            "ast_path": [],
+            "before": "GtE",
+            "id": "contract-gap",
+            "kind": "compare",
+            "parameters": [],
+            "path": "pkg/analytics.py",
+            "source_segment": "value >= 1"
+          },
+          "execution": {
+            "duration_seconds": 0.1,
+            "exit_code": 0,
+            "failing_tests": [],
+            "status": "survived",
+            "stderr": "",
+            "stdout": ".......... [100%]\n10 passed in 0.10s\n",
+            "timed_out": false
+          },
+          "generated_anchor": {
+            "column": 11,
+            "end_column": 20,
+            "end_line": 2,
+            "line": 2
+          }
+        },
+        "mutant_id": "contract-gap",
+        "mutated_function": "def f(value):\n    return value > 1",
+        "mutation": {
+          "mutated_segment": "value > 1",
+          "original_segment": "value >= 1",
+          "unified_diff": "-    return value >= 1\n+    return value > 1"
+        },
+        "original_function": "def f(value):\n    return value >= 1",
+        "qualified_function_name": "f",
+        "submitted_suite_artifact_ref": "mutants/contract-gap/result.json",
+        "submitted_suite_tests_passed": 10
+      },
+      "reason_codes": [
+        "implicit_bool_as_number"
+      ],
+      "reasons": [
+        "A boolean may be used as a numeric argument only when the function signature explicitly declares or defaults that parameter as boolean. Treating False as integer zero is otherwise a Python quirk, not evidence of the assignment's intended numeric contract. Witness: passes a boolean literal to a parameter that is not explicitly boolean."
+      ]
+    }
+  ],
+  "places": [],
+  "probable_equivalent_count_contract": 1,
+  "probable_equivalent_count_strict": 0,
+  "question_count": 0,
+  "question_mutant_count": 0,
+  "real_gap_count_contract": 1,
+  "real_gap_count_strict": 2,
+  "repository_commit": "fixture-commit",
+  "schema_version": "2.0",
+  "student_email": "student@example.edu",
+  "student_name": "Diego Ramos",
+  "submitted_answer_count": 0,
+  "submitted_suite_status": "PASSED",
+  "submitted_suite_tests_passed": 10,
+  "title": "Fencepost comprehension report",
+  "traceability_artifacts": [
+    "run.json",
+    "baseline/result.json",
+    "selection.json",
+    "triage/summary.json",
+    "probe/summary.json"
+  ],
+  "unresolved_count_contract": 0,
+  "unresolved_count_strict": 0,
+  "unverified_place_count": 0
+}

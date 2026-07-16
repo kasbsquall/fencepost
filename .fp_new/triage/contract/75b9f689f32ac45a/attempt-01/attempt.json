@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fixture-fake",
+    "response_id": null,
+    "source": "from gradebook.analytics import letter_grade\n\ndef test_letter_grade_boundary_70():\n    assert letter_grade(70) == 'C'\n",
+    "targeted_behavior": "letter_grade exact 70 boundary"
+  },
+  "mutant": {
+    "duration_seconds": 0.8223884530016221,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_letter_grade_boundary_70():\n>       assert letter_grade(70) == 'C'\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0006/test_adversarial.py:4: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+      "nodeid": ".fencepost-generated-0006.test_adversarial::test_letter_grade_boundary_70"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________________ test_letter_grade_boundary_70 _________________________\n\n    def test_letter_grade_boundary_70():\n>       assert letter_grade(70) == 'C'\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0006/test_adversarial.py:4: AssertionError\n----- generated xml file: /work/jobs/triage-0006-dorlpxfl/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0006/test_adversarial.py::test_letter_grade_boundary_70\n1 failed in 0.03s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.8289449690018955,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0006-dorlpxfl/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

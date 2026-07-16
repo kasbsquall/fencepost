@@ -1,0 +1,9 @@
+{
+  "generation_duration_seconds": 0.0,
+  "input_tokens": null,
+  "model": null,
+  "output_tokens": null,
+  "provider": "fixture-fake",
+  "question_text": "What result changes at this boundary, and why?",
+  "response_id": null
+}

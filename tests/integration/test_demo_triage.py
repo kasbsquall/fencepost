@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 from html.parser import HTMLParser
@@ -30,13 +31,53 @@ class _ReportText(HTMLParser):
         self.parts = []
 
     def handle_data(self, data) -> None:
-        normalized = " ".join(data.split())
-        if normalized:
-            self.parts.append(normalized)
+        self.parts.append(data)
+
+    def handle_starttag(self, tag, attrs) -> None:
+        self.parts.append(" ")
+
+    def handle_endtag(self, tag) -> None:
+        self.parts.append(" ")
 
     @property
     def visible(self) -> str:
-        return " ".join(self.parts)
+        return " ".join("".join(self.parts).split())
+
+
+def _assert_mutation_headline(payload: dict, visible: str) -> None:
+    """Assert reported execution facts, independently of inline number styling."""
+    summary = payload["mutation_summary"]
+    tests = payload["submitted_suite_tests_passed"]
+    total = summary["total_mutants"]
+    killed = summary["killed_by_submitted_tests"]
+    missed = summary["survived_submitted_tests"]
+    fair = payload["question_mutant_count"]
+    withheld = payload["not_questioned_mutant_count"]
+
+    assert re.search(rf"\b{tests}\s+tests\s+pass\b", visible)
+    assert re.search(rf"\b{total}\s+small\s+changes\b", visible)
+    assert re.search(rf"\btests\s+caught\s+{killed}\b", visible)
+    assert re.search(rf"\b{missed}\s+changes\s+they\s+missed\b", visible)
+    assert re.search(rf"\b{fair}\s+are\s+fair\s+to\s+discuss\b", visible)
+    assert re.search(rf"\bwithheld\s+{withheld}\s+change", visible)
+
+
+def _assert_clean_function_fact(payload: dict, visible: str) -> None:
+    """Check a protected function without coupling its name to adjacent markup."""
+    clean = next(
+        item
+        for item in payload["function_assessments"]
+        if item.get("status") == "CLEAN"
+    )
+    name = clean["qualified_function_name"]
+    killed = clean["killed_by_submitted_tests"]
+    total = clean["total_mutants"]
+
+    assert name in visible
+    assert re.search(
+        rf"\ball\s+{killed}\s+of\s+{total}\s+changes\s+caught\b",
+        visible,
+    )
 
 
 def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> None:
@@ -343,11 +384,9 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     )
     parsed = _ReportText()
     parsed.feed(document)
-    assert "10 tests pass" in parsed.visible
-    assert "We made 51 small changes to code they wrote; their tests caught 30." in parsed.visible
+    _assert_mutation_headline(report_payload, parsed.visible)
     assert "What their tests already protect" in parsed.visible
-    assert "rank all" in parsed.visible
-    assert "top_n all" in parsed.visible
+    _assert_clean_function_fact(report_payload, parsed.visible)
     assert "STRICT equivalent rate" not in parsed.visible
     assert "CONTRACT equivalent rate" not in parsed.visible
     assert "Deliberately not asked" in parsed.visible

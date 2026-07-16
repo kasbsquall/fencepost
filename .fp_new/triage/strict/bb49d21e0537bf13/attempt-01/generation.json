@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 0.0,
+  "input_tokens": null,
+  "model": null,
+  "output_tokens": null,
+  "provider": "fixture-fake",
+  "response_id": null,
+  "source": "from gradebook.analytics import percentile\n\nclass DivergentDivision:\n    def __lt__(self, other):\n        return False\n    def __gt__(self, other):\n        return False\n    def __rmul__(self, other):\n        return self\n    def __truediv__(self, other):\n        return 1\n    def __floordiv__(self, other):\n        return 0\n\ndef test_custom_division_protocol():\n    assert percentile([10, 20], DivergentDivision()) == 20\n",
+  "targeted_behavior": "custom true-division versus floor-division protocol"
+}

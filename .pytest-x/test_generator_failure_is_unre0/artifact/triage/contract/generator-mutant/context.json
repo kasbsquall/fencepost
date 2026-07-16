@@ -1,0 +1,100 @@
+{
+  "contract_rules": {
+    "allowed_function_definitions": "top-level synchronous test_* functions only",
+    "allowed_imports": [
+      "pytest",
+      "<module-under-test>"
+    ],
+    "allowed_input_values": [
+      "int",
+      "float",
+      "str",
+      "bool",
+      "None",
+      "list",
+      "tuple",
+      "dict",
+      "set"
+    ],
+    "forbidden_comparison_operators": [
+      "Is",
+      "IsNot"
+    ],
+    "forbidden_definition_nodes": [
+      "ClassDef",
+      "AsyncFunctionDef",
+      "Lambda"
+    ],
+    "forbidden_fixture_names": [
+      "monkeypatch"
+    ],
+    "forbidden_inspection_attributes": [
+      "__class__"
+    ],
+    "forbidden_inspection_calls": [
+      "isinstance",
+      "type",
+      "id"
+    ],
+    "forbidden_mock_modules": [
+      "unittest.mock",
+      "mock"
+    ],
+    "forbidden_mock_names": [
+      "mock",
+      "patch",
+      "monkeypatch"
+    ],
+    "forbidden_mutation_calls": [
+      "setattr",
+      "delattr",
+      "setitem"
+    ],
+    "limitation": "CONTRACT mode can hide a genuine behavioral gap when the only witness uses type, identity, a custom object, or another excluded input. This deliberate false-negative risk means its rate is execution-grounded only under the stated caller contract, not universal truth.",
+    "program_replacement_rationale": "A test that replaces part of the program is no longer evidence about the program.",
+    "resolved_allowed_imports": [
+      "pytest",
+      "pkg.analytics"
+    ],
+    "target_arguments": "plain literals, containers of plain literals, unary signed numeric literals, or local names bound directly to those values"
+  },
+  "mode": "CONTRACT",
+  "module_path": "pkg.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "Gt",
+      "anchor": {
+        "column": 0,
+        "end_column": 1,
+        "end_line": 1,
+        "line": 1
+      },
+      "ast_path": [],
+      "before": "GtE",
+      "id": "generator-mutant",
+      "kind": "compare",
+      "parameters": [],
+      "path": "pkg/analytics.py",
+      "source_segment": "value >= 1"
+    },
+    "execution": {
+      "duration_seconds": 0.1,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 0,
+      "end_column": 1,
+      "end_line": 1,
+      "line": 1
+    }
+  },
+  "mutated_function": "def f(value):\n    return value > 1",
+  "original_function": "def f(value):\n    return value >= 1",
+  "qualified_function_name": "f",
+  "unified_diff": "- value >= 1\n+ value > 1"
+}

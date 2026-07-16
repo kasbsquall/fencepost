@@ -1,0 +1,32 @@
+{
+  "citations": [
+    {
+      "artifact_ref": "triage/contract/contract-gap/attempt-01/attempt.json",
+      "detail": "AssertionError",
+      "kind": "MUTANT_FAILING_ASSERTION",
+      "message": "assert False",
+      "nodeid": "test_probe.py::test_boundary"
+    },
+    {
+      "artifact_ref": "triage/contract/contract-gap-2/attempt-01/attempt.json",
+      "detail": "AssertionError",
+      "kind": "MUTANT_FAILING_ASSERTION",
+      "message": "assert False",
+      "nodeid": "test_probe.py::test_boundary"
+    }
+  ],
+  "evidence_explanation": "The supporting mutants failed: test_probe.py::test_boundary: assert False; test_probe.py::test_boundary: assert False",
+  "feedback": "Review the answer against the execution-grounded boundary behavior.",
+  "generated": {
+    "evidence_explanation": "The supporting mutants failed: test_probe.py::test_boundary: assert False; test_probe.py::test_boundary: assert False",
+    "feedback": "Review the answer against the execution-grounded boundary behavior.",
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fixture-fake",
+    "response_id": null,
+    "verdict": "INSUFFICIENT"
+  },
+  "verdict": "INSUFFICIENT"
+}

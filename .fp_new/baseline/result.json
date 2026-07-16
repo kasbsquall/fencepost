@@ -1,0 +1,9 @@
+{
+  "duration_seconds": 1.263364112997806,
+  "exit_code": 0,
+  "failing_tests": [],
+  "status": "survived",
+  "stderr": "",
+  "stdout": "..........                                                               [100%]\n-------- generated xml file: /tmp/fencepost-baseline-_pj1459c/junit.xml --------\n10 passed in 0.10s\n",
+  "timed_out": false
+}

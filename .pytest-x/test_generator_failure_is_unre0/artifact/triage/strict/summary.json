@@ -1,0 +1,63 @@
+{
+  "equivalent_rate": null,
+  "generator_call_count": 1,
+  "generator_wall_clock_seconds": 0.0,
+  "invalid_contract_attempts": 0,
+  "invalid_original_attempts": 0,
+  "mode": "STRICT",
+  "probable_equivalent_count": 0,
+  "real_gap_count": 0,
+  "results": [
+    {
+      "attempts": [],
+      "attempts_used": 0,
+      "failure_evidence": null,
+      "invalid_attempts": 0,
+      "label": "UNRESOLVED",
+      "mode": "STRICT",
+      "mutant": {
+        "candidate": {
+          "after": "Gt",
+          "anchor": {
+            "column": 0,
+            "end_column": 1,
+            "end_line": 1,
+            "line": 1
+          },
+          "ast_path": [],
+          "before": "GtE",
+          "id": "generator-mutant",
+          "kind": "compare",
+          "parameters": [],
+          "path": "pkg/analytics.py",
+          "source_segment": "value >= 1"
+        },
+        "execution": {
+          "duration_seconds": 0.1,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": "",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 0,
+          "end_column": 1,
+          "end_line": 1,
+          "line": 1
+        }
+      },
+      "unresolved_reason": "model unavailable",
+      "valid_attempts": 0,
+      "winning_test": null
+    }
+  ],
+  "selected_survivor_count": 1,
+  "total_attempts": 0,
+  "total_survivors": 1,
+  "triage_complete": true,
+  "triage_wall_clock_seconds": 0.014999999999417923,
+  "unresolved_count": 1,
+  "valid_attempts": 0
+}

@@ -1,0 +1,11 @@
+{
+  "duration_seconds": 0.01,
+  "exit_code": 0,
+  "failure": null,
+  "status": "passed",
+  "stderr": "",
+  "stdout": "",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

@@ -1,0 +1,7 @@
+{
+  "attempted_mutants": 5,
+  "diagnostic": "Broken mutants indicate an invalid operator or execution harness, not a student comprehension finding. The run was stopped before executing every candidate.",
+  "eligible_mutants": 40,
+  "error": "The first 5 eligible mutants were all broken.",
+  "median_mutant_seconds": 0.2
+}

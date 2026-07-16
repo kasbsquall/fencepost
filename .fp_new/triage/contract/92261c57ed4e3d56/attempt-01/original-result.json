@@ -1,0 +1,11 @@
+{
+  "duration_seconds": 0.8248122810000496,
+  "exit_code": 0,
+  "failure": null,
+  "status": "passed",
+  "stderr": "",
+  "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0015-w2qnze8f/original/junit.xml ----\n1 passed in 0.02s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

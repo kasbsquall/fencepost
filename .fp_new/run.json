@@ -1,0 +1,662 @@
+{
+  "blame": {
+    "gradebook/__init__.py": {},
+    "gradebook/analytics.py": {
+      "1": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 1,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "10": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 10,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "11": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 11,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "12": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 12,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "13": {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "is_student": true,
+        "line": 13,
+        "path": "gradebook/analytics.py",
+        "summary": "implement letter_grade"
+      },
+      "14": {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "is_student": true,
+        "line": 14,
+        "path": "gradebook/analytics.py",
+        "summary": "implement letter_grade"
+      },
+      "15": {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "is_student": true,
+        "line": 15,
+        "path": "gradebook/analytics.py",
+        "summary": "implement letter_grade"
+      },
+      "16": {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "is_student": true,
+        "line": 16,
+        "path": "gradebook/analytics.py",
+        "summary": "implement letter_grade"
+      },
+      "17": {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "is_student": true,
+        "line": 17,
+        "path": "gradebook/analytics.py",
+        "summary": "implement letter_grade"
+      },
+      "18": {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "is_student": true,
+        "line": 18,
+        "path": "gradebook/analytics.py",
+        "summary": "implement letter_grade"
+      },
+      "19": {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "is_student": true,
+        "line": 19,
+        "path": "gradebook/analytics.py",
+        "summary": "implement letter_grade"
+      },
+      "2": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 2,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "20": {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "is_student": true,
+        "line": 20,
+        "path": "gradebook/analytics.py",
+        "summary": "implement letter_grade"
+      },
+      "21": {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "is_student": true,
+        "line": 21,
+        "path": "gradebook/analytics.py",
+        "summary": "implement letter_grade"
+      },
+      "22": {
+        "author_date": "2026-07-07",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "a0f7cba3817de9bc7d4859443a05d962b0c9b566",
+        "is_student": true,
+        "line": 22,
+        "path": "gradebook/analytics.py",
+        "summary": "implement letter_grade"
+      },
+      "23": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 23,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "24": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 24,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "25": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "is_student": true,
+        "line": 25,
+        "path": "gradebook/analytics.py",
+        "summary": "clamp percentile inputs to the valid interval"
+      },
+      "26": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "is_student": true,
+        "line": 26,
+        "path": "gradebook/analytics.py",
+        "summary": "clamp percentile inputs to the valid interval"
+      },
+      "27": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "is_student": true,
+        "line": 27,
+        "path": "gradebook/analytics.py",
+        "summary": "clamp percentile inputs to the valid interval"
+      },
+      "28": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "is_student": true,
+        "line": 28,
+        "path": "gradebook/analytics.py",
+        "summary": "clamp percentile inputs to the valid interval"
+      },
+      "29": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "is_student": true,
+        "line": 29,
+        "path": "gradebook/analytics.py",
+        "summary": "clamp percentile inputs to the valid interval"
+      },
+      "3": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 3,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "30": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "is_student": true,
+        "line": 30,
+        "path": "gradebook/analytics.py",
+        "summary": "clamp percentile inputs to the valid interval"
+      },
+      "31": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "is_student": true,
+        "line": 31,
+        "path": "gradebook/analytics.py",
+        "summary": "clamp percentile inputs to the valid interval"
+      },
+      "32": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "is_student": true,
+        "line": 32,
+        "path": "gradebook/analytics.py",
+        "summary": "clamp percentile inputs to the valid interval"
+      },
+      "33": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "is_student": true,
+        "line": 33,
+        "path": "gradebook/analytics.py",
+        "summary": "clamp percentile inputs to the valid interval"
+      },
+      "34": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 34,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "35": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 35,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "36": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "1fe8a853d501ad61956479f29ca9082b98424c57",
+        "is_student": true,
+        "line": 36,
+        "path": "gradebook/analytics.py",
+        "summary": "clamp percentile inputs to the valid interval"
+      },
+      "37": {
+        "author_date": "2026-07-09",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "dceec68ad2228d7e3a299b1129053f7a036e17de",
+        "is_student": true,
+        "line": 37,
+        "path": "gradebook/analytics.py",
+        "summary": "implement percentile"
+      },
+      "38": {
+        "author_date": "2026-07-09",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "dceec68ad2228d7e3a299b1129053f7a036e17de",
+        "is_student": true,
+        "line": 38,
+        "path": "gradebook/analytics.py",
+        "summary": "implement percentile"
+      },
+      "39": {
+        "author_date": "2026-07-09",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "c59d8e6ba90a5e67270c579eec3ffe6201d34afa",
+        "is_student": true,
+        "line": 39,
+        "path": "gradebook/analytics.py",
+        "summary": "fix percentile index out of range when p=100"
+      },
+      "4": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 4,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "40": {
+        "author_date": "2026-07-09",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "c59d8e6ba90a5e67270c579eec3ffe6201d34afa",
+        "is_student": true,
+        "line": 40,
+        "path": "gradebook/analytics.py",
+        "summary": "fix percentile index out of range when p=100"
+      },
+      "41": {
+        "author_date": "2026-07-09",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "dceec68ad2228d7e3a299b1129053f7a036e17de",
+        "is_student": true,
+        "line": 41,
+        "path": "gradebook/analytics.py",
+        "summary": "implement percentile"
+      },
+      "42": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 42,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "43": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 43,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "44": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 44,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "45": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 45,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "46": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "d5552549b80e3606fb02910beb1e2d31e45efe19",
+        "is_student": true,
+        "line": 46,
+        "path": "gradebook/analytics.py",
+        "summary": "implement rank and top_n"
+      },
+      "47": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "d5552549b80e3606fb02910beb1e2d31e45efe19",
+        "is_student": true,
+        "line": 47,
+        "path": "gradebook/analytics.py",
+        "summary": "implement rank and top_n"
+      },
+      "48": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "d5552549b80e3606fb02910beb1e2d31e45efe19",
+        "is_student": true,
+        "line": 48,
+        "path": "gradebook/analytics.py",
+        "summary": "implement rank and top_n"
+      },
+      "49": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "d5552549b80e3606fb02910beb1e2d31e45efe19",
+        "is_student": true,
+        "line": 49,
+        "path": "gradebook/analytics.py",
+        "summary": "implement rank and top_n"
+      },
+      "5": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 5,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "50": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "d5552549b80e3606fb02910beb1e2d31e45efe19",
+        "is_student": true,
+        "line": 50,
+        "path": "gradebook/analytics.py",
+        "summary": "implement rank and top_n"
+      },
+      "51": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 51,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "52": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 52,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "53": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 53,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "54": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 54,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "55": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "d5552549b80e3606fb02910beb1e2d31e45efe19",
+        "is_student": true,
+        "line": 55,
+        "path": "gradebook/analytics.py",
+        "summary": "implement rank and top_n"
+      },
+      "56": {
+        "author_date": "2026-07-10",
+        "author_email": "d.ramos@alumnos.ejemplo.edu",
+        "author_name": "Diego Ramos",
+        "commit": "d5552549b80e3606fb02910beb1e2d31e45efe19",
+        "is_student": true,
+        "line": 56,
+        "path": "gradebook/analytics.py",
+        "summary": "implement rank and top_n"
+      },
+      "6": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 6,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "7": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 7,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "8": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 8,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      },
+      "9": {
+        "author_date": "2026-07-06",
+        "author_email": "a.martinez@ejemplo.edu",
+        "author_name": "Ana Martinez",
+        "commit": "9ca035dcd77fed5d7c3cd7e1ad9f2f85d411b8df",
+        "is_student": false,
+        "line": 9,
+        "path": "gradebook/analytics.py",
+        "summary": "Assignment 3 starter: gradebook analytics"
+      }
+    }
+  },
+  "commit": "3a93a3eb3a34e04aed55c7761d7c8d1cf0ec414c",
+  "image": "fencepost-runner:local",
+  "mutant_workers": 4,
+  "probe": {
+    "agent": "FixtureComprehensionProbeAgent",
+    "enabled": true,
+    "model": null,
+    "submitted_answer_count": 0,
+    "target_policy": "CONTRACT-mode REAL_GAP only"
+  },
+  "scope": {
+    "supported": "Committed Python projects whose tests use only the standard library and pytest; repository-root, conventional src/, and direct __init__.py package roots are importable.",
+    "unsupported": "Installing student-controlled dependencies or package metadata such as requirements.txt, pyproject dependencies, setup.py, and custom build/import layouts outside detected roots."
+  },
+  "sources": [
+    {
+      "path": "gradebook/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "gradebook/analytics.py",
+      "sha256": "d4f2b56f58f230701756eeed0241a30f8a0c1bcb03e989dc9e8803e2e158e6d4"
+    }
+  ],
+  "student_email": "d.ramos@alumnos.ejemplo.edu",
+  "triage": {
+    "config": {
+      "invalid_retry_limit": 3,
+      "max_survivors": null,
+      "test_timeout_seconds": 10.0,
+      "valid_attempts": 3
+    },
+    "contract_limitation": "CONTRACT mode can hide a genuine behavioral gap when the only witness uses type, identity, a custom object, or another excluded input. This deliberate false-negative risk means its rate is execution-grounded only under the stated caller contract, not universal truth.",
+    "contract_rules": {
+      "allowed_function_definitions": "top-level synchronous test_* functions only",
+      "allowed_imports": [
+        "pytest",
+        "<module-under-test>"
+      ],
+      "allowed_input_values": [
+        "int",
+        "float",
+        "str",
+        "bool",
+        "None",
+        "list",
+        "tuple",
+        "dict",
+        "set"
+      ],
+      "forbidden_comparison_operators": [
+        "Is",
+        "IsNot"
+      ],
+      "forbidden_definition_nodes": [
+        "ClassDef",
+        "AsyncFunctionDef",
+        "Lambda"
+      ],
+      "forbidden_fixture_names": [
+        "monkeypatch"
+      ],
+      "forbidden_inspection_attributes": [
+        "__class__"
+      ],
+      "forbidden_inspection_calls": [
+        "isinstance",
+        "type",
+        "id"
+      ],
+      "forbidden_mock_modules": [
+        "unittest.mock",
+        "mock"
+      ],
+      "forbidden_mock_names": [
+        "mock",
+        "patch",
+        "monkeypatch"
+      ],
+      "forbidden_mutation_calls": [
+        "setattr",
+        "delattr",
+        "setitem"
+      ],
+      "program_replacement_rationale": "A test that replaces part of the program is no longer evidence about the program.",
+      "target_arguments": "plain literals, containers of plain literals, unary signed numeric literals, or local names bound directly to those values"
+    },
+    "enabled": true,
+    "generator": "FixtureAdversarialTestGenerator",
+    "model": null,
+    "modes": {
+      "CONTRACT": "statically validated plain-caller domain",
+      "STRICT": "unrestricted Python distinguishability"
+    }
+  }
+}

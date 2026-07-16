@@ -1,0 +1,42 @@
+{
+  "contract_rules": null,
+  "mode": "STRICT",
+  "module_path": "pkg.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "Gt",
+      "anchor": {
+        "column": 0,
+        "end_column": 1,
+        "end_line": 1,
+        "line": 1
+      },
+      "ast_path": [],
+      "before": "GtE",
+      "id": "capped-mutant",
+      "kind": "compare",
+      "parameters": [],
+      "path": "pkg/analytics.py",
+      "source_segment": "value >= 1"
+    },
+    "execution": {
+      "duration_seconds": 0.1,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 0,
+      "end_column": 1,
+      "end_line": 1,
+      "line": 1
+    }
+  },
+  "mutated_function": "def f(value):\n    return value > 1",
+  "original_function": "def f(value):\n    return value >= 1",
+  "qualified_function_name": "f",
+  "unified_diff": "- value >= 1\n+ value > 1"
+}

@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 0.0,
+  "input_tokens": null,
+  "model": null,
+  "output_tokens": null,
+  "provider": "fixture-fake",
+  "response_id": null,
+  "source": "from gradebook.analytics import clamp_percent\n\ndef test_clamp_percent_clamps_one_hundred_one():\n    assert clamp_percent(101) == 100\n",
+  "targeted_behavior": "clamp_percent upper comparison literal shifted up"
+}

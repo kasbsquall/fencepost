@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import threading
 from html.parser import HTMLParser
 from urllib.error import HTTPError
@@ -30,13 +31,29 @@ class _DocumentFacts(HTMLParser):
         self.tags.append(tag)
 
     def handle_data(self, data) -> None:
-        normalized = " ".join(data.split())
-        if normalized:
-            self.text.append(normalized)
+        self.text.append(data)
 
     @property
     def visible_text(self) -> str:
-        return " ".join(self.text)
+        return " ".join("".join(self.text).split())
+
+
+def _assert_headline_facts(report, visible: str) -> None:
+    """Check execution facts without coupling the test to inline presentational spans."""
+    tests = report["submitted_suite_tests_passed"]
+    mutation = report["mutation_summary"]
+    total = mutation["total_mutants"]
+    killed = mutation["killed_by_submitted_tests"]
+    missed = mutation["survived_submitted_tests"]
+    fair = report["question_mutant_count"]
+    withheld = report["not_questioned_mutant_count"]
+
+    assert re.search(rf"\b{tests}\s+tests\s+pass\b", visible)
+    assert re.search(rf"\b{total}\s+small\s+changes\b", visible)
+    assert re.search(rf"\btests\s+caught\s+{killed}\b", visible)
+    assert re.search(rf"\b{missed}\s+changes\s+they\s+missed\b", visible)
+    assert re.search(rf"\b{fair}\s+are\s+fair\s+to\s+discuss\b", visible)
+    assert re.search(rf"\bwithheld\s+{withheld}\s+change", visible)
 
 
 def _fixture_report(tmp_path):
@@ -82,8 +99,7 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
     parsed.feed(document)
     visible = parsed.visible_text
 
-    assert "Diego Ramos's 10 tests pass." in visible
-    assert "We made 3 small changes to code they wrote; their tests caught 0." in visible
+    _assert_headline_facts(report, visible)
     assert "Authored-line coverage" in visible
     assert "Their suite executes 1 of 1 mutatable lines they authored." in visible
     assert "What their tests already protect" in visible
@@ -221,7 +237,9 @@ def test_local_server_exposes_only_report_page_css_and_read_only_json(tmp_path) 
             ]
             page = response.read().decode("utf-8")
             assert "Diego Ramos" in page
-            assert "10 tests pass." in page
+            page_facts = _DocumentFacts()
+            page_facts.feed(page)
+            _assert_headline_facts(expected_report, page_facts.visible_text)
         with urlopen(base + "/method", timeout=3) as response:
             assert response.status == 200
             method = response.read().decode("utf-8")

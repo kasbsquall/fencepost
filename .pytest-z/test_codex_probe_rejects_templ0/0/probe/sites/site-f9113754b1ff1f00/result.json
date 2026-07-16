@@ -1,0 +1,133 @@
+{
+  "answer": null,
+  "artifact_refs": [
+    "run.json",
+    "triage/contract/contract-gap/attempt-01/attempt.json",
+    "probe/sites/site-f9113754b1ff1f00/result.json"
+  ],
+  "assessment": null,
+  "error": "question generation failed: probe question violated formative-language policy: \\bobservable(?:\\s+\\w+){0,2}\\s+behavior\\b",
+  "grounding": {
+    "attribution_artifact_ref": "run.json",
+    "authored_lines": [
+      {
+        "author_date": "2026-07-07",
+        "author_email": "student@example.edu",
+        "author_name": "Diego Ramos",
+        "commit": "4a3f000000000000000000000000000000000000",
+        "commit_summary": "implement boundary",
+        "line": 2,
+        "path": "pkg/analytics.py",
+        "text": "    return value >= 1"
+      }
+    ],
+    "end_line": 2,
+    "original_segment": "    return value >= 1",
+    "path": "pkg/analytics.py",
+    "start_line": 2
+  },
+  "mutants": [
+    {
+      "artifact_refs": [
+        "mutants/contract-gap/result.json",
+        "triage/contract/contract-gap/attempt-01/attempt.json",
+        "probe/sites/site-f9113754b1ff1f00/mutants/contract-gap.json"
+      ],
+      "evidence": {
+        "adversarial_test": {
+          "generation_duration_seconds": 0.0,
+          "input_tokens": null,
+          "model": null,
+          "output_tokens": null,
+          "provider": "fixture",
+          "response_id": null,
+          "source": "from pkg.analytics import f\n\ndef test_boundary():\n    assert f(1)\n",
+          "targeted_behavior": "exact lower boundary"
+        },
+        "failing_assertion": {
+          "detail": "AssertionError",
+          "kind": "failure",
+          "message": "assert False",
+          "nodeid": "test_probe.py::test_boundary"
+        },
+        "mutant_execution": {
+          "duration_seconds": 0.01,
+          "exit_code": 1,
+          "failure": {
+            "detail": "AssertionError",
+            "kind": "failure",
+            "message": "assert False",
+            "nodeid": "test_probe.py::test_boundary"
+          },
+          "status": "failed",
+          "stderr": "",
+          "stdout": "",
+          "tests_collected": 1,
+          "tests_skipped": 0,
+          "timed_out": false
+        },
+        "original_execution": {
+          "duration_seconds": 0.01,
+          "exit_code": 0,
+          "failure": null,
+          "status": "passed",
+          "stderr": "",
+          "stdout": "",
+          "tests_collected": 1,
+          "tests_skipped": 0,
+          "timed_out": false
+        },
+        "triage_artifact_ref": "triage/contract/contract-gap/attempt-01/attempt.json"
+      },
+      "module_path": "pkg.analytics",
+      "mutant": {
+        "candidate": {
+          "after": "Gt",
+          "anchor": {
+            "column": 11,
+            "end_column": 21,
+            "end_line": 2,
+            "line": 2
+          },
+          "ast_path": [],
+          "before": "GtE",
+          "id": "contract-gap",
+          "kind": "compare",
+          "parameters": [],
+          "path": "pkg/analytics.py",
+          "source_segment": "value >= 1"
+        },
+        "execution": {
+          "duration_seconds": 0.1,
+          "exit_code": 0,
+          "failing_tests": [],
+          "status": "survived",
+          "stderr": "",
+          "stdout": ".......... [100%]\n10 passed in 0.10s\n",
+          "timed_out": false
+        },
+        "generated_anchor": {
+          "column": 11,
+          "end_column": 20,
+          "end_line": 2,
+          "line": 2
+        }
+      },
+      "mutant_id": "contract-gap",
+      "mutated_function": "def f(value):\n    return value > 1",
+      "mutation": {
+        "mutated_segment": "value > 1",
+        "original_segment": "value >= 1",
+        "unified_diff": "-    return value >= 1\n+    return value > 1"
+      },
+      "original_function": "def f(value):\n    return value >= 1",
+      "qualified_function_name": "f",
+      "submitted_suite_artifact_ref": "mutants/contract-gap/result.json",
+      "submitted_suite_tests_passed": 10
+    }
+  ],
+  "question": null,
+  "site_id": "site-f9113754b1ff1f00",
+  "status": "QUESTION_FAILED",
+  "survivor_count": 1
+}

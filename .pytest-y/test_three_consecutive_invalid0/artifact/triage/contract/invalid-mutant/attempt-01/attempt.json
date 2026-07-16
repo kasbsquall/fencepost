@@ -1,0 +1,25 @@
+{
+  "attempt": 1,
+  "contract_violations": [
+    {
+      "column": 11,
+      "line": 1,
+      "message": "generated test is not valid Python: invalid syntax",
+      "rule": "syntax"
+    }
+  ],
+  "generated_test": {
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fake",
+    "response_id": null,
+    "source": "not valid python !",
+    "targeted_behavior": "fixture behavior"
+  },
+  "mutant": null,
+  "original": null,
+  "outcome": "INVALID_CONTRACT",
+  "valid_attempt_number": null
+}

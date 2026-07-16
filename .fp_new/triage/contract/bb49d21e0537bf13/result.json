@@ -1,0 +1,219 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [
+        {
+          "column": 38,
+          "line": 3,
+          "message": "the 'monkeypatch' fixture can replace program behavior and is not allowed",
+          "rule": "fixtures"
+        },
+        {
+          "column": 4,
+          "line": 4,
+          "message": "call to monkeypatch.setattr can replace program behavior and is not allowed",
+          "rule": "mocking"
+        },
+        {
+          "column": 4,
+          "line": 4,
+          "message": "setattr() targets the module under test or an object reachable from it",
+          "rule": "program_replacement"
+        },
+        {
+          "column": 4,
+          "line": 4,
+          "message": "the 'monkeypatch' fixture can replace program behavior and is not allowed",
+          "rule": "fixtures"
+        }
+      ],
+      "generated_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fixture-fake",
+        "response_id": null,
+        "source": "import gradebook.analytics as analytics\n\ndef test_percentile_without_its_clamp(monkeypatch):\n    monkeypatch.setattr(analytics, 'clamp_percent', float)\n    assert analytics.percentile([10, 20, 30, 40], -12.5) == 10\n",
+        "targeted_behavior": "intentionally invalid attempt that replaces the program clamp"
+      },
+      "mutant": null,
+      "original": null,
+      "outcome": "INVALID_CONTRACT",
+      "valid_attempt_number": null
+    },
+    {
+      "attempt": 2,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fixture-fake",
+        "response_id": null,
+        "source": "from gradebook.analytics import percentile\n\ndef test_plain_percentile_index():\n    assert percentile([10, 20, 30], 50) == 20\n",
+        "targeted_behavior": "plain numeric percentile index"
+      },
+      "mutant": {
+        "duration_seconds": 0.6828731499990681,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-q3yh6wq4/mutant/junit.xml -----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.7819584310018399,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-q3yh6wq4/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "NOT_DISTINGUISHED",
+      "valid_attempt_number": 1
+    },
+    {
+      "attempt": 3,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fixture-fake",
+        "response_id": null,
+        "source": "from gradebook.analytics import percentile\n\ndef test_plain_percentile_index():\n    assert percentile([10, 20, 30], 50) == 20\n",
+        "targeted_behavior": "plain numeric percentile index"
+      },
+      "mutant": {
+        "duration_seconds": 0.6632592140013003,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-bam6ioxe/mutant/junit.xml -----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.67024875000061,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-bam6ioxe/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "NOT_DISTINGUISHED",
+      "valid_attempt_number": 2
+    },
+    {
+      "attempt": 4,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 0.0,
+        "input_tokens": null,
+        "model": null,
+        "output_tokens": null,
+        "provider": "fixture-fake",
+        "response_id": null,
+        "source": "from gradebook.analytics import percentile\n\ndef test_plain_percentile_index():\n    assert percentile([10, 20, 30], 50) == 20\n",
+        "targeted_behavior": "plain numeric percentile index"
+      },
+      "mutant": {
+        "duration_seconds": 0.665761955002381,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-pcoq8g9v/mutant/junit.xml -----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.6620928760021343,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-pcoq8g9v/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "NOT_DISTINGUISHED",
+      "valid_attempt_number": 3
+    }
+  ],
+  "attempts_used": 4,
+  "failure_evidence": null,
+  "invalid_attempts": 1,
+  "label": "PROBABLE_EQUIVALENT",
+  "mode": "CONTRACT",
+  "mutant": {
+    "candidate": {
+      "after": "FloorDiv",
+      "anchor": {
+        "column": 12,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        }
+      ],
+      "before": "Div",
+      "id": "bb49d21e0537bf13",
+      "kind": "arithmetic",
+      "parameters": [],
+      "path": "gradebook/analytics.py",
+      "source_segment": "len(ordered) * p / 100"
+    },
+    "execution": {
+      "duration_seconds": 1.2524699860005057,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0031-013hcq6z/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 12,
+      "end_column": 35,
+      "end_line": 35,
+      "line": 35
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 3,
+  "winning_test": null
+}

@@ -1,0 +1,98 @@
+{
+  "artifact_refs": [
+    "mutants/contract-gap-2/result.json",
+    "triage/contract/contract-gap-2/attempt-01/attempt.json",
+    "probe/sites/site-f9113754b1ff1f00/mutants/contract-gap-2.json"
+  ],
+  "evidence": {
+    "adversarial_test": {
+      "generation_duration_seconds": 0.0,
+      "input_tokens": null,
+      "model": null,
+      "output_tokens": null,
+      "provider": "fixture",
+      "response_id": null,
+      "source": "from pkg.analytics import f\n\ndef test_boundary():\n    assert f(1)\n",
+      "targeted_behavior": "exact lower boundary"
+    },
+    "failing_assertion": {
+      "detail": "AssertionError",
+      "kind": "failure",
+      "message": "assert False",
+      "nodeid": "test_probe.py::test_boundary"
+    },
+    "mutant_execution": {
+      "duration_seconds": 0.01,
+      "exit_code": 1,
+      "failure": {
+        "detail": "AssertionError",
+        "kind": "failure",
+        "message": "assert False",
+        "nodeid": "test_probe.py::test_boundary"
+      },
+      "status": "failed",
+      "stderr": "",
+      "stdout": "",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "original_execution": {
+      "duration_seconds": 0.01,
+      "exit_code": 0,
+      "failure": null,
+      "status": "passed",
+      "stderr": "",
+      "stdout": "",
+      "tests_collected": 1,
+      "tests_skipped": 0,
+      "timed_out": false
+    },
+    "triage_artifact_ref": "triage/contract/contract-gap-2/attempt-01/attempt.json"
+  },
+  "module_path": "pkg.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "2",
+      "anchor": {
+        "column": 20,
+        "end_column": 21,
+        "end_line": 2,
+        "line": 2
+      },
+      "ast_path": [],
+      "before": "1",
+      "id": "contract-gap-2",
+      "kind": "numeric_boundary",
+      "parameters": [],
+      "path": "pkg/analytics.py",
+      "source_segment": "1"
+    },
+    "execution": {
+      "duration_seconds": 0.1,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": ".......... [100%]\n10 passed in 0.10s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 20,
+      "end_column": 21,
+      "end_line": 2,
+      "line": 2
+    }
+  },
+  "mutant_id": "contract-gap-2",
+  "mutated_function": "def f(value):\n    return value >= 2",
+  "mutation": {
+    "mutated_segment": "2",
+    "original_segment": "1",
+    "unified_diff": "-    return value >= 1\n+    return value >= 2"
+  },
+  "original_function": "def f(value):\n    return value >= 1",
+  "qualified_function_name": "f",
+  "submitted_suite_artifact_ref": "mutants/contract-gap-2/result.json",
+  "submitted_suite_tests_passed": 10
+}

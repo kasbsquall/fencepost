@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fixture-fake",
+    "response_id": null,
+    "source": "from gradebook.analytics import clamp_percent, percentile\n\ndef test_upper_numeric_boundaries():\n    assert clamp_percent(99.5) == 99.5\n    assert percentile([30, 10, 20], 66) == 20\n",
+    "targeted_behavior": "upper clamp and percentile denominator boundaries"
+  },
+  "mutant": {
+    "duration_seconds": 0.8621750839993183,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_upper_numeric_boundaries():\n        assert clamp_percent(99.5) == 99.5\n>       assert percentile([30, 10, 20], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = percentile([30, 10, 20], 66)\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "assert 30 == 20\n +  where 30 = percentile([30, 10, 20], 66)",
+      "nodeid": ".fencepost-generated-0019.test_adversarial::test_upper_numeric_boundaries"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________________ test_upper_numeric_boundaries _________________________\n\n    def test_upper_numeric_boundaries():\n        assert clamp_percent(99.5) == 99.5\n>       assert percentile([30, 10, 20], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = percentile([30, 10, 20], 66)\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0019-m7p15jdc/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_upper_numeric_boundaries\n1 failed in 0.03s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.8146159129973967,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-m7p15jdc/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

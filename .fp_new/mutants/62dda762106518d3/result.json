@@ -1,0 +1,57 @@
+{
+  "candidate": {
+    "after": "101",
+    "anchor": {
+      "column": 12,
+      "end_column": 15,
+      "end_line": 30,
+      "line": 30
+    },
+    "ast_path": [
+      {
+        "field": "body",
+        "index": 2
+      },
+      {
+        "field": "body",
+        "index": 2
+      },
+      {
+        "field": "body",
+        "index": 0
+      },
+      {
+        "field": "value",
+        "index": null
+      }
+    ],
+    "before": "100",
+    "id": "62dda762106518d3",
+    "kind": "numeric_boundary",
+    "parameters": [
+      [
+        "direction",
+        "1"
+      ]
+    ],
+    "path": "gradebook/analytics.py",
+    "source_segment": "100"
+  },
+  "execution": {
+    "duration_seconds": 1.2844420580004225,
+    "exit_code": 1,
+    "failing_tests": [
+      "tests.test_analytics::test_clamp_percent_outside_interval"
+    ],
+    "status": "killed",
+    "stderr": "",
+    "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n......F...                                                               [100%]\n=================================== FAILURES ===================================\n_____________________ test_clamp_percent_outside_interval ______________________\n\n    def test_clamp_percent_outside_interval():\n        assert clamp_percent(-5) == 0\n        assert clamp_percent(50) == 50\n>       assert clamp_percent(120) == 100\nE       assert 101 == 100\nE        +  where 101 = clamp_percent(120)\n\ntests/test_analytics.py:31: AssertionError\n------------ generated xml file: /work/jobs/0029-tf2tk8n_/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_clamp_percent_outside_interval - assert ...\n1 failed, 9 passed in 0.04s\n",
+    "timed_out": false
+  },
+  "generated_anchor": {
+    "column": 12,
+    "end_column": 15,
+    "end_line": 28,
+    "line": 28
+  }
+}

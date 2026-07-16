@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from html import escape
 from pathlib import Path
 from typing import Any, Mapping, Sequence
@@ -82,13 +83,46 @@ def _code(value: object, class_name: str = "") -> str:
     return f"<code{class_attr}>{_text(value)}</code>"
 
 
+def _data_text(value: object) -> str:
+    """Escape prose while marking numeric data for deterministic mono figures."""
+    escaped = _text(value)
+    return re.sub(
+        r"(?<![\w])([0-9]+(?:\.[0-9]+)?%?)(?![\w])",
+        r'<span class="data-value">\1</span>',
+        escaped,
+    )
+
+
+def _icon(name: str, class_name: str = "") -> str:
+    classes = "icon" + (f" {class_name}" if class_name else "")
+    return (
+        f'<svg class="{classes}" aria-hidden="true" focusable="false">'
+        f'<use href="#icon-{name}"></use></svg>'
+    )
+
+
+def _icon_sprite() -> str:
+    """Definitions shared by every icon; presentation stays in Ledger CSS."""
+    return """
+<svg class="icon-sprite" aria-hidden="true" focusable="false">
+  <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+  <symbol id="icon-cross" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></symbol>
+</svg>""".strip()
+
+
+def _inline_disclosure(label: str) -> str:
+    return f'<summary>{_text(label)}{_icon("chevron", "disclosure-icon")}</summary>'
+
+
 def _logo() -> str:
     return """
 <a class="brand" href="/" aria-label="Fencepost report home">
   <svg class="brand-mark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
     <rect x="12" y="30" width="9" height="54" rx="2" fill="currentColor"/>
     <rect x="30" y="30" width="9" height="54" rx="2" fill="currentColor"/>
-    <rect x="48" y="44" width="9" height="40" rx="2" fill="#B24A3C"/>
+    <rect class="brand-post-offset" x="48" y="44" width="9" height="40" rx="2" fill="currentColor"/>
     <rect x="66" y="30" width="9" height="54" rx="2" fill="currentColor"/>
     <rect x="84" y="30" width="9" height="54" rx="2" fill="currentColor"/>
   </svg>
@@ -186,7 +220,7 @@ def _change_line(mutation: Mapping[str, Any]) -> str:
         return _code(original)
     return (
         f'<span class="change-before">{_code(original)}</span>'
-        '<span class="change-arrow" aria-label="changed to">→</span>'
+        f'<span class="change-arrow" aria-label="changed to">{_icon("arrow")}</span>'
         f'<span class="change-after">{_code(changed)}</span>'
     )
 
@@ -209,7 +243,7 @@ def _suite_state(mutant: Mapping[str, Any]) -> str:
     artifact = mutant.get("submitted_suite_artifact_ref")
     return f"""
 <section class="run-state run-state-pass" aria-label="Student test suite passed">
-  <span class="state-icon" aria-hidden="true">✓</span>
+  <span class="state-icon">{_icon("check")}</span>
   <div>
     <p class="state-result"><span>{_text(label)}</span> <strong>— {_text(outcome)}</strong></p>
     {f'<p class="artifact-ref">{_code(artifact)}</p>' if artifact else ''}
@@ -225,7 +259,7 @@ def _adversarial_section(evidence: Mapping[str, Any]) -> str:
     if source is None and behavior is None:
         return ""
     validated = (
-        '<span class="validation-pass">✓ passed on original</span>'
+        f'<span class="validation-pass">{_icon("check")} passed on original</span>'
         if original.get("status") == "passed"
         else ""
     )
@@ -251,18 +285,18 @@ def _failure_section(evidence: Mapping[str, Any]) -> str:
     status = execution.get("status")
     return f"""
 <section class="run-state run-state-fail" aria-label="Adversarial test failed on mutant">
-  <span class="state-icon" aria-hidden="true">×</span>
+  <span class="state-icon">{_icon("cross")}</span>
   <div class="failure-body">
     <p class="step-label"><span>5</span> Result on changed code</p>
     {f'<p class="state-result">{_text(status)}</p>' if status is not None else ''}
     {f'<p class="failure-node">{_code(nodeid)}</p>' if nodeid else ''}
     {f'<pre class="failure-message"><code>{_text(message)}</code></pre>' if message is not None else ''}
-    {f'<details class="trace"><summary>Full assertion trace</summary><pre><code>{_text(detail)}</code></pre></details>' if detail else ''}
+    {f'<details class="trace">{_inline_disclosure("Full assertion trace")}<pre><code>{_text(detail)}</code></pre></details>' if detail else ''}
   </div>
 </section>""".strip()
 
 
-def _mutation_story(mutant: Mapping[str, Any]) -> str:
+def _mutation_story(mutant: Mapping[str, Any], *, open_story: bool = False) -> str:
     mutation = _mapping(mutant.get("mutation"))
     evidence = _mapping(mutant.get("evidence"))
     change = _change_line(mutation)
@@ -272,12 +306,16 @@ def _mutation_story(mutant: Mapping[str, Any]) -> str:
     artifact = evidence.get("triage_artifact_ref")
     unified_diff = mutation.get("unified_diff")
     return f"""
-<article class="mutation-story">
-  <section class="change-considered">
+<details class="mutation-story"{' open' if open_story else ''}>
+  <summary class="mutation-summary">
+    <span class="mutation-summary-copy">
     <p class="step-label"><span>2</span> Change considered</p>
     {f'<div class="change-line">{change}</div>' if change else ''}
-    {f'<details class="unified-diff"><summary>Full source diff</summary><pre><code>{_text(unified_diff)}</code></pre></details>' if unified_diff else ''}
-  </section>
+    </span>
+    {_icon("chevron", "disclosure-icon")}
+  </summary>
+  <div class="mutation-evidence">
+  {f'<details class="unified-diff">{_inline_disclosure("Full source diff")}<pre><code>{_text(unified_diff)}</code></pre></details>' if unified_diff else ''}
   <div class="state-sequence">
     <div>
       <p class="step-label"><span>3</span> Submitted tests</p>
@@ -287,7 +325,8 @@ def _mutation_story(mutant: Mapping[str, Any]) -> str:
     {failure}
   </div>
   {f'<p class="evidence-ref">Execution artifact {_code(artifact)}</p>' if artifact else ''}
-</article>""".strip()
+  </div>
+</details>""".strip()
 
 
 def _assessment(place: Mapping[str, Any]) -> str:
@@ -320,7 +359,7 @@ def _assessment(place: Mapping[str, Any]) -> str:
                 + (f"<p>{_code(nodeid)}</p>" if nodeid else "")
                 + (f"<pre><code>{_text(message)}</code></pre>" if message else "")
                 + (f"<p class=\"artifact-ref\">{_code(artifact)}</p>" if artifact else "")
-                + (f"<details><summary>Full assertion trace</summary><pre><code>{_text(detail)}</code></pre></details>" if detail else "")
+                + (f"<details>{_inline_disclosure('Full assertion trace')}<pre><code>{_text(detail)}</code></pre></details>" if detail else "")
                 + "</li>"
             )
         parts.append("</ul>")
@@ -328,7 +367,7 @@ def _assessment(place: Mapping[str, Any]) -> str:
     return "".join(parts)
 
 
-def _site_card(place: Mapping[str, Any]) -> str:
+def _site_card(place: Mapping[str, Any], *, open_site: bool = False) -> str:
     grounding = _mapping(place.get("grounding"))
     path = grounding.get("path")
     line = grounding.get("start_line")
@@ -355,9 +394,12 @@ def _site_card(place: Mapping[str, Any]) -> str:
     mutants = [
         _mapping(item) for item in _sequence(place.get("mutants"))
     ]
-    stories = "".join(_mutation_story(mutant) for mutant in mutants)
+    stories = "".join(
+        _mutation_story(mutant, open_story=open_site and index == 0)
+        for index, mutant in enumerate(mutants)
+    )
     return f"""
-<details class="site-card">
+<details class="site-card"{' open' if open_site else ''}>
   <summary>
     <span class="summary-copy">
       <span class="site-meta">{_code(location, 'location')} {f'<span>{" · ".join(metadata)}</span>' if metadata else ''}</span>
@@ -365,6 +407,7 @@ def _site_card(place: Mapping[str, Any]) -> str:
     </span>
     {count_text}
     <span class="disclosure-label" aria-hidden="true">view evidence</span>
+    {_icon("chevron", "disclosure-icon")}
   </summary>
   <div class="site-evidence">
     {_source_section(grounding)}
@@ -397,7 +440,7 @@ def _shielded_item(item: Mapping[str, Any]) -> str:
     {f'<p class="shielded-lead">{_text(plain_reason)}</p>' if plain_reason else ''}
     {f'<div class="change-line">{change}</div>' if change else ''}
     <details class="technical-evidence">
-      <summary>Technical evidence for audit</summary>
+      {_inline_disclosure("Technical evidence for audit")}
       {f'<p>{_text(reason)}</p>' if reason and reason != plain_reason else ''}
       {f'<p class="step-label">STRICT-mode killing test</p><pre class="test-code"><code>{_text(test.get("source"))}</code></pre>' if test.get('source') is not None else ''}
       {f'<div class="strict-failure"><p>{_code(failure.get("nodeid"))}</p><pre><code>{_text(failure.get("message"))}</code></pre></div>' if failure else ''}
@@ -444,7 +487,7 @@ def _pedagogically_withheld_item(item: Mapping[str, Any]) -> str:
     <p class="shielded-lead">{_text(lead)}</p>
     {f'<div class="change-line">{change}</div>' if change else ''}
     <details class="technical-evidence">
-      <summary>Technical evidence for audit</summary>
+      {_inline_disclosure("Technical evidence for audit")}
       {''.join(f'<p>{_text(reason)}</p>' for reason in reasons)}
       {f'<pre class="test-code"><code>{_text(test.get("source"))}</code></pre>' if test.get('source') is not None else ''}
       {f'<div class="strict-failure"><p>{_code(failure.get("nodeid"))}</p><pre><code>{_text(failure.get("message"))}</code></pre></div>' if failure else ''}
@@ -594,8 +637,12 @@ def _conversation_groups(report: Mapping[str, Any]) -> str:
         _mapping(item) for item in _sequence(report.get("function_groups"))
     ]
     if not groups and places:
-        return "".join(_site_card(place) for place in places.values())
+        return "".join(
+            _site_card(place, open_site=index == 0)
+            for index, place in enumerate(places.values())
+        )
     rendered = []
+    first_site_opened = False
     for group in groups:
         name = group.get("qualified_function_name")
         path = group.get("path")
@@ -607,11 +654,14 @@ def _conversation_groups(report: Mapping[str, Any]) -> str:
             metadata.append(f"{site_count} source {'site' if site_count == 1 else 'sites'}")
         if isinstance(mutant_count, int):
             metadata.append(f"{mutant_count} surviving {'change' if mutant_count == 1 else 'changes'}")
-        cards = "".join(
-            _site_card(places[site_id])
-            for site_id in _sequence(group.get("site_ids"))
-            if site_id in places
-        )
+        cards = []
+        for site_id in _sequence(group.get("site_ids")):
+            if site_id not in places:
+                continue
+            cards.append(
+                _site_card(places[site_id], open_site=not first_site_opened)
+            )
+            first_site_opened = True
         rendered.append(
             f"""<section class="conversation-group">
   <header class="conversation-header">
@@ -620,7 +670,7 @@ def _conversation_groups(report: Mapping[str, Any]) -> str:
     {f'<p class="group-meta">{" · ".join(metadata)}</p>' if metadata else ''}
     {f'<p class="priority-reason"><strong>Why this comes first.</strong> {_text(reason)}</p>' if reason else ''}
   </header>
-  {cards}
+  {''.join(cards)}
 </section>"""
         )
     return "".join(rendered)
@@ -674,6 +724,7 @@ def render_report_document(report: Mapping[str, Any]) -> str:
   <link rel="stylesheet" href="/assets/ledger.css">
 </head>
 <body id="top">
+  {_icon_sprite()}
   <a class="skip-link" href="#main">Skip to report</a>
   <header class="masthead">
     <div class="shell masthead-inner">{_logo()}<nav aria-label="Report navigation"><a href="/method">Method</a></nav></div>
@@ -682,8 +733,8 @@ def render_report_document(report: Mapping[str, Any]) -> str:
     {f'<aside class="formative-notice"><strong>Formative, human-reviewed.</strong><span>{_text(formative)}</span></aside>' if formative else ''}
     <section class="run-header" aria-labelledby="run-title">
       {f'<p class="run-meta">{" · ".join(run_meta)}</p>' if run_meta else ''}
-      <h1 id="run-title">{_text(headline)}</h1>
-      {f'<p class="headline-detail">{_text(summary)}</p>' if summary else ''}
+      <h1 id="run-title">{_data_text(headline)}</h1>
+      {f'<p class="headline-detail">{_data_text(summary)}</p>' if summary else ''}
     </section>
     {_coverage_section(report)}
     {_function_outcomes(report)}
@@ -728,6 +779,7 @@ def render_method_document(report: Mapping[str, Any]) -> str:
   <link rel="stylesheet" href="/assets/ledger.css">
 </head>
 <body id="top">
+  {_icon_sprite()}
   <a class="skip-link" href="#main">Skip to method</a>
   <header class="masthead"><div class="shell masthead-inner">{_logo()}<nav aria-label="Report navigation"><a href="/">Instructor report</a></nav></div></header>
   <main class="shell method-main" id="main">
@@ -754,6 +806,7 @@ def render_error_document(message: str) -> str:
   <link rel="stylesheet" href="/assets/ledger.css">
 </head>
 <body id="top">
+  {_icon_sprite()}
   <header class="masthead"><div class="shell masthead-inner">{_logo()}</div></header>
   <main class="shell error-main" id="main">
     <section class="error-panel" role="alert">

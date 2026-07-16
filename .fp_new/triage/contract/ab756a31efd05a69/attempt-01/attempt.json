@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fixture-fake",
+    "response_id": null,
+    "source": "from gradebook.analytics import clamp_percent\n\ndef test_clamp_percent_clamps_negative_one():\n    assert clamp_percent(-1) == 0\n",
+    "targeted_behavior": "clamp_percent lower comparison literal shifted down"
+  },
+  "mutant": {
+    "duration_seconds": 0.8481019399987417,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_clamp_percent_clamps_negative_one():\n>       assert clamp_percent(-1) == 0\nE       assert -1 == 0\nE        +  where -1 = clamp_percent(-1)\n\n.fencepost-generated-0013/test_adversarial.py:4: AssertionError",
+      "kind": "failure",
+      "message": "assert -1 == 0\n +  where -1 = clamp_percent(-1)",
+      "nodeid": ".fencepost-generated-0013.test_adversarial::test_clamp_percent_clamps_negative_one"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n____________________ test_clamp_percent_clamps_negative_one ____________________\n\n    def test_clamp_percent_clamps_negative_one():\n>       assert clamp_percent(-1) == 0\nE       assert -1 == 0\nE        +  where -1 = clamp_percent(-1)\n\n.fencepost-generated-0013/test_adversarial.py:4: AssertionError\n----- generated xml file: /work/jobs/triage-0013-p92pl1gv/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0013/test_adversarial.py::test_clamp_percent_clamps_negative_one\n1 failed in 0.03s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.8484454629979155,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0013-p92pl1gv/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

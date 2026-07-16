@@ -1,0 +1,57 @@
+{
+  "candidate": {
+    "after": "FloorDiv",
+    "anchor": {
+      "column": 12,
+      "end_column": 28,
+      "end_line": 38,
+      "line": 38
+    },
+    "ast_path": [
+      {
+        "field": "body",
+        "index": 3
+      },
+      {
+        "field": "body",
+        "index": 3
+      },
+      {
+        "field": "value",
+        "index": null
+      },
+      {
+        "field": "args",
+        "index": 0
+      },
+      {
+        "field": "left",
+        "index": null
+      }
+    ],
+    "before": "Mult",
+    "id": "32cc5e262da8e932",
+    "kind": "arithmetic",
+    "parameters": [],
+    "path": "gradebook/analytics.py",
+    "source_segment": "len(ordered) * p"
+  },
+  "execution": {
+    "duration_seconds": 1.2964270100019348,
+    "exit_code": 1,
+    "failing_tests": [
+      "tests.test_analytics::test_percentile_median",
+      "tests.test_analytics::test_percentile_low"
+    ],
+    "status": "killed",
+    "stderr": "",
+    "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.02s\n\n....FF....                                                               [100%]\n=================================== FAILURES ===================================\n____________________________ test_percentile_median ____________________________\n\n    def test_percentile_median():\n>       assert percentile([10, 20, 30, 40, 50], 50) == 30\nE       assert 10 == 30\nE        +  where 10 = percentile([10, 20, 30, 40, 50], 50)\n\ntests/test_analytics.py:21: AssertionError\n_____________________________ test_percentile_low ______________________________\n\n    def test_percentile_low():\n>       assert percentile([10, 20, 30, 40, 50], 20) == 20\nE       assert 10 == 20\nE        +  where 10 = percentile([10, 20, 30, 40, 50], 20)\n\ntests/test_analytics.py:25: AssertionError\n------------ generated xml file: /work/jobs/0032-xeq309ex/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_percentile_median - assert 10 == 30\nFAILED tests/test_analytics.py::test_percentile_low - assert 10 == 20\n2 failed, 8 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "generated_anchor": {
+    "column": 12,
+    "end_column": 29,
+    "end_line": 35,
+    "line": 35
+  }
+}

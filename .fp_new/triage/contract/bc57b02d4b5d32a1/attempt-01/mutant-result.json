@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.8389227360021323,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_letter_grade_boundary_80():\n>       assert letter_grade(80) == 'B'\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0003/test_adversarial.py:4: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+    "nodeid": ".fencepost-generated-0003.test_adversarial::test_letter_grade_boundary_80"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________________ test_letter_grade_boundary_80 _________________________\n\n    def test_letter_grade_boundary_80():\n>       assert letter_grade(80) == 'B'\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0003/test_adversarial.py:4: AssertionError\n----- generated xml file: /work/jobs/triage-0003-r5nkqdm9/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0003/test_adversarial.py::test_letter_grade_boundary_80\n1 failed in 0.03s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

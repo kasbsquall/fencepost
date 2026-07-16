@@ -1,0 +1,31 @@
+{
+  "attempt": 1,
+  "contract_violations": [
+    {
+      "column": 0,
+      "line": 1,
+      "message": "import from 'decimal' is outside pytest and 'pkg.analytics'",
+      "rule": "imports"
+    },
+    {
+      "column": 13,
+      "line": 5,
+      "message": "code-under-test arguments must be plain literal values",
+      "rule": "plain_inputs"
+    }
+  ],
+  "generated_test": {
+    "generation_duration_seconds": 0.0,
+    "input_tokens": null,
+    "model": null,
+    "output_tokens": null,
+    "provider": "fake",
+    "response_id": null,
+    "source": "from decimal import Decimal\nfrom pkg.analytics import f\n\ndef test_generated():\n    assert f(Decimal('1'))\n",
+    "targeted_behavior": "retry fixture"
+  },
+  "mutant": null,
+  "original": null,
+  "outcome": "INVALID_CONTRACT",
+  "valid_attempt_number": null
+}
