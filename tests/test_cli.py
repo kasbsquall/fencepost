@@ -1,5 +1,5 @@
 from fencepost.adversarial import CodexCliAdversarialTestGenerator
-from fencepost.cli import _build_generator, _build_probe_agent, _parser
+from fencepost.cli import _build_generator, _build_probe_agent, _parser, main
 from fencepost.probe import CodexCliComprehensionProbeAgent
 
 
@@ -25,3 +25,17 @@ def test_cli_defaults_to_chatgpt_authenticated_codex_model(monkeypatch) -> None:
     probe_agent = _build_probe_agent(args, generator)
     assert isinstance(probe_agent, CodexCliComprehensionProbeAgent)
     assert probe_agent.client is generator.client
+
+
+def test_cli_dispatches_serve_without_starting_analysis(monkeypatch, tmp_path) -> None:
+    import fencepost.serve
+
+    received = []
+
+    def fake_serve(argv):
+        received.append(argv)
+        return 17
+
+    monkeypatch.setattr(fencepost.serve, "main", fake_serve)
+    assert main(["serve", str(tmp_path), "--no-open"]) == 17
+    assert received == [[str(tmp_path), "--no-open"]]

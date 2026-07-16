@@ -1,0 +1,52 @@
+{
+  "candidate": {
+    "after": "''",
+    "anchor": {
+      "column": 15,
+      "end_column": 18,
+      "end_line": 14,
+      "line": 14
+    },
+    "ast_path": [
+      {
+        "field": "body",
+        "index": 1
+      },
+      {
+        "field": "body",
+        "index": 1
+      },
+      {
+        "field": "body",
+        "index": 0
+      },
+      {
+        "field": "value",
+        "index": null
+      }
+    ],
+    "before": "'A'",
+    "id": "855aea364aae6807",
+    "kind": "string_constant",
+    "parameters": [],
+    "path": "gradebook/analytics.py",
+    "source_segment": "\"A\""
+  },
+  "execution": {
+    "duration_seconds": 1.1311399400001392,
+    "exit_code": 1,
+    "failing_tests": [
+      "tests.test_analytics::test_letter_grade_a"
+    ],
+    "status": "killed",
+    "stderr": "",
+    "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.F........                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_letter_grade_a ______________________________\n\n    def test_letter_grade_a():\n>       assert letter_grade(95) == \"A\"\nE       AssertionError: assert '' == 'A'\nE         \nE         - A\n\ntests/test_analytics.py:9: AssertionError\n------------ generated xml file: /work/jobs/0004-w_849rwe/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_letter_grade_a - AssertionError: assert ...\n1 failed, 9 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "generated_anchor": {
+    "column": 15,
+    "end_column": 17,
+    "end_line": 13,
+    "line": 13
+  }
+}

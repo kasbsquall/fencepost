@@ -324,6 +324,8 @@ class ProbeExecutionEvidence:
 class ProbeMutantEvidence:
     mutant_id: str
     mutant: MutantResult
+    submitted_suite_tests_passed: int | None
+    submitted_suite_artifact_ref: str
     module_path: str
     qualified_function_name: str
     original_function: str

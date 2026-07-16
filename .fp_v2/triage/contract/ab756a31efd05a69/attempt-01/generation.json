@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.31199999999808,
+  "input_tokens": 13072,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 153,
+  "provider": "codex-cli",
+  "response_id": "019f6ae0-8fed-78c2-b88c-5c780dde2296",
+  "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_clamps_negative_one_to_zero():\n    assert gradebook.analytics.clamp_percent(-1) == 0",
+  "targeted_behavior": "A percentage below the inclusive lower bound, specifically -1, must clamp to 0."
+}

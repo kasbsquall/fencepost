@@ -1,0 +1,128 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 10.843000000000757,
+        "input_tokens": 13165,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 267,
+        "provider": "codex-cli",
+        "response_id": "019f6ae4-bb3c-7d21-890d-0b8a11d7ccec",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_hundred_based_rank_scale():\n    assert analytics.percentile([10, 20, 30], 66) == 20",
+        "targeted_behavior": "Percentile rank calculation must divide by 100, so 66th percentile of three ordered scores selects index 1."
+      },
+      "mutant": {
+        "duration_seconds": 0.6294280500005698,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_percentile_uses_hundred_based_rank_scale():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x739c89670220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x739c89670220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "assert 30 == 20\n +  where 30 = <function percentile at 0x739c89670220>([10, 20, 30], 66)\n +    where <function percentile at 0x739c89670220> = analytics.percentile",
+          "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_based_rank_scale"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________ test_percentile_uses_hundred_based_rank_scale _________________\n\n    def test_percentile_uses_hundred_based_rank_scale():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x739c89670220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x739c89670220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0019-q7nu4klo/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_uses_hundred_based_rank_scale\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.6127768530022877,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-q7nu4klo/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_percentile_uses_hundred_based_rank_scale():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x739c89670220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x739c89670220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "assert 30 == 20\n +  where 30 = <function percentile at 0x739c89670220>([10, 20, 30], 66)\n +    where <function percentile at 0x739c89670220> = analytics.percentile",
+    "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_based_rank_scale"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mode": "CONTRACT",
+  "mutant": {
+    "candidate": {
+      "after": "99",
+      "anchor": {
+        "column": 31,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        },
+        {
+          "field": "right",
+          "index": null
+        }
+      ],
+      "before": "100",
+      "id": "764a18c525e359d6",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    "execution": {
+      "duration_seconds": 1.3156326480002463,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.02s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0033-f9j9307d/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 31,
+      "end_column": 33,
+      "end_line": 35,
+      "line": 35
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 10.843000000000757,
+    "input_tokens": 13165,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 267,
+    "provider": "codex-cli",
+    "response_id": "019f6ae4-bb3c-7d21-890d-0b8a11d7ccec",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_hundred_based_rank_scale():\n    assert analytics.percentile([10, 20, 30], 66) == 20",
+    "targeted_behavior": "Percentile rank calculation must divide by 100, so 66th percentile of three ordered scores selects index 1."
+  }
+}

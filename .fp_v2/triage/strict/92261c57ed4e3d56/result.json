@@ -1,0 +1,120 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 13.25,
+        "input_tokens": 12650,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 370,
+        "provider": "codex-cli",
+        "response_id": "019f6add-28aa-73b2-8d9f-d32fb0e80e5f",
+        "source": "import gradebook.analytics as analytics\n\n\nclass BoundarySentinel:\n    def __lt__(self, other):\n        return False\n\n    def __gt__(self, other):\n        return False\n\n    def __ge__(self, other):\n        return True\n\n\ndef test_clamp_preserves_value_when_only_greater_than_is_false():\n    value = BoundarySentinel()\n\n    assert analytics.clamp_percent(value) is value",
+        "targeted_behavior": "Uses a comparable sentinel that is not negative or greater than 100, but reports itself as greater-than-or-equal to 100; only the mutant replaces it with the integer bound."
+      },
+      "mutant": {
+        "duration_seconds": 0.7024856239986548,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_clamp_preserves_value_when_only_greater_than_is_false():\n        value = BoundarySentinel()\n    \n>       assert analytics.clamp_percent(value) is value\nE       assert 100 is <test_adversarial.BoundarySentinel object at 0x71e3c76e25a0>\nE        +  where 100 = <function clamp_percent at 0x71e3c6c98180>(<test_adversarial.BoundarySentinel object at 0x71e3c76e25a0>)\nE        +    where <function clamp_percent at 0x71e3c6c98180> = analytics.clamp_percent\n\n.fencepost-generated-0015/test_adversarial.py:18: AssertionError",
+          "kind": "failure",
+          "message": "assert 100 is <test_adversarial.BoundarySentinel object at 0x71e3c76e25a0>\n +  where 100 = <function clamp_percent at 0x71e3c6c98180>(<test_adversarial.BoundarySentinel object at 0x71e3c76e25a0>)\n +    where <function clamp_percent at 0x71e3c6c98180> = analytics.clamp_percent",
+          "nodeid": ".fencepost-generated-0015.test_adversarial::test_clamp_preserves_value_when_only_greater_than_is_false"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________ test_clamp_preserves_value_when_only_greater_than_is_false __________\n\n    def test_clamp_preserves_value_when_only_greater_than_is_false():\n        value = BoundarySentinel()\n    \n>       assert analytics.clamp_percent(value) is value\nE       assert 100 is <test_adversarial.BoundarySentinel object at 0x71e3c76e25a0>\nE        +  where 100 = <function clamp_percent at 0x71e3c6c98180>(<test_adversarial.BoundarySentinel object at 0x71e3c76e25a0>)\nE        +    where <function clamp_percent at 0x71e3c6c98180> = analytics.clamp_percent\n\n.fencepost-generated-0015/test_adversarial.py:18: AssertionError\n----- generated xml file: /work/jobs/triage-0015-c7rxep51/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0015/test_adversarial.py::test_clamp_preserves_value_when_only_greater_than_is_false\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.8308483050004725,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0015-c7rxep51/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_clamp_preserves_value_when_only_greater_than_is_false():\n        value = BoundarySentinel()\n    \n>       assert analytics.clamp_percent(value) is value\nE       assert 100 is <test_adversarial.BoundarySentinel object at 0x71e3c76e25a0>\nE        +  where 100 = <function clamp_percent at 0x71e3c6c98180>(<test_adversarial.BoundarySentinel object at 0x71e3c76e25a0>)\nE        +    where <function clamp_percent at 0x71e3c6c98180> = analytics.clamp_percent\n\n.fencepost-generated-0015/test_adversarial.py:18: AssertionError",
+    "kind": "failure",
+    "message": "assert 100 is <test_adversarial.BoundarySentinel object at 0x71e3c76e25a0>\n +  where 100 = <function clamp_percent at 0x71e3c6c98180>(<test_adversarial.BoundarySentinel object at 0x71e3c76e25a0>)\n +    where <function clamp_percent at 0x71e3c6c98180> = analytics.clamp_percent",
+    "nodeid": ".fencepost-generated-0015.test_adversarial::test_clamp_preserves_value_when_only_greater_than_is_false"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mode": "STRICT",
+  "mutant": {
+    "candidate": {
+      "after": "GtE",
+      "anchor": {
+        "column": 7,
+        "end_column": 14,
+        "end_line": 29,
+        "line": 29
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "Gt",
+      "id": "92261c57ed4e3d56",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "p > 100"
+    },
+    "execution": {
+      "duration_seconds": 1.266309093000018,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0025-2w7c0bhl/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 7,
+      "end_column": 15,
+      "end_line": 27,
+      "line": 27
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 13.25,
+    "input_tokens": 12650,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 370,
+    "provider": "codex-cli",
+    "response_id": "019f6add-28aa-73b2-8d9f-d32fb0e80e5f",
+    "source": "import gradebook.analytics as analytics\n\n\nclass BoundarySentinel:\n    def __lt__(self, other):\n        return False\n\n    def __gt__(self, other):\n        return False\n\n    def __ge__(self, other):\n        return True\n\n\ndef test_clamp_preserves_value_when_only_greater_than_is_false():\n    value = BoundarySentinel()\n\n    assert analytics.clamp_percent(value) is value",
+    "targeted_behavior": "Uses a comparable sentinel that is not negative or greater than 100, but reports itself as greater-than-or-equal to 100; only the mutant replaces it with the integer bound."
+  }
+}

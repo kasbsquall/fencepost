@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 16.264999999999418,
+    "input_tokens": 13308,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 135,
+    "provider": "codex-cli",
+    "response_id": "019f6adf-c706-7910-8849-0004d1be73e6",
+    "source": "import gradebook.analytics\n\n\ndef test_letter_grade_awards_d_at_inclusive_lower_boundary():\n    assert gradebook.analytics.letter_grade(60) == \"D\"",
+    "targeted_behavior": "Distinguishes inclusive versus exclusive lower bound for the D grade at score 60."
+  },
+  "mutant": {
+    "duration_seconds": 0.7680237709973881,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_letter_grade_awards_d_at_inclusive_lower_boundary():\n>       assert gradebook.analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+      "nodeid": ".fencepost-generated-0009.test_adversarial::test_letter_grade_awards_d_at_inclusive_lower_boundary"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n____________ test_letter_grade_awards_d_at_inclusive_lower_boundary ____________\n\n    def test_letter_grade_awards_d_at_inclusive_lower_boundary():\n>       assert gradebook.analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0009-m7g_fh48/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0009/test_adversarial.py::test_letter_grade_awards_d_at_inclusive_lower_boundary\n1 failed in 0.03s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.6731874930010235,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0009-m7g_fh48/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

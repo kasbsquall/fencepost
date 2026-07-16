@@ -125,6 +125,8 @@ _BANNED_QUESTION_PATTERNS = (
     re.compile(r"\b(?:GtE|Gt|LtE|Lt|FloorDiv)\b"),
 )
 
+_PYTEST_PASSED_RE = re.compile(r"(?<!\w)(\d+)\s+passed\b")
+
 
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -150,6 +152,12 @@ def source_span_segment(source: str, span: SourceSpan) -> str:
     selected.extend(lines[span.line : span.end_line - 1])
     selected.append(lines[span.end_line - 1][: span.end_column])
     return "".join(selected).strip()
+
+
+def pytest_pass_count(stdout: str) -> int | None:
+    """Extract pytest's reported pass count for artifact presentation."""
+    matches = _PYTEST_PASSED_RE.findall(stdout)
+    return int(matches[-1]) if matches else None
 
 
 def _clean_question(prompt: str, grounding: ProbeGrounding) -> str:
@@ -370,9 +378,14 @@ def _site_mutant(
 ) -> ProbeMutantEvidence:
     candidate_id = context.mutant.candidate.id
     evidence = _execution_evidence(pair, candidate_id)
+    submitted_suite_artifact = f"mutants/{candidate_id}/result.json"
     return ProbeMutantEvidence(
         mutant_id=candidate_id,
         mutant=context.mutant,
+        submitted_suite_tests_passed=pytest_pass_count(
+            context.mutant.execution.stdout
+        ),
+        submitted_suite_artifact_ref=submitted_suite_artifact,
         module_path=context.module_path,
         qualified_function_name=context.qualified_function_name,
         original_function=context.original_function,
@@ -386,6 +399,7 @@ def _site_mutant(
         ),
         evidence=evidence,
         artifact_refs=(
+            submitted_suite_artifact,
             evidence.triage_artifact_ref,
             f"probe/sites/{site_id}/mutants/{candidate_id}.json",
         ),

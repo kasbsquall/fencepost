@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.406000000002678,
+  "input_tokens": 12646,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 159,
+  "provider": "codex-cli",
+  "response_id": "019f6adc-dec6-7b81-ba5e-6b761c40c4ae",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_clamps_fractional_negative_values_to_zero():\n    assert analytics.clamp_percent(-0.5) == 0",
+  "targeted_behavior": "A negative percentage between -1 and 0 must clamp to exactly 0."
+}

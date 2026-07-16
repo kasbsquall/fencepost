@@ -48,7 +48,13 @@ def _records():
     mutant = MutantResult(
         candidate=candidate,
         generated_anchor=SourceSpan(2, 11, 2, 20),
-        execution=ExecutionResult("survived", 0, 0.1, "", ""),
+        execution=ExecutionResult(
+            "survived",
+            0,
+            0.1,
+            ".......... [100%]\n10 passed in 0.10s\n",
+            "",
+        ),
     )
     test = GeneratedAdversarialTest(
         source="from pkg.analytics import f\n\ndef test_boundary():\n    assert f(1)\n",
@@ -114,7 +120,13 @@ def _records():
     shielded_mutant = MutantResult(
         candidate=shielded_candidate,
         generated_anchor=SourceSpan(2, 11, 2, 20),
-        execution=ExecutionResult("survived", 0, 0.1, "", ""),
+        execution=ExecutionResult(
+            "survived",
+            0,
+            0.1,
+            ".......... [100%]\n10 passed in 0.10s\n",
+            "",
+        ),
     )
     strict_only = SurvivorTriageResult(
         mode="STRICT",

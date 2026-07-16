@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.25,
+  "input_tokens": 12882,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 120,
+  "provider": "codex-cli",
+  "response_id": "019f6adb-0228-7ba0-a1ba-8ca69275bff0",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_assigns_a_at_exactly_90():\n    assert letter_grade(90) == \"A\"",
+  "targeted_behavior": "At the exact A/B boundary, a score of 90 must receive an A; the mutant instead returns B."
+}

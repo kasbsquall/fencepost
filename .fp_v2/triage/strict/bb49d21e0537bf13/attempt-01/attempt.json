@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 20.827999999994063,
+    "input_tokens": 12748,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 747,
+    "provider": "codex-cli",
+    "response_id": "019f6add-aa7f-7751-ac56-0c5ca9daa0dc",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_true_division_before_integer_conversion():\n    class Percent:\n        def __lt__(self, other):\n            return False\n\n        def __gt__(self, other):\n            return False\n\n        def __rmul__(self, other):\n            assert other == 2\n            return Product()\n\n    class Product:\n        def __truediv__(self, other):\n            assert other == 100\n            return 1\n\n        def __floordiv__(self, other):\n            raise AssertionError(\"percentile must use true division\")\n\n    assert analytics.percentile([10, 20], Percent()) == 20",
+    "targeted_behavior": "Uses a numeric-like percentile whose product defines distinct true- and floor-division behavior."
+  },
+  "mutant": {
+    "duration_seconds": 0.8805024390003382,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_percentile_uses_true_division_before_integer_conversion():\n        class Percent:\n            def __lt__(self, other):\n                return False\n    \n            def __gt__(self, other):\n                return False\n    \n            def __rmul__(self, other):\n                assert other == 2\n                return Product()\n    \n        class Product:\n            def __truediv__(self, other):\n                assert other == 100\n                return 1\n    \n            def __floordiv__(self, other):\n                raise AssertionError(\"percentile must use true division\")\n    \n>       assert analytics.percentile([10, 20], Percent()) == 20\n\n.fencepost-generated-0018/test_adversarial.py:24: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ngradebook/analytics.py:35: in percentile\n    k = int(len(ordered) * p // 100)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <test_adversarial.test_percentile_uses_true_division_before_integer_conversion.<locals>.Product object at 0x702f339b6600>\nother = 100\n\n    def __floordiv__(self, other):\n>       raise AssertionError(\"percentile must use true division\")\nE       AssertionError: percentile must use true division\n\n.fencepost-generated-0018/test_adversarial.py:22: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: percentile must use true division",
+      "nodeid": ".fencepost-generated-0018.test_adversarial::test_percentile_uses_true_division_before_integer_conversion"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________ test_percentile_uses_true_division_before_integer_conversion _________\n\n    def test_percentile_uses_true_division_before_integer_conversion():\n        class Percent:\n            def __lt__(self, other):\n                return False\n    \n            def __gt__(self, other):\n                return False\n    \n            def __rmul__(self, other):\n                assert other == 2\n                return Product()\n    \n        class Product:\n            def __truediv__(self, other):\n                assert other == 100\n                return 1\n    \n            def __floordiv__(self, other):\n                raise AssertionError(\"percentile must use true division\")\n    \n>       assert analytics.percentile([10, 20], Percent()) == 20\n\n.fencepost-generated-0018/test_adversarial.py:24: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ngradebook/analytics.py:35: in percentile\n    k = int(len(ordered) * p // 100)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <test_adversarial.test_percentile_uses_true_division_before_integer_conversion.<locals>.Product object at 0x702f339b6600>\nother = 100\n\n    def __floordiv__(self, other):\n>       raise AssertionError(\"percentile must use true division\")\nE       AssertionError: percentile must use true division\n\n.fencepost-generated-0018/test_adversarial.py:22: AssertionError\n----- generated xml file: /work/jobs/triage-0018-j0pb7px7/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0018/test_adversarial.py::test_percentile_uses_true_division_before_integer_conversion\n1 failed in 0.03s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.6810798340011388,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-j0pb7px7/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

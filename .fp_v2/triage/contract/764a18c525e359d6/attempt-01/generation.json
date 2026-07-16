@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.843000000000757,
+  "input_tokens": 13165,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 267,
+  "provider": "codex-cli",
+  "response_id": "019f6ae4-bb3c-7d21-890d-0b8a11d7ccec",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_hundred_based_rank_scale():\n    assert analytics.percentile([10, 20, 30], 66) == 20",
+  "targeted_behavior": "Percentile rank calculation must divide by 100, so 66th percentile of three ordered scores selects index 1."
+}

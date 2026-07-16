@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.922000000005937,
+  "input_tokens": 12743,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 288,
+  "provider": "codex-cli",
+  "response_id": "019f6add-fbe6-7cf3-a2e6-9c773addc596",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_hundred_based_indexing():\n    assert analytics.percentile([30, 10, 20], 66) == 20",
+  "targeted_behavior": "Percentile index calculation at p=66 over three sorted scores: original selects index 1, while the mutant selects index 2."
+}

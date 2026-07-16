@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 17.68800000000192,
+  "input_tokens": 13073,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 611,
+  "provider": "codex-cli",
+  "response_id": "019f6ae0-4ad5-76c1-8b57-7e33e688c609",
+  "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_preserves_false_at_zero_boundary():\n    assert str(gradebook.analytics.clamp_percent(False)) == \"False\"",
+  "targeted_behavior": "At the lower boundary, `False < 0` is false and the original preserves the boolean; the mutant uses `False <= 0` and replaces it with integer zero."
+}

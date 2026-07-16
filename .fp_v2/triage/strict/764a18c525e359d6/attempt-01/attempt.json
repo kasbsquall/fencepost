@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 10.922000000005937,
+    "input_tokens": 12743,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 288,
+    "provider": "codex-cli",
+    "response_id": "019f6add-fbe6-7cf3-a2e6-9c773addc596",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_hundred_based_indexing():\n    assert analytics.percentile([30, 10, 20], 66) == 20",
+    "targeted_behavior": "Percentile index calculation at p=66 over three sorted scores: original selects index 1, while the mutant selects index 2."
+  },
+  "mutant": {
+    "duration_seconds": 0.8580666540001403,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_percentile_uses_hundred_based_indexing():\n>       assert analytics.percentile([30, 10, 20], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x743c35910220>([30, 10, 20], 66)\nE        +    where <function percentile at 0x743c35910220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "assert 30 == 20\n +  where 30 = <function percentile at 0x743c35910220>([30, 10, 20], 66)\n +    where <function percentile at 0x743c35910220> = analytics.percentile",
+      "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_based_indexing"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_percentile_uses_hundred_based_indexing __________________\n\n    def test_percentile_uses_hundred_based_indexing():\n>       assert analytics.percentile([30, 10, 20], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x743c35910220>([30, 10, 20], 66)\nE        +    where <function percentile at 0x743c35910220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0019-8r4i94wp/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_uses_hundred_based_indexing\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.7053436210007931,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-8r4i94wp/original/junit.xml ----\n1 passed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

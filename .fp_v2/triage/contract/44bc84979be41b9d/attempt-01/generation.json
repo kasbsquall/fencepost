@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.75,
+  "input_tokens": 13078,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 163,
+  "provider": "codex-cli",
+  "response_id": "019f6ae0-b04c-75d3-8fad-127e90592adf",
+  "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_preserves_positive_fraction_below_one():\n    assert gradebook.analytics.clamp_percent(0.5) == 0.5",
+  "targeted_behavior": "A percentage strictly between 0 and 1 must be preserved rather than clamped."
+}

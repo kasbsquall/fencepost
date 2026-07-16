@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.671000000002095,
+  "input_tokens": 12877,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 128,
+  "provider": "codex-cli",
+  "response_id": "019f6adb-94f2-7350-94f8-2e78e48a345a",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_score_79_is_a_c_not_a_b():\n    assert letter_grade(79) == \"C\"",
+  "targeted_behavior": "At the exact lower boundary for a B, 79 remains a C; the mutation incorrectly promotes it to B."
+}

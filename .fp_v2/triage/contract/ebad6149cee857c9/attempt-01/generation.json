@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.656999999999243,
+  "input_tokens": 13141,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 207,
+  "provider": "codex-cli",
+  "response_id": "019f6ae4-e5b8-74b3-9010-cf57f65df089",
+  "source": "import gradebook.analytics\n\n\ndef test_percentile_at_100_returns_largest_score():\n    assert gradebook.analytics.percentile([4, 7, 11], 100) == 11",
+  "targeted_behavior": "At the upper percentile boundary (p=100), the computed index equals the score count and must be clamped to the final valid index."
+}

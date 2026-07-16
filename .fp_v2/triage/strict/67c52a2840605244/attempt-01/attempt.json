@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 11.578000000001339,
+    "input_tokens": 12649,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 317,
+    "provider": "codex-cli",
+    "response_id": "019f6adc-b18a-7980-a908-850d8fc47c6a",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_zero_like_object_when_not_negative():\n    class ZeroLike:\n        def __lt__(self, other):\n            assert other == 0\n            return False\n\n        def __le__(self, other):\n            assert other == 0\n            return True\n\n        def __gt__(self, other):\n            assert other == 100\n            return False\n\n    value = ZeroLike()\n    assert analytics.clamp_percent(value) is value",
+    "targeted_behavior": "At the lower boundary, distinguish preserving a zero-like object from replacing it with the integer 0 by making `< 0` false but `<= 0` true."
+  },
+  "mutant": {
+    "duration_seconds": 0.6940670450003381,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_clamp_percent_preserves_zero_like_object_when_not_negative():\n        class ZeroLike:\n            def __lt__(self, other):\n                assert other == 0\n                return False\n    \n            def __le__(self, other):\n                assert other == 0\n                return True\n    \n            def __gt__(self, other):\n                assert other == 100\n                return False\n    \n        value = ZeroLike()\n>       assert analytics.clamp_percent(value) is value\nE       assert 0 is <test_adversarial.test_clamp_percent_preserves_zero_like_object_when_not_negative.<locals>.ZeroLike object at 0x7a8d9d792180>\nE        +  where 0 = <function clamp_percent at 0x7a8d9d2e8180>(<test_adversarial.test_clamp_percent_preserves_zero_like_object_when_not_negative.<locals>.ZeroLike object at 0x7a8d9d792180>)\nE        +    where <function clamp_percent at 0x7a8d9d2e8180> = analytics.clamp_percent\n\n.fencepost-generated-0012/test_adversarial.py:19: AssertionError",
+      "kind": "failure",
+      "message": "assert 0 is <test_adversarial.test_clamp_percent_preserves_zero_like_object_when_not_negative.<locals>.ZeroLike object at 0x7a8d9d792180>\n +  where 0 = <function clamp_percent at 0x7a8d9d2e8180>(<test_adversarial.test_clamp_percent_preserves_zero_like_object_when_not_negative.<locals>.ZeroLike object at 0x7a8d9d792180>)\n +    where <function clamp_percent at 0x7a8d9d2e8180> = analytics.clamp_percent",
+      "nodeid": ".fencepost-generated-0012.test_adversarial::test_clamp_percent_preserves_zero_like_object_when_not_negative"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______ test_clamp_percent_preserves_zero_like_object_when_not_negative ________\n\n    def test_clamp_percent_preserves_zero_like_object_when_not_negative():\n        class ZeroLike:\n            def __lt__(self, other):\n                assert other == 0\n                return False\n    \n            def __le__(self, other):\n                assert other == 0\n                return True\n    \n            def __gt__(self, other):\n                assert other == 100\n                return False\n    \n        value = ZeroLike()\n>       assert analytics.clamp_percent(value) is value\nE       assert 0 is <test_adversarial.test_clamp_percent_preserves_zero_like_object_when_not_negative.<locals>.ZeroLike object at 0x7a8d9d792180>\nE        +  where 0 = <function clamp_percent at 0x7a8d9d2e8180>(<test_adversarial.test_clamp_percent_preserves_zero_like_object_when_not_negative.<locals>.ZeroLike object at 0x7a8d9d792180>)\nE        +    where <function clamp_percent at 0x7a8d9d2e8180> = analytics.clamp_percent\n\n.fencepost-generated-0012/test_adversarial.py:19: AssertionError\n----- generated xml file: /work/jobs/triage-0012-7nyuz5i0/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0012/test_adversarial.py::test_clamp_percent_preserves_zero_like_object_when_not_negative\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.8145888310009468,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0012-7nyuz5i0/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.671999999998661,
+  "input_tokens": 12881,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 156,
+  "provider": "codex-cli",
+  "response_id": "019f6adb-2231-7d51-b980-5036af61f3e8",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_score_89_is_b_not_a():\n    assert letter_grade(89) == \"B\"",
+  "targeted_behavior": "A score of exactly 89 remains a B; only scores of 90 or higher are A."
+}

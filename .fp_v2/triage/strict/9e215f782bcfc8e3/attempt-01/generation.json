@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 11.968999999997322,
+  "input_tokens": 12886,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 170,
+  "provider": "codex-cli",
+  "response_id": "019f6adc-3dc8-7620-8273-1c3790488050",
+  "source": "\"\"\"Mutation test for gradebook.analytics.letter_grade.\"\"\"\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_includes_60_in_d_range():\n    assert letter_grade(60) == \"D\"",
+  "targeted_behavior": "The inclusive lower boundary for a D grade: a score of exactly 60 must return 'D'."
+}

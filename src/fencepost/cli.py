@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import statistics
+import sys
 from pathlib import Path
 
 from .adversarial import (
@@ -25,6 +26,7 @@ def _parser() -> argparse.ArgumentParser:
             "Attribute, select, mutate, execute, triage, probe, and report on a Python pytest submission."
         ),
         epilog=(
+            "Use 'fencepost serve ARTIFACT_DIR' to open the read-only report UI. "
             "Scope: committed projects using only the standard library and pytest. "
             "Fencepost adds the repository root, conventional src/, and detected top-level packages to PYTHONPATH; "
             "it does not install requirements.txt, pyproject, or setup.py dependencies, or support custom build layouts. "
@@ -166,8 +168,13 @@ def _load_answers(path: Path | None) -> dict[str, str]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    raw_args = list(sys.argv[1:] if argv is None else argv)
+    if raw_args[:1] == ["serve"]:
+        from .serve import main as serve_main
+
+        return serve_main(raw_args[1:])
     parser = _parser()
-    args = parser.parse_args(argv)
+    args = parser.parse_args(raw_args)
     if not args.skip_triage and not args.adversarial_model:
         parser.error(
             "--adversarial-model or FENCEPOST_ADVERSARIAL_MODEL is required "

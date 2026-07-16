@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 11.375,
+  "input_tokens": 12645,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 302,
+  "provider": "codex-cli",
+  "response_id": "019f6add-5c6c-7d21-a606-990bbd3609c9",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_distinguishes_99_from_100_boundary_for_custom_comparables():\n    class BoundaryProbe:\n        def __lt__(self, other):\n            return False\n\n        def __gt__(self, other):\n            return other == 99\n\n    value = BoundaryProbe()\n    assert analytics.clamp_percent(value) is value",
+  "targeted_behavior": "Uses a comparison-sensitive custom object that is greater than 99 but not greater than 100; the original returns the object unchanged while the mutant clamps it."
+}

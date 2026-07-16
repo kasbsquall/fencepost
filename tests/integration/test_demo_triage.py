@@ -5,10 +5,12 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+from html.parser import HTMLParser
 from pathlib import Path
 
 from fencepost import RunConfig, TriageConfig, run_analysis
 from fencepost.probe import probe_site_id
+from fencepost.ui import load_report, render_report_document
 from tests.fakes import (
     FixtureAdversarialTestGenerator,
     FixtureComprehensionProbeAgent,
@@ -16,6 +18,21 @@ from tests.fakes import (
 
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+class _ReportText(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.parts = []
+
+    def handle_data(self, data) -> None:
+        normalized = " ".join(data.split())
+        if normalized:
+            self.parts.append(normalized)
+
+    @property
+    def visible(self) -> str:
+        return " ".join(self.parts)
 
 
 def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> None:
@@ -264,5 +281,24 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     assert len(report_payload["places"]) == probe.total_sites
     assert sum(place["survivor_count"] for place in report_payload["places"]) == 20
     assert sum(len(place["mutants"]) for place in report_payload["places"]) == 20
+    assert {
+        mutant["submitted_suite_tests_passed"]
+        for place in report_payload["places"]
+        for mutant in place["mutants"]
+    } == {10}
     assert len(report_payload["deliberately_not_asked"]) == 1
     assert (result.artifact_dir / "report" / "report.md").exists()
+
+    document = render_report_document(
+        load_report(result.artifact_dir / "report" / "report.json")
+    )
+    parsed = _ReportText()
+    parsed.feed(document)
+    assert (
+        f"Their suite passed; {probe.total_sites} sites where understanding is "
+        "unverified."
+    ) in parsed.visible
+    assert "STRICT equivalent rate" in parsed.visible
+    assert "CONTRACT equivalent rate" in parsed.visible
+    assert "Deliberately not asked" in parsed.visible
+    assert "10 passed" in parsed.visible

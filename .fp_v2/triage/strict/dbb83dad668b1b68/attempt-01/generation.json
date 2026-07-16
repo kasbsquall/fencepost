@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.093999999997322,
+  "input_tokens": 12879,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 128,
+  "provider": "codex-cli",
+  "response_id": "019f6adb-f77b-77d3-9f4a-69b9a6c66cfd",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_69_is_a_d_not_a_c():\n    assert letter_grade(69) == \"D\"",
+  "targeted_behavior": "The exact score 69 remains a D; only scores at least 70 receive C."
+}

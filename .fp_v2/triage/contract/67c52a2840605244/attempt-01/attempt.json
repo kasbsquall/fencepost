@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 17.68800000000192,
+    "input_tokens": 13073,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 611,
+    "provider": "codex-cli",
+    "response_id": "019f6ae0-4ad5-76c1-8b57-7e33e688c609",
+    "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_preserves_false_at_zero_boundary():\n    assert str(gradebook.analytics.clamp_percent(False)) == \"False\"",
+    "targeted_behavior": "At the lower boundary, `False < 0` is false and the original preserves the boolean; the mutant uses `False <= 0` and replaces it with integer zero."
+  },
+  "mutant": {
+    "duration_seconds": 0.6191418950002117,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_clamp_percent_preserves_false_at_zero_boundary():\n>       assert str(gradebook.analytics.clamp_percent(False)) == \"False\"\nE       AssertionError: assert '0' == 'False'\nE         \nE         - False\nE         + 0\n\n.fencepost-generated-0012/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert '0' == 'False'\n  \n  - False\n  + 0",
+      "nodeid": ".fencepost-generated-0012.test_adversarial::test_clamp_percent_preserves_false_at_zero_boundary"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_____________ test_clamp_percent_preserves_false_at_zero_boundary ______________\n\n    def test_clamp_percent_preserves_false_at_zero_boundary():\n>       assert str(gradebook.analytics.clamp_percent(False)) == \"False\"\nE       AssertionError: assert '0' == 'False'\nE         \nE         - False\nE         + 0\n\n.fencepost-generated-0012/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0012-1ua71xad/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0012/test_adversarial.py::test_clamp_percent_preserves_false_at_zero_boundary\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.6575937239977065,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0012-1ua71xad/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

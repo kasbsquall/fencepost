@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.7119092590000946,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert clamp_percent(0.5) == pytest.approx(0.5)\nE       assert 0 == 0.5 \u00b1 5.0e-07\nE         \nE         comparison failed\nE         Obtained: 0\nE         Expected: 0.5 \u00b1 5.0e-07\n\n.fencepost-generated-0014/test_adversarial.py:7: AssertionError",
+    "kind": "failure",
+    "message": "assert 0 == 0.5 \u00b1 5.0e-07\n  \n  comparison failed\n  Obtained: 0\n  Expected: 0.5 \u00b1 5.0e-07",
+    "nodeid": ".fencepost-generated-0014.test_adversarial::test_clamp_percent_preserves_positive_fraction_below_one"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_clamp_percent_preserves_positive_fraction_below_one ___________\n\n    def test_clamp_percent_preserves_positive_fraction_below_one():\n>       assert clamp_percent(0.5) == pytest.approx(0.5)\nE       assert 0 == 0.5 \u00b1 5.0e-07\nE         \nE         comparison failed\nE         Obtained: 0\nE         Expected: 0.5 \u00b1 5.0e-07\n\n.fencepost-generated-0014/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0014-hy0u9trn/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0014/test_adversarial.py::test_clamp_percent_preserves_positive_fraction_below_one\n1 failed in 0.02s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

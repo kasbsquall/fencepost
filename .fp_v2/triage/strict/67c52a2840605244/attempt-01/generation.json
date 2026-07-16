@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 11.578000000001339,
+  "input_tokens": 12649,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 317,
+  "provider": "codex-cli",
+  "response_id": "019f6adc-b18a-7980-a908-850d8fc47c6a",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_zero_like_object_when_not_negative():\n    class ZeroLike:\n        def __lt__(self, other):\n            assert other == 0\n            return False\n\n        def __le__(self, other):\n            assert other == 0\n            return True\n\n        def __gt__(self, other):\n            assert other == 100\n            return False\n\n    value = ZeroLike()\n    assert analytics.clamp_percent(value) is value",
+  "targeted_behavior": "At the lower boundary, distinguish preserving a zero-like object from replacing it with the integer 0 by making `< 0` false but `<= 0` true."
+}
