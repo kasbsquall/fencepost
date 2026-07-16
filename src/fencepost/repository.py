@@ -13,6 +13,7 @@ import subprocess
 import tarfile
 import tokenize
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from hashlib import sha256
 from pathlib import Path, PurePosixPath
 
@@ -122,6 +123,18 @@ def blame_file(
         if raw.startswith("\t"):
             line_number += 1
             email = current.get("author-mail", "").strip("<>")
+            author_date = ""
+            try:
+                raw_offset = current.get("author-tz", "+0000")
+                sign = -1 if raw_offset.startswith("-") else 1
+                hours = int(raw_offset[1:3])
+                minutes = int(raw_offset[3:5])
+                zone = timezone(sign * timedelta(hours=hours, minutes=minutes))
+                author_date = datetime.fromtimestamp(
+                    int(current["author-time"]), tz=zone
+                ).date().isoformat()
+            except (KeyError, TypeError, ValueError):
+                author_date = "unknown"
             lines.append(
                 BlameLine(
                     path=path,
@@ -129,6 +142,7 @@ def blame_file(
                     commit=current.get("commit", ""),
                     author_name=current.get("author", ""),
                     author_email=email,
+                    author_date=author_date,
                     summary=current.get("summary", ""),
                     is_student=email.casefold() == student_email.casefold(),
                 )

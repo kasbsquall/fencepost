@@ -21,6 +21,10 @@ AttemptOutcome = Literal[
 AdversarialExecutionStatus = Literal[
     "passed", "failed", "timed_out", "infrastructure_error"
 ]
+ProbeVerdict = Literal[
+    "UNDERSTANDS", "PARTIAL", "MISCONCEPTION", "INSUFFICIENT"
+]
+ProbeStatus = Literal["READY", "GRADED", "QUESTION_FAILED", "GRADE_FAILED"]
 
 
 @dataclass(frozen=True)
@@ -65,6 +69,7 @@ class BlameLine:
     commit: str
     author_name: str
     author_email: str
+    author_date: str
     summary: str
     is_student: bool
 
@@ -278,6 +283,180 @@ class TriageSummary:
 
 
 @dataclass(frozen=True)
+class AuthoredSourceLine:
+    path: str
+    line: int
+    text: str
+    commit: str
+    author_name: str
+    author_email: str
+    author_date: str
+    commit_summary: str
+
+
+@dataclass(frozen=True)
+class ProbeGrounding:
+    path: str
+    start_line: int
+    end_line: int
+    authored_lines: tuple[AuthoredSourceLine, ...]
+    original_segment: str
+    attribution_artifact_ref: str
+
+
+@dataclass(frozen=True)
+class ProbeMutation:
+    original_segment: str
+    mutated_segment: str
+    unified_diff: str
+
+
+@dataclass(frozen=True)
+class ProbeExecutionEvidence:
+    adversarial_test: GeneratedAdversarialTest
+    original_execution: AdversarialExecution
+    mutant_execution: AdversarialExecution
+    failing_assertion: FailureEvidence
+    triage_artifact_ref: str
+
+
+@dataclass(frozen=True)
+class ProbeQuestionRequest:
+    mutant: MutantResult
+    module_path: str
+    qualified_function_name: str
+    original_function: str
+    mutated_function: str
+    grounding: ProbeGrounding
+    mutation: ProbeMutation
+    evidence: ProbeExecutionEvidence
+
+
+@dataclass(frozen=True)
+class GeneratedProbeQuestion:
+    question_text: str
+    mutation_description: str
+    provider: str
+    model: str | None
+    response_id: str | None
+    generation_duration_seconds: float
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+
+
+@dataclass(frozen=True)
+class ProbeGradeRequest:
+    question: GeneratedProbeQuestion
+    answer: str
+    grounding: ProbeGrounding
+    mutation: ProbeMutation
+    evidence: ProbeExecutionEvidence
+
+
+@dataclass(frozen=True)
+class GeneratedProbeGrade:
+    verdict: ProbeVerdict
+    feedback: str
+    evidence_explanation: str
+    provider: str
+    model: str | None
+    response_id: str | None
+    generation_duration_seconds: float
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+
+
+@dataclass(frozen=True)
+class ProbeEvidenceCitation:
+    kind: str
+    nodeid: str
+    message: str
+    detail: str
+    artifact_ref: str
+
+
+@dataclass(frozen=True)
+class ProbeAssessment:
+    verdict: ProbeVerdict
+    feedback: str
+    evidence_explanation: str
+    citations: tuple[ProbeEvidenceCitation, ...]
+    generated: GeneratedProbeGrade
+
+
+@dataclass(frozen=True)
+class ProbeResult:
+    mutant_id: str
+    status: ProbeStatus
+    grounding: ProbeGrounding
+    mutation: ProbeMutation
+    evidence: ProbeExecutionEvidence
+    question: GeneratedProbeQuestion | None
+    answer: str | None
+    assessment: ProbeAssessment | None
+    error: str | None
+    artifact_refs: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class ProbeSummary:
+    total_targets: int
+    question_count: int
+    submitted_answer_count: int
+    graded_answer_count: int
+    failed_question_count: int
+    failed_grade_count: int
+    complete: bool
+    agent: str
+    model: str | None
+    call_count: int
+    model_wall_clock_seconds: float
+    results: tuple[ProbeResult, ...]
+
+
+@dataclass(frozen=True)
+class ContractShieldedReportItem:
+    mutant_id: str
+    path: str
+    line: int
+    original_segment: str
+    mutated_segment: str
+    reason: str
+    strict_test: GeneratedAdversarialTest
+    strict_failure_evidence: FailureEvidence
+    artifact_refs: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class FencepostReport:
+    schema_version: str
+    title: str
+    formative_notice: str
+    student_name: str | None
+    student_email: str
+    repository_commit: str
+    submitted_suite_status: str
+    baseline_artifact_ref: str
+    unverified_place_count: int
+    question_count: int
+    submitted_answer_count: int
+    graded_answer_count: int
+    real_gap_count_strict: int
+    probable_equivalent_count_strict: int
+    unresolved_count_strict: int
+    equivalent_rate_strict: float | None
+    real_gap_count_contract: int
+    probable_equivalent_count_contract: int
+    unresolved_count_contract: int
+    equivalent_rate_contract: float | None
+    contract_limitation: str
+    places: tuple[ProbeResult, ...]
+    deliberately_not_asked: tuple[ContractShieldedReportItem, ...]
+    traceability_artifacts: tuple[str, ...]
+    complete: bool
+
+
+@dataclass(frozen=True)
 class AnalysisResult:
     repo: Path
     commit: str
@@ -289,6 +468,8 @@ class AnalysisResult:
     elapsed_seconds: float
     artifact_dir: Path
     triage: TriageSummary | None = None
+    probe: ProbeSummary | None = None
+    report: FencepostReport | None = None
 
     @property
     def mutant_count(self) -> int:

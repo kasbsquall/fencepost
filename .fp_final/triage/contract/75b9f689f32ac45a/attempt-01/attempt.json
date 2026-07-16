@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 11.015999999995984,
+    "input_tokens": 13306,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 207,
+    "provider": "codex-cli",
+    "response_id": "019f6a96-9de9-7f82-a9b0-46e46023a5cd",
+    "source": "import gradebook.analytics\n\n\ndef test_letter_grade_assigns_c_at_inclusive_70_cutoff():\n    assert gradebook.analytics.letter_grade(70) == \"C\"",
+    "targeted_behavior": "Distinguishes the inclusive C-grade cutoff at score 70 from the mutant's exclusive cutoff."
+  },
+  "mutant": {
+    "duration_seconds": 0.9243517760005489,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_letter_grade_assigns_c_at_inclusive_70_cutoff():\n>       assert gradebook.analytics.letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0006/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+      "nodeid": ".fencepost-generated-0006.test_adversarial::test_letter_grade_assigns_c_at_inclusive_70_cutoff"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________ test_letter_grade_assigns_c_at_inclusive_70_cutoff ______________\n\n    def test_letter_grade_assigns_c_at_inclusive_70_cutoff():\n>       assert gradebook.analytics.letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0006/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0006-37ea4pjz/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0006/test_adversarial.py::test_letter_grade_assigns_c_at_inclusive_70_cutoff\n1 failed in 0.04s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.875775683000029,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0006-37ea4pjz/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

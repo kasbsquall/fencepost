@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.8514822929992079,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_score_just_below_d_threshold_is_f():\n>       assert analytics.letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 'D' == 'F'\n  \n  - F\n  + D",
+    "nodeid": ".fencepost-generated-0010.test_adversarial::test_score_just_below_d_threshold_is_f"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n____________________ test_score_just_below_d_threshold_is_f ____________________\n\n    def test_score_just_below_d_threshold_is_f():\n>       assert analytics.letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0010-3yfp4ntp/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0010/test_adversarial.py::test_score_just_below_d_threshold_is_f\n1 failed in 0.03s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

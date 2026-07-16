@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.968999999997322,
+  "input_tokens": 13303,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 137,
+  "provider": "codex-cli",
+  "response_id": "019f6a96-5790-7011-91fa-732f0d34a125",
+  "source": "import gradebook.analytics\n\n\ndef test_letter_grade_79_is_c():\n    assert gradebook.analytics.letter_grade(79) == \"C\"",
+  "targeted_behavior": "The exact B/C cutoff: score 79 must receive C, while the mutant incorrectly returns B."
+}

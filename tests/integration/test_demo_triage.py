@@ -8,7 +8,11 @@ import sys
 from pathlib import Path
 
 from fencepost import RunConfig, TriageConfig, run_analysis
-from tests.fakes import FixtureAdversarialTestGenerator
+from fencepost.mutation import enumerate_candidates
+from tests.fakes import (
+    FixtureAdversarialTestGenerator,
+    FixtureComprehensionProbeAgent,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -22,6 +26,19 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
         cwd=ROOT,
     )
     generator = FixtureAdversarialTestGenerator()
+    probe_agent = FixtureComprehensionProbeAgent()
+    analytics_source = (repo / "gradebook" / "analytics.py").read_text(
+        encoding="utf-8"
+    )
+    answered_candidate = next(
+        candidate
+        for candidate in enumerate_candidates(
+            analytics_source, "gradebook/analytics.py"
+        )
+        if candidate.kind == "compare"
+        and candidate.source_segment.strip() == "score >= 90"
+        and candidate.after == "Gt"
+    )
     result = run_analysis(
         RunConfig(
             repo=repo,
@@ -30,6 +47,13 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
         ),
         adversarial_generator=generator,
         triage_config=TriageConfig(valid_attempts=3, invalid_retry_limit=3),
+        probe_agent=probe_agent,
+        probe_answers={
+            answered_candidate.id: (
+                "At exactly 90 the strict comparison skips A and returns B because "
+                "equality no longer satisfies the boundary."
+            )
+        },
     )
 
     assert result.triage is not None
@@ -167,3 +191,50 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     assert "false-negative risk" in summary["contract_limitation"].lower()
     assert "hide a genuine behavioral gap" in summary["contract_limitation"]
     assert summary["triage_complete"] is True
+
+    assert result.probe is not None
+    probe = result.probe
+    assert probe.total_targets == 20
+    assert probe.question_count == 20
+    assert probe.submitted_answer_count == 1
+    assert probe.graded_answer_count == 1
+    assert probe.complete is True
+    questioned_ids = {
+        request.mutant.candidate.id for request in probe_agent.question_requests
+    }
+    assert questioned_ids == set(triage.probe_target_mutant_ids)
+    strict_only_ids = {
+        item.mutant.candidate.id for item in triage.contract_shielded
+    }
+    assert questioned_ids.isdisjoint(strict_only_ids)
+    assert all(
+        item.evidence.original_execution.status == "passed"
+        and item.evidence.mutant_execution.status in {"failed", "timed_out"}
+        for item in probe.results
+    )
+    graded = [item for item in probe.results if item.assessment is not None]
+    assert len(graded) == 1
+    for item in graded:
+        assert item.assessment.citations
+        assert all(
+            citation.artifact_ref == item.evidence.triage_artifact_ref
+            and citation.message == item.evidence.failing_assertion.message
+            for citation in item.assessment.citations
+        )
+
+    assert result.report is not None
+    report = result.report
+    assert report.unverified_place_count == 20
+    assert report.question_count == 20
+    assert len(report.deliberately_not_asked) == 1
+    assert report.equivalent_rate_strict == 0.0
+    assert report.equivalent_rate_contract == 1 / 21
+    report_payload = json.loads(
+        (result.artifact_dir / "report" / "report.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert report_payload["schema_version"] == "1.0"
+    assert len(report_payload["places"]) == 20
+    assert len(report_payload["deliberately_not_asked"]) == 1
+    assert (result.artifact_dir / "report" / "report.md").exists()

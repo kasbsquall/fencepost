@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.343999999997322,
+  "input_tokens": 13069,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 130,
+  "provider": "codex-cli",
+  "response_id": "019f6a98-5f79-74b2-a68a-8000a3fd3751",
+  "source": "import gradebook.analytics\n\n\ndef test_clamp_percent_clamps_first_value_above_upper_bound():\n    assert gradebook.analytics.clamp_percent(101) == 100",
+  "targeted_behavior": "Values immediately above the inclusive upper bound must clamp to exactly 100."
+}

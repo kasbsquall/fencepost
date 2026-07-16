@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 7.9060000000026776,
+  "input_tokens": 12883,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 136,
+  "provider": "codex-cli",
+  "response_id": "019f6a93-19d0-7212-8be1-73b0b9a014c3",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_score_69_is_a_d():\n    assert letter_grade(69) == \"D\"",
+  "targeted_behavior": "The exact boundary score 69 is a D under the original >=70 C cutoff, but C under the mutation."
+}

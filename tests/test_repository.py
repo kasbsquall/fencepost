@@ -94,3 +94,4 @@ def test_blame_uses_student_authorship_for_mutation_targets(tmp_path: Path) -> N
     )
     assert blame[boundary_line - 1].is_student
     assert blame[boundary_line - 1].summary == "implement letter_grade"
+    assert blame[boundary_line - 1].author_date == "2026-07-07"

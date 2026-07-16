@@ -1,0 +1,128 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 12.703999999997905,
+        "input_tokens": 12745,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 339,
+        "provider": "codex-cli",
+        "response_id": "019f6a95-3c5d-7a31-b2a7-2c6ce9bca8fd",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_hundred_based_index_scaling():\n    assert analytics.percentile([10, 20, 30], 66) == 20",
+        "targeted_behavior": "Percentile index computation must use a denominator of 100; with three scores at p=66, the original selects index 1 while the mutant selects index 2."
+      },
+      "mutant": {
+        "duration_seconds": 0.8842052209984104,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_percentile_uses_hundred_based_index_scaling():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x7dd0e344c220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x7dd0e344c220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "assert 30 == 20\n +  where 30 = <function percentile at 0x7dd0e344c220>([10, 20, 30], 66)\n +    where <function percentile at 0x7dd0e344c220> = analytics.percentile",
+          "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_based_index_scaling"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______________ test_percentile_uses_hundred_based_index_scaling _______________\n\n    def test_percentile_uses_hundred_based_index_scaling():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x7dd0e344c220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x7dd0e344c220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0019-k_4jyi6g/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_uses_hundred_based_index_scaling\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.8434525489992666,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-k_4jyi6g/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_percentile_uses_hundred_based_index_scaling():\n>       assert analytics.percentile([10, 20, 30], 66) == 20\nE       assert 30 == 20\nE        +  where 30 = <function percentile at 0x7dd0e344c220>([10, 20, 30], 66)\nE        +    where <function percentile at 0x7dd0e344c220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "assert 30 == 20\n +  where 30 = <function percentile at 0x7dd0e344c220>([10, 20, 30], 66)\n +    where <function percentile at 0x7dd0e344c220> = analytics.percentile",
+    "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_based_index_scaling"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mode": "STRICT",
+  "mutant": {
+    "candidate": {
+      "after": "99",
+      "anchor": {
+        "column": 31,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        },
+        {
+          "field": "right",
+          "index": null
+        }
+      ],
+      "before": "100",
+      "id": "764a18c525e359d6",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    "execution": {
+      "duration_seconds": 1.1861298139992869,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0033-cx5qa82l/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 31,
+      "end_column": 33,
+      "end_line": 35,
+      "line": 35
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 12.703999999997905,
+    "input_tokens": 12745,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 339,
+    "provider": "codex-cli",
+    "response_id": "019f6a95-3c5d-7a31-b2a7-2c6ce9bca8fd",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_hundred_based_index_scaling():\n    assert analytics.percentile([10, 20, 30], 66) == 20",
+    "targeted_behavior": "Percentile index computation must use a denominator of 100; with three scores at p=66, the original selects index 1 while the mutant selects index 2."
+  }
+}

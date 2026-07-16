@@ -1,0 +1,38 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 118.43700000000536,
+    "input_tokens": 107417,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 4956,
+    "provider": "codex-cli",
+    "response_id": "019f6a98-8005-7c53-b5c0-6bb2c1789fea",
+    "source": "from gradebook.analytics import percentile\n\n\ndef test_percentile_fractional_percent_selects_upper_boundary_value():\n    assert percentile([10, 20, 30], 66.66666666666667) == 30",
+    "targeted_behavior": "Exercise a fractional floating-point percentile boundary after clamping and sorting."
+  },
+  "mutant": {
+    "duration_seconds": 0.7751889589999337,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0018-29brdl_r/mutant/junit.xml -----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 1.038007823000953,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0018-29brdl_r/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "NOT_DISTINGUISHED",
+  "valid_attempt_number": 1
+}

@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 12.671999999998661,
+    "input_tokens": 12649,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 252,
+    "provider": "codex-cli",
+    "response_id": "019f6a94-68e9-7d82-b529-b561272ac6c1",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_exact_100_object():\n    class Percent(int):\n        pass\n\n    value = Percent(100)\n    assert analytics.clamp_percent(value) is value",
+    "targeted_behavior": "At exactly 100, the original preserves the input object while the mutant replaces it with the literal integer 100."
+  },
+  "mutant": {
+    "duration_seconds": 0.8796308009987115,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_clamp_percent_preserves_exact_100_object():\n        class Percent(int):\n            pass\n    \n        value = Percent(100)\n>       assert analytics.clamp_percent(value) is value\nE       assert 100 is 100\nE        +  where 100 = <function clamp_percent at 0x7201a4938180>(100)\nE        +    where <function clamp_percent at 0x7201a4938180> = analytics.clamp_percent\n\n.fencepost-generated-0016/test_adversarial.py:9: AssertionError",
+      "kind": "failure",
+      "message": "assert 100 is 100\n +  where 100 = <function clamp_percent at 0x7201a4938180>(100)\n +    where <function clamp_percent at 0x7201a4938180> = analytics.clamp_percent",
+      "nodeid": ".fencepost-generated-0016.test_adversarial::test_clamp_percent_preserves_exact_100_object"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________ test_clamp_percent_preserves_exact_100_object _________________\n\n    def test_clamp_percent_preserves_exact_100_object():\n        class Percent(int):\n            pass\n    \n        value = Percent(100)\n>       assert analytics.clamp_percent(value) is value\nE       assert 100 is 100\nE        +  where 100 = <function clamp_percent at 0x7201a4938180>(100)\nE        +    where <function clamp_percent at 0x7201a4938180> = analytics.clamp_percent\n\n.fencepost-generated-0016/test_adversarial.py:9: AssertionError\n----- generated xml file: /work/jobs/triage-0016-_oohqwq4/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0016/test_adversarial.py::test_clamp_percent_preserves_exact_100_object\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.861249689000033,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0016-_oohqwq4/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

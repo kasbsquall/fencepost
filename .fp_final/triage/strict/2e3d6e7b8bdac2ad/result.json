@@ -1,0 +1,124 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 8.860000000000582,
+        "input_tokens": 12643,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 143,
+        "provider": "codex-cli",
+        "response_id": "019f6a94-9a91-7831-a354-2160c4c5094c",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_clamps_value_just_above_upper_bound():\n    assert analytics.clamp_percent(101) == 100",
+        "targeted_behavior": "A value of exactly 101 must be clamped to 100, since it exceeds the inclusive upper bound."
+      },
+      "mutant": {
+        "duration_seconds": 0.9040661519993591,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_clamp_percent_clamps_value_just_above_upper_bound():\n>       assert analytics.clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = <function clamp_percent at 0x791c77010180>(101)\nE        +    where <function clamp_percent at 0x791c77010180> = analytics.clamp_percent\n\n.fencepost-generated-0017/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "assert 101 == 100\n +  where 101 = <function clamp_percent at 0x791c77010180>(101)\n +    where <function clamp_percent at 0x791c77010180> = analytics.clamp_percent",
+          "nodeid": ".fencepost-generated-0017.test_adversarial::test_clamp_percent_clamps_value_just_above_upper_bound"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n____________ test_clamp_percent_clamps_value_just_above_upper_bound ____________\n\n    def test_clamp_percent_clamps_value_just_above_upper_bound():\n>       assert analytics.clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = <function clamp_percent at 0x791c77010180>(101)\nE        +    where <function clamp_percent at 0x791c77010180> = analytics.clamp_percent\n\n.fencepost-generated-0017/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0017-645mltp5/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0017/test_adversarial.py::test_clamp_percent_clamps_value_just_above_upper_bound\n1 failed in 0.03s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.8421695130000444,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0017-645mltp5/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_clamp_percent_clamps_value_just_above_upper_bound():\n>       assert analytics.clamp_percent(101) == 100\nE       assert 101 == 100\nE        +  where 101 = <function clamp_percent at 0x791c77010180>(101)\nE        +    where <function clamp_percent at 0x791c77010180> = analytics.clamp_percent\n\n.fencepost-generated-0017/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "assert 101 == 100\n +  where 101 = <function clamp_percent at 0x791c77010180>(101)\n +    where <function clamp_percent at 0x791c77010180> = analytics.clamp_percent",
+    "nodeid": ".fencepost-generated-0017.test_adversarial::test_clamp_percent_clamps_value_just_above_upper_bound"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mode": "STRICT",
+  "mutant": {
+    "candidate": {
+      "after": "101",
+      "anchor": {
+        "column": 11,
+        "end_column": 14,
+        "end_line": 29,
+        "line": 29
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "100",
+      "id": "2e3d6e7b8bdac2ad",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    "execution": {
+      "duration_seconds": 1.057594469999458,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0027-12b5ras2/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 11,
+      "end_column": 14,
+      "end_line": 27,
+      "line": 27
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 8.860000000000582,
+    "input_tokens": 12643,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 143,
+    "provider": "codex-cli",
+    "response_id": "019f6a94-9a91-7831-a354-2160c4c5094c",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_clamps_value_just_above_upper_bound():\n    assert analytics.clamp_percent(101) == 100",
+    "targeted_behavior": "A value of exactly 101 must be clamped to 100, since it exceeds the inclusive upper bound."
+  }
+}

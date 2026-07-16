@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import statistics
 from pathlib import Path
@@ -14,13 +15,14 @@ from .adversarial import (
 )
 from .models import RunConfig, TriageConfig
 from .pipeline import PipelineError, run_analysis
+from .probe import CodexCliComprehensionProbeAgent
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="fencepost",
         description=(
-            "Attribute, select, mutate, execute, and triage a Python pytest submission."
+            "Attribute, select, mutate, execute, triage, probe, and report on a Python pytest submission."
         ),
         epilog=(
             "Scope: committed projects using only the standard library and pytest. "
@@ -91,6 +93,16 @@ def _parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Run only stages 1-4 without model calls",
     )
+    parser.add_argument(
+        "--skip-probe",
+        action="store_true",
+        help="Run through Stage 5 but do not generate questions or a report",
+    )
+    parser.add_argument(
+        "--answers",
+        type=Path,
+        help="JSON object mapping probe mutant IDs to typed student answers",
+    )
     return parser
 
 
@@ -115,6 +127,41 @@ def _build_generator(args):
     return FixtureAdversarialTestGenerator()
 
 
+def _build_probe_agent(args, adversarial_generator):
+    if args.generator == "fake":
+        try:
+            from tests.fakes import FixtureComprehensionProbeAgent
+        except ImportError as exc:
+            raise AdversarialGeneratorError(
+                "the fake probe agent is available only from a Fencepost source checkout"
+            ) from exc
+        return FixtureComprehensionProbeAgent()
+    if args.generator != "codex":
+        raise ValueError(
+            "Stage 6 uses the ChatGPT-authenticated Codex CLI; use --generator codex "
+            "or add --skip-probe when selecting the OpenAI adversarial-test option"
+        )
+    return CodexCliComprehensionProbeAgent(
+        model=args.adversarial_model,
+        client=adversarial_generator.client,
+    )
+
+
+def _load_answers(path: Path | None) -> dict[str, str]:
+    if path is None:
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"cannot read probe answers {path}: {exc}") from exc
+    if not isinstance(payload, dict) or not all(
+        isinstance(key, str) and isinstance(value, str)
+        for key, value in payload.items()
+    ):
+        raise ValueError("probe answers must be a JSON object of string IDs to strings")
+    return payload
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(argv)
@@ -123,6 +170,10 @@ def main(argv: list[str] | None = None) -> int:
             "--adversarial-model or FENCEPOST_ADVERSARIAL_MODEL is required "
             "unless --skip-triage is used"
         )
+    if args.skip_triage and args.answers is not None:
+        parser.error("--answers cannot be used with --skip-triage")
+    if args.skip_probe and args.answers is not None:
+        parser.error("--answers cannot be used with --skip-probe")
     config = RunConfig(
         repo=args.repo,
         student_email=args.student_email,
@@ -134,6 +185,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     try:
         generator = None if args.skip_triage else _build_generator(args)
+        probe_agent = (
+            None
+            if args.skip_triage or args.skip_probe
+            else _build_probe_agent(args, generator)
+        )
+        answers = _load_answers(args.answers)
         triage_config = (
             None
             if args.skip_triage
@@ -147,6 +204,8 @@ def main(argv: list[str] | None = None) -> int:
             config,
             adversarial_generator=generator,
             triage_config=triage_config,
+            probe_agent=probe_agent,
+            probe_answers=answers,
         )
     except (PipelineError, AdversarialGeneratorError, ValueError) as exc:
         print(f"fencepost: {exc}")
@@ -202,5 +261,20 @@ def main(argv: list[str] | None = None) -> int:
             "each call has Codex startup/model latency and consumes ChatGPT usage "
             "when --generator codex is selected"
         )
+    if result.probe is not None:
+        print(
+            f"probe: targets={result.probe.total_targets} "
+            f"questions={result.probe.question_count} "
+            f"answers={result.probe.submitted_answer_count} "
+            f"graded={result.probe.graded_answer_count} "
+            f"calls={result.probe.call_count} "
+            f"model_wall={result.probe.model_wall_clock_seconds:.2f}s "
+            f"complete={result.probe.complete}"
+        )
+    if result.report is not None:
+        print(f"report: {result.artifact_dir / 'report' / 'report.json'}")
     print(f"artifact: {result.artifact_dir}")
-    return 0 if result.triage is None or result.triage.triage_complete else 3
+    complete = result.triage is None or result.triage.triage_complete
+    if result.probe is not None:
+        complete = complete and result.probe.complete
+    return 0 if complete else 3

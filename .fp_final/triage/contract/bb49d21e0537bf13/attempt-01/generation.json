@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 118.43700000000536,
+  "input_tokens": 107417,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 4956,
+  "provider": "codex-cli",
+  "response_id": "019f6a98-8005-7c53-b5c0-6bb2c1789fea",
+  "source": "from gradebook.analytics import percentile\n\n\ndef test_percentile_fractional_percent_selects_upper_boundary_value():\n    assert percentile([10, 20, 30], 66.66666666666667) == 30",
+  "targeted_behavior": "Exercise a fractional floating-point percentile boundary after clamping and sorting."
+}

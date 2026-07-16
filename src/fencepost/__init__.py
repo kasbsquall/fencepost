@@ -8,15 +8,21 @@ from .adversarial import (
 from .contract import CONTRACT_RULES, validate_adversarial_test
 from .models import AnalysisResult, RunConfig, TriageConfig
 from .pipeline import run_analysis
+from .probe import ComprehensionProbeAgent, CodexCliComprehensionProbeAgent
+from .report import REPORT_SCHEMA_VERSION, render_report_markdown
 
 __all__ = [
     "AdversarialTestGenerator",
     "AnalysisResult",
+    "CodexCliComprehensionProbeAgent",
+    "ComprehensionProbeAgent",
     "CodexCliAdversarialTestGenerator",
     "CONTRACT_RULES",
     "OpenAIAdversarialTestGenerator",
     "RunConfig",
+    "REPORT_SCHEMA_VERSION",
     "TriageConfig",
     "run_analysis",
+    "render_report_markdown",
     "validate_adversarial_test",
 ]

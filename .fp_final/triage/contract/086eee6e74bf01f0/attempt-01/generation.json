@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.60899999999674,
+  "input_tokens": 13071,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 214,
+  "provider": "codex-cli",
+  "response_id": "019f6a98-3639-77e1-8a00-c7bf995bacdb",
+  "source": "import pytest\nimport gradebook.analytics\n\n\ndef test_clamp_percent_preserves_fraction_below_100():\n    assert gradebook.analytics.clamp_percent(99.5) == 99.5",
+  "targeted_behavior": "A fractional percentage between 99 and 100 must remain unchanged; only values strictly above 100 are clamped."
+}

@@ -1,0 +1,38 @@
+{
+  "attempt": 4,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 281.0619999999981,
+    "input_tokens": 234748,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 9984,
+    "provider": "codex-cli",
+    "response_id": "019f6aa1-1873-7492-824f-f01cf1cc08d4",
+    "source": "from gradebook.analytics import percentile\n\n\ndef test_percentile_clamps_signed_subnormal_negative_percent_to_zero():\n    assert percentile([10, 20, 30], -5e-324) == 10",
+    "targeted_behavior": "Exercise lower-bound clamping with a signed subnormal float before percentile index calculation."
+  },
+  "mutant": {
+    "duration_seconds": 0.49668026300059864,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-ug3huky1/mutant/junit.xml -----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.5182432729998254,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-ug3huky1/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "NOT_DISTINGUISHED",
+  "valid_attempt_number": 3
+}

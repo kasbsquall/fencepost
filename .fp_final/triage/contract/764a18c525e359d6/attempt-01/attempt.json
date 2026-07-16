@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 13.671999999998661,
+    "input_tokens": 13167,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 422,
+    "provider": "codex-cli",
+    "response_id": "019f6a9a-4ec6-7ef3-9519-ca88a0f0eda5",
+    "source": "import gradebook.analytics\n\n\ndef test_percentile_uses_hundred_based_index_for_nonterminal_percentile():\n    assert gradebook.analytics.percentile([30, 10, 20], 66) == 20",
+    "targeted_behavior": "At p=66 with three distinct scores, the original uses index 1 while the mutant uses index 2."
+  },
+  "mutant": {
+    "duration_seconds": 0.8163187200007087,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_percentile_uses_hundred_based_index_for_nonterminal_percentile():\n>       assert gradebook.analytics.percentile([30, 10, 20], 66) == 20\nE       AssertionError: assert 30 == 20\nE        +  where 30 = <function percentile at 0x71a53213c220>([30, 10, 20], 66)\nE        +    where <function percentile at 0x71a53213c220> = <module 'gradebook.analytics' from '/work/jobs/triage-0019-d6lw6rbc/mutant/tree/gradebook/analytics.py'>.percentile\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0019-d6lw6rbc/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 30 == 20\n +  where 30 = <function percentile at 0x71a53213c220>([30, 10, 20], 66)\n +    where <function percentile at 0x71a53213c220> = <module 'gradebook.analytics' from '/work/jobs/triage-0019-d6lw6rbc/mutant/tree/gradebook/analytics.py'>.percentile\n +      where <module 'gradebook.analytics' from '/work/jobs/triage-0019-d6lw6rbc/mutant/tree/gradebook/analytics.py'> = gradebook.analytics",
+      "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_hundred_based_index_for_nonterminal_percentile"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_____ test_percentile_uses_hundred_based_index_for_nonterminal_percentile ______\n\n    def test_percentile_uses_hundred_based_index_for_nonterminal_percentile():\n>       assert gradebook.analytics.percentile([30, 10, 20], 66) == 20\nE       AssertionError: assert 30 == 20\nE        +  where 30 = <function percentile at 0x71a53213c220>([30, 10, 20], 66)\nE        +    where <function percentile at 0x71a53213c220> = <module 'gradebook.analytics' from '/work/jobs/triage-0019-d6lw6rbc/mutant/tree/gradebook/analytics.py'>.percentile\nE        +      where <module 'gradebook.analytics' from '/work/jobs/triage-0019-d6lw6rbc/mutant/tree/gradebook/analytics.py'> = gradebook.analytics\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0019-d6lw6rbc/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_uses_hundred_based_index_for_nonterminal_percentile\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 1.0257240190003358,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-d6lw6rbc/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

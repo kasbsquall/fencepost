@@ -8,6 +8,7 @@ does that.
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from pathlib import Path
 import shutil
 import subprocess
@@ -24,6 +25,10 @@ from .models import (
 
 class AdversarialGeneratorError(RuntimeError):
     """The configured generator did not produce a usable test payload."""
+
+
+class CodexCliStructuredError(RuntimeError):
+    """The shared host-side Codex structured-output client failed."""
 
 
 class AdversarialTestGenerator(Protocol):
@@ -162,8 +167,17 @@ def _codex_event_data(stdout: str) -> tuple[str | None, str | None, int | None, 
     return final_message, thread_id, input_tokens, output_tokens
 
 
-class CodexCliAdversarialTestGenerator:
-    """Generate tests with the user's host-authenticated Codex CLI session."""
+@dataclass(frozen=True)
+class CodexStructuredResponse:
+    payload: dict[str, object]
+    response_id: str | None
+    duration_seconds: float
+    input_tokens: int | None
+    output_tokens: int | None
+
+
+class CodexCliStructuredClient:
+    """One isolated, read-only Codex CLI transport shared by Stages 5 and 6."""
 
     def __init__(
         self,
@@ -174,22 +188,17 @@ class CodexCliAdversarialTestGenerator:
         temporary_root: Path | None = None,
     ) -> None:
         if not model.strip():
-            raise ValueError("an adversarial generator model must be configured")
+            raise ValueError("a Codex model must be configured")
         if timeout_seconds <= 0:
-            raise ValueError("Codex generator timeout must be positive")
+            raise ValueError("Codex timeout must be positive")
         self.model = model
         self.executable = shutil.which(executable) or executable
         self.timeout_seconds = timeout_seconds
         self.temporary_root = temporary_root
 
-    def generate(
-        self, request: AdversarialTestRequest
-    ) -> GeneratedAdversarialTest:
-        prompt = (
-            _instructions_for(request)
-            + "\nThe response schema names the Python field test_source.\n\n"
-            + json.dumps(_request_payload(request), indent=2, sort_keys=True)
-        )
+    def run(
+        self, *, prompt: str, schema: dict[str, object]
+    ) -> CodexStructuredResponse:
         started = time.monotonic()
         try:
             with tempfile.TemporaryDirectory(
@@ -199,7 +208,7 @@ class CodexCliAdversarialTestGenerator:
                 schema_path = cwd / "schema.json"
                 last_message_path = cwd / "last-message.json"
                 schema_path.write_text(
-                    json.dumps(_CODEX_OUTPUT_SCHEMA, indent=2, sort_keys=True) + "\n",
+                    json.dumps(schema, indent=2, sort_keys=True) + "\n",
                     encoding="utf-8",
                 )
                 command = [
@@ -230,7 +239,7 @@ class CodexCliAdversarialTestGenerator:
                 )
                 if completed.returncode != 0:
                     diagnostic = (completed.stderr or completed.stdout).strip()[:4000]
-                    raise AdversarialGeneratorError(
+                    raise CodexCliStructuredError(
                         f"codex exec exited {completed.returncode}: {diagnostic}"
                     )
                 event_message, thread_id, input_tokens, output_tokens = (
@@ -244,30 +253,76 @@ class CodexCliAdversarialTestGenerator:
                 if final_message is None:
                     final_message = event_message
                 if final_message is None or not final_message.strip():
-                    raise AdversarialGeneratorError(
+                    raise CodexCliStructuredError(
                         "codex exec returned no final agent message"
                     )
                 try:
                     decoded = json.loads(_strip_markdown_fence(final_message))
                 except json.JSONDecodeError as exc:
-                    raise AdversarialGeneratorError(
+                    raise CodexCliStructuredError(
                         f"codex exec returned unparseable structured output: {exc}"
                     ) from exc
-        except AdversarialGeneratorError:
+                if not isinstance(decoded, dict):
+                    raise CodexCliStructuredError(
+                        "codex exec structured output is not a JSON object"
+                    )
+        except CodexCliStructuredError:
             raise
         except subprocess.TimeoutExpired as exc:
-            raise AdversarialGeneratorError(
+            raise CodexCliStructuredError(
                 f"codex exec exceeded {self.timeout_seconds:.1f}s"
             ) from exc
         except OSError as exc:
-            raise AdversarialGeneratorError(
+            raise CodexCliStructuredError(
                 f"cannot run codex exec: {type(exc).__name__}: {exc}"
             ) from exc
 
-        source = decoded.get("test_source") if isinstance(decoded, dict) else None
-        behavior = (
-            decoded.get("targeted_behavior") if isinstance(decoded, dict) else None
+        return CodexStructuredResponse(
+            payload=decoded,
+            response_id=thread_id,
+            duration_seconds=time.monotonic() - started,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
         )
+
+
+class CodexCliAdversarialTestGenerator:
+    """Generate tests with the user's host-authenticated Codex CLI session."""
+
+    def __init__(
+        self,
+        *,
+        model: str,
+        executable: str = "codex",
+        timeout_seconds: float = 300.0,
+        temporary_root: Path | None = None,
+    ) -> None:
+        self.client = CodexCliStructuredClient(
+            model=model,
+            executable=executable,
+            timeout_seconds=timeout_seconds,
+            temporary_root=temporary_root,
+        )
+        self.model = self.client.model
+        self.executable = self.client.executable
+        self.timeout_seconds = self.client.timeout_seconds
+        self.temporary_root = self.client.temporary_root
+
+    def generate(
+        self, request: AdversarialTestRequest
+    ) -> GeneratedAdversarialTest:
+        prompt = (
+            _instructions_for(request)
+            + "\nThe response schema names the Python field test_source.\n\n"
+            + json.dumps(_request_payload(request), indent=2, sort_keys=True)
+        )
+        try:
+            response = self.client.run(prompt=prompt, schema=_CODEX_OUTPUT_SCHEMA)
+        except CodexCliStructuredError as exc:
+            raise AdversarialGeneratorError(str(exc)) from exc
+
+        source = response.payload.get("test_source")
+        behavior = response.payload.get("targeted_behavior")
         if not isinstance(source, str) or not source.strip():
             raise AdversarialGeneratorError("codex exec returned empty pytest source")
         if not isinstance(behavior, str) or not behavior.strip():
@@ -279,10 +334,10 @@ class CodexCliAdversarialTestGenerator:
             targeted_behavior=behavior.strip(),
             provider="codex-cli",
             model=self.model,
-            response_id=thread_id,
-            generation_duration_seconds=time.monotonic() - started,
-            input_tokens=input_tokens,
-            output_tokens=output_tokens,
+            response_id=response.response_id,
+            generation_duration_seconds=response.duration_seconds,
+            input_tokens=response.input_tokens,
+            output_tokens=response.output_tokens,
         )
 
 

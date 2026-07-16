@@ -1,0 +1,43 @@
+{
+  "attempt": 1,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 16.18699999999808,
+    "input_tokens": 13072,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 583,
+    "provider": "codex-cli",
+    "response_id": "019f6a97-f6c7-78b0-b9eb-d87799fdc45d",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_float_at_inclusive_upper_bound():\n    assert str(analytics.clamp_percent(100.0)) == \"100.0\"",
+    "targeted_behavior": "At exactly 100.0, preserve the caller-visible float return value rather than replacing it with integer 100."
+  },
+  "mutant": {
+    "duration_seconds": 0.7883405960001255,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_clamp_percent_preserves_float_at_inclusive_upper_bound():\n>       assert str(analytics.clamp_percent(100.0)) == \"100.0\"\nE       AssertionError: assert '100' == '100.0'\nE         \nE         - 100.0\nE         ?    --\nE         + 100\n\n.fencepost-generated-0015/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert '100' == '100.0'\n  \n  - 100.0\n  ?    --\n  + 100",
+      "nodeid": ".fencepost-generated-0015.test_adversarial::test_clamp_percent_preserves_float_at_inclusive_upper_bound"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________ test_clamp_percent_preserves_float_at_inclusive_upper_bound __________\n\n    def test_clamp_percent_preserves_float_at_inclusive_upper_bound():\n>       assert str(analytics.clamp_percent(100.0)) == \"100.0\"\nE       AssertionError: assert '100' == '100.0'\nE         \nE         - 100.0\nE         ?    --\nE         + 100\n\n.fencepost-generated-0015/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0015-419ei1fg/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0015/test_adversarial.py::test_clamp_percent_preserves_float_at_inclusive_upper_bound\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.7249848880001082,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0015-419ei1fg/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

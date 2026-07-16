@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 32.59300000000076,
+  "input_tokens": 25865,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 1344,
+  "provider": "codex-cli",
+  "response_id": "019f6a94-bd1c-7da2-bb91-58f53dd5e05c",
+  "source": "from gradebook.analytics import percentile\n\n\nclass _Percent:\n    def __lt__(self, other):\n        return other == 100\n\n    def __gt__(self, other):\n        return other == 0\n\n    def __rmul__(self, other):\n        return _Product()\n\n\nclass _Product:\n    def __truediv__(self, other):\n        assert other == 100\n        return 1\n\n    def __floordiv__(self, other):\n        assert other == 100\n        return 0\n\n\ndef test_percentile_uses_true_division_before_int_conversion():\n    assert percentile([10, 20], _Percent()) == 20",
+  "targeted_behavior": "Uses a percent-like custom object that survives clamping but gives deliberately different true-division and floor-division results after multiplication, selecting different ordered scores."
+}

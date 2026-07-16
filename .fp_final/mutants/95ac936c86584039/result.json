@@ -1,0 +1,60 @@
+{
+  "candidate": {
+    "after": "None",
+    "anchor": {
+      "column": 8,
+      "end_column": 18,
+      "end_line": 22,
+      "line": 22
+    },
+    "ast_path": [
+      {
+        "field": "body",
+        "index": 1
+      },
+      {
+        "field": "body",
+        "index": 1
+      },
+      {
+        "field": "orelse",
+        "index": 0
+      },
+      {
+        "field": "orelse",
+        "index": 0
+      },
+      {
+        "field": "orelse",
+        "index": 0
+      },
+      {
+        "field": "orelse",
+        "index": 0
+      }
+    ],
+    "before": "'F'",
+    "id": "95ac936c86584039",
+    "kind": "return_none",
+    "parameters": [],
+    "path": "gradebook/analytics.py",
+    "source_segment": "return \"F\""
+  },
+  "execution": {
+    "duration_seconds": 1.076322283999616,
+    "exit_code": 1,
+    "failing_tests": [
+      "tests.test_analytics::test_letter_grade_f"
+    ],
+    "status": "killed",
+    "stderr": "",
+    "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.02s\n\nF.........                                                               [100%]\n=================================== FAILURES ===================================\n_____________________________ test_letter_grade_f ______________________________\n\n    def test_letter_grade_f():\n>       assert letter_grade(12) == \"F\"\nE       AssertionError: assert None == 'F'\nE        +  where None = letter_grade(12)\n\ntests/test_analytics.py:5: AssertionError\n------------ generated xml file: /work/jobs/0018-l2j0robp/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_letter_grade_f - AssertionError: assert ...\n1 failed, 9 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "generated_anchor": {
+    "column": 8,
+    "end_column": 19,
+    "end_line": 21,
+    "line": 21
+  }
+}

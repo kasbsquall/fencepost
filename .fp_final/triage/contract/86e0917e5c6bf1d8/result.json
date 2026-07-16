@@ -1,0 +1,120 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "contract_violations": [],
+      "generated_test": {
+        "generation_duration_seconds": 10.110000000000582,
+        "input_tokens": 13312,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 196,
+        "provider": "codex-cli",
+        "response_id": "019f6a95-be28-77d1-aafd-ff004d946a48",
+        "source": "import gradebook.analytics\n\n\ndef test_letter_grade_includes_ninety_in_a_range():\n    assert gradebook.analytics.letter_grade(90) == \"A\"",
+        "targeted_behavior": "At the inclusive A-grade boundary, 90 must return 'A' rather than falling through to 'B'."
+      },
+      "mutant": {
+        "duration_seconds": 0.7305728470000759,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_includes_ninety_in_a_range():\n>       assert gradebook.analytics.letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+          "nodeid": ".fencepost-generated-0000.test_adversarial::test_letter_grade_includes_ninety_in_a_range"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_letter_grade_includes_ninety_in_a_range _________________\n\n    def test_letter_grade_includes_ninety_in_a_range():\n>       assert gradebook.analytics.letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0000-lgwb7yue/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0000/test_adversarial.py::test_letter_grade_includes_ninety_in_a_range\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.77667226199992,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-lgwb7yue/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_letter_grade_includes_ninety_in_a_range():\n>       assert gradebook.analytics.letter_grade(90) == \"A\"\nE       AssertionError: assert 'B' == 'A'\nE         \nE         - A\nE         + B\n\n.fencepost-generated-0000/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 'B' == 'A'\n  \n  - A\n  + B",
+    "nodeid": ".fencepost-generated-0000.test_adversarial::test_letter_grade_includes_ninety_in_a_range"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mode": "CONTRACT",
+  "mutant": {
+    "candidate": {
+      "after": "Gt",
+      "anchor": {
+        "column": 7,
+        "end_column": 18,
+        "end_line": 13,
+        "line": 13
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "GtE",
+      "id": "86e0917e5c6bf1d8",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "score >= 90"
+    },
+    "execution": {
+      "duration_seconds": 1.100691891999304,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0000-cssljmvi/junit.xml ------------\n10 passed in 0.02s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 7,
+      "end_column": 17,
+      "end_line": 12,
+      "line": 12
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 10.110000000000582,
+    "input_tokens": 13312,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 196,
+    "provider": "codex-cli",
+    "response_id": "019f6a95-be28-77d1-aafd-ff004d946a48",
+    "source": "import gradebook.analytics\n\n\ndef test_letter_grade_includes_ninety_in_a_range():\n    assert gradebook.analytics.letter_grade(90) == \"A\"",
+    "targeted_behavior": "At the inclusive A-grade boundary, 90 must return 'A' rather than falling through to 'B'."
+  }
+}

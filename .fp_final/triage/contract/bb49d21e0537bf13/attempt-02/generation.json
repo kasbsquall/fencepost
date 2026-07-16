@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 184.82800000000134,
+  "input_tokens": 154891,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 7820,
+  "provider": "codex-cli",
+  "response_id": "019f6a9a-d3ac-7102-86b5-480f33eaf73a",
+  "source": "from gradebook.analytics import percentile\n\n\ndef test_percentile_negative_value_uses_truncating_index():\n    assert percentile([10, 20, 30], -50) == 30",
+  "targeted_behavior": "A negative percentile would make truncation toward zero select a different index than floor division."
+}

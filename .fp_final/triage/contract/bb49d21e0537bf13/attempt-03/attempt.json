@@ -1,0 +1,38 @@
+{
+  "attempt": 3,
+  "contract_violations": [],
+  "generated_test": {
+    "generation_duration_seconds": 223.51600000000326,
+    "input_tokens": 130260,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 9221,
+    "provider": "codex-cli",
+    "response_id": "019f6a9d-a970-74a1-a7d1-704d67cdcd75",
+    "source": "from gradebook.analytics import percentile\n\n\ndef test_percentile_uses_the_expected_boundary_index():\n    assert percentile([10, 20, 30], 66.66666666666667) == 30",
+    "targeted_behavior": "No distinguishing witness is available under the stated plain-literal contract: clamp_percent confines p to [0, 100], so for realizable sorted-list lengths both expressions produce the same nonnegative integer index."
+  },
+  "mutant": {
+    "duration_seconds": 0.5159977999992407,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n----- generated xml file: /work/jobs/triage-0000-0hykqg65/mutant/junit.xml -----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.5328876650000893,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0000-0hykqg65/original/junit.xml ----\n1 passed in 0.01s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "NOT_DISTINGUISHED",
+  "valid_attempt_number": 2
+}

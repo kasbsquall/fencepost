@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 11.015999999995984,
+  "input_tokens": 13306,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 207,
+  "provider": "codex-cli",
+  "response_id": "019f6a96-9de9-7f82-a9b0-46e46023a5cd",
+  "source": "import gradebook.analytics\n\n\ndef test_letter_grade_assigns_c_at_inclusive_70_cutoff():\n    assert gradebook.analytics.letter_grade(70) == \"C\"",
+  "targeted_behavior": "Distinguishes the inclusive C-grade cutoff at score 70 from the mutant's exclusive cutoff."
+}

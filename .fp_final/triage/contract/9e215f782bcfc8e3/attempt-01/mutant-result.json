@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.8901233169999614,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_letter_grade_assigns_d_at_inclusive_lower_boundary():\n>       assert gradebook.analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+    "nodeid": ".fencepost-generated-0009.test_adversarial::test_letter_grade_assigns_d_at_inclusive_lower_boundary"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_letter_grade_assigns_d_at_inclusive_lower_boundary ____________\n\n    def test_letter_grade_assigns_d_at_inclusive_lower_boundary():\n>       assert gradebook.analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0009/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0009-c8njh1er/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0009/test_adversarial.py::test_letter_grade_assigns_d_at_inclusive_lower_boundary\n1 failed in 0.03s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

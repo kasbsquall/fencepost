@@ -7,9 +7,10 @@ import os
 import statistics
 import tempfile
 import time
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Mapping
 
 from .contract import CONTRACT_LIMITATION, CONTRACT_RULES
 from .models import (
@@ -36,11 +37,14 @@ from .repository import (
     load_source_files,
     resolve_commit,
 )
+from .probe import run_probes
+from .report import build_report
 from .sandbox import DockerSandbox, SandboxError
 from .triage import build_survivor_context, triage_survivors
 
 if TYPE_CHECKING:
     from .adversarial import AdversarialTestGenerator
+    from .probe import ComprehensionProbeAgent
 
 
 class PipelineError(RuntimeError):
@@ -140,6 +144,16 @@ def _blame_index(
     }
 
 
+def _student_name(blame: dict[str, dict[int, BlameLine]]) -> str | None:
+    names = Counter(
+        line.author_name
+        for file_lines in blame.values()
+        for line in file_lines.values()
+        if line.is_student and line.author_name
+    )
+    return names.most_common(1)[0][0] if names else None
+
+
 def _eligible_candidates(
     sources: tuple[SourceFile, ...],
     blame: dict[str, dict[int, BlameLine]],
@@ -228,8 +242,10 @@ def run_analysis(
     *,
     adversarial_generator: "AdversarialTestGenerator | None" = None,
     triage_config: TriageConfig | None = None,
+    probe_agent: "ComprehensionProbeAgent | None" = None,
+    probe_answers: Mapping[str, str] | None = None,
 ) -> AnalysisResult:
-    """Run stages 1-4 and optionally Stage 5 equivalence triage.
+    """Run stages 1-4 and optionally Stages 5-7 triage, probe, and report.
 
     The submitted pytest suite is run exactly as submitted.  Blame only filters
     the source lines eligible to mutate; it does not filter tests by authorship.
@@ -243,6 +259,10 @@ def run_analysis(
         raise PipelineError("triage configuration requires an adversarial generator")
     if adversarial_generator is not None and triage_config is None:
         triage_config = TriageConfig()
+    if probe_agent is not None and adversarial_generator is None:
+        raise PipelineError("probe generation requires equivalence triage")
+    if probe_answers and probe_agent is None:
+        raise PipelineError("probe answers require a configured probe agent")
     repo = config.repo.resolve()
     artifact_dir = config.artifact_dir.resolve()
     if artifact_dir.exists():
@@ -280,6 +300,13 @@ def run_analysis(
                 "contract_rules": CONTRACT_RULES,
                 "contract_limitation": CONTRACT_LIMITATION,
             },
+            "probe": {
+                "enabled": probe_agent is not None,
+                "agent": type(probe_agent).__name__ if probe_agent is not None else None,
+                "model": getattr(probe_agent, "model", None),
+                "submitted_answer_count": len(probe_answers or {}),
+                "target_policy": "CONTRACT-mode REAL_GAP only",
+            },
             "scope": {
                 "supported": (
                     "Committed Python projects whose tests use only the standard library and pytest; "
@@ -314,6 +341,7 @@ def run_analysis(
                 artifact_dir / "baseline",
                 config.baseline_timeout_seconds,
             )
+            _write_json(artifact_dir / "baseline" / "result.json", baseline.execution)
         except (RepositoryError, SandboxError) as exc:
             raise PipelineError(str(exc)) from exc
 
@@ -432,9 +460,11 @@ def run_analysis(
             )
 
         triage_summary = None
+        probe_summary = None
+        report_summary = None
+        survivor_contexts = []
         if adversarial_generator is not None and triage_config is not None:
             import_roots = sandbox.import_roots(baseline_tree)
-            survivor_contexts = []
             for mutant in mutant_results:
                 if mutant.execution.status != "survived":
                     continue
@@ -465,6 +495,26 @@ def run_analysis(
                 config=triage_config,
                 workers=workers,
             )
+            if probe_agent is not None:
+                probe_summary = run_probes(
+                    triage_summary,
+                    survivor_contexts,
+                    blame=blame,
+                    agent=probe_agent,
+                    answers=probe_answers,
+                    artifact_dir=artifact_dir,
+                )
+
+        if triage_summary is not None and probe_summary is not None:
+            report_summary = build_report(
+                commit=commit,
+                student_email=config.student_email,
+                student_name=_student_name(blame),
+                triage=triage_summary,
+                probe=probe_summary,
+                contexts=survivor_contexts,
+                artifact_dir=artifact_dir,
+            )
 
     result = AnalysisResult(
         repo=repo,
@@ -477,6 +527,8 @@ def run_analysis(
         elapsed_seconds=time.monotonic() - started,
         artifact_dir=artifact_dir,
         triage=triage_summary,
+        probe=probe_summary,
+        report=report_summary,
     )
     _write_json(artifact_dir / "summary.json", _summary_payload(result))
     if result.mutant_count and all(

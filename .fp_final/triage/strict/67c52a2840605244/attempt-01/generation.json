@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.530999999995402,
+  "input_tokens": 12651,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 274,
+  "provider": "codex-cli",
+  "response_id": "019f6a93-c1a3-7ee0-ac06-777a51b375f2",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_zero_int_subclass_is_preserved_by_identity():\n    class ZeroInt(int):\n        pass\n\n    value = ZeroInt(0)\n    result = analytics.clamp_percent(value)\n\n    assert result is value\n    assert type(result) is ZeroInt",
+  "targeted_behavior": "At an input equal to zero represented by an int subclass, the original preserves and returns the exact input object, while the mutant replaces it with the built-in integer 0."
+}

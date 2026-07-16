@@ -1,6 +1,10 @@
 from __future__ import annotations
 
-from fencepost.models import GeneratedAdversarialTest
+from fencepost.models import (
+    GeneratedAdversarialTest,
+    GeneratedProbeGrade,
+    GeneratedProbeQuestion,
+)
 
 
 class FixtureAdversarialTestGenerator:
@@ -204,6 +208,56 @@ class FixtureAdversarialTestGenerator:
         return GeneratedAdversarialTest(
             source=source,
             targeted_behavior=behavior,
+            provider="fixture-fake",
+            model=None,
+            response_id=None,
+            generation_duration_seconds=0.0,
+        )
+
+
+class FixtureComprehensionProbeAgent:
+    """Hermetic question/grade seam; evidence attachment remains engine-owned."""
+
+    model = None
+
+    def __init__(self) -> None:
+        self.question_requests = []
+        self.grade_requests = []
+
+    def generate_question(self, request):
+        self.question_requests.append(request)
+        first = request.grounding.authored_lines[0]
+        mutation = (
+            f"Consider changing `{request.mutation.original_segment}` to "
+            f"`{request.mutation.mutated_segment}`."
+        )
+        question = (
+            f"In commit {first.commit[:7]} on {first.author_date}, you wrote "
+            f"line {first.line} of {request.grounding.path}.\n\n"
+            f"{mutation}\n\n"
+            "What observable behavior changes, and why?"
+        )
+        return GeneratedProbeQuestion(
+            question_text=question,
+            mutation_description=mutation,
+            provider="fixture-fake",
+            model=None,
+            response_id=None,
+            generation_duration_seconds=0.0,
+        )
+
+    def grade_answer(self, request):
+        self.grade_requests.append(request)
+        failure = request.evidence.failing_assertion
+        verdict = "INSUFFICIENT" if not request.answer.strip() else "PARTIAL"
+        return GeneratedProbeGrade(
+            verdict=verdict,
+            feedback=(
+                "Review the answer against the execution-grounded boundary behavior."
+            ),
+            evidence_explanation=(
+                f"The mutant failed {failure.nodeid}: {failure.message}"
+            ),
             provider="fixture-fake",
             model=None,
             response_id=None,

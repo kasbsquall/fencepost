@@ -1,0 +1,134 @@
+{
+  "contract_rules": {
+    "allowed_function_definitions": "top-level synchronous test_* functions only",
+    "allowed_imports": [
+      "pytest",
+      "<module-under-test>"
+    ],
+    "allowed_input_values": [
+      "int",
+      "float",
+      "str",
+      "bool",
+      "None",
+      "list",
+      "tuple",
+      "dict",
+      "set"
+    ],
+    "forbidden_comparison_operators": [
+      "Is",
+      "IsNot"
+    ],
+    "forbidden_definition_nodes": [
+      "ClassDef",
+      "AsyncFunctionDef",
+      "Lambda"
+    ],
+    "forbidden_fixture_names": [
+      "monkeypatch"
+    ],
+    "forbidden_inspection_attributes": [
+      "__class__"
+    ],
+    "forbidden_inspection_calls": [
+      "isinstance",
+      "type",
+      "id"
+    ],
+    "forbidden_mock_modules": [
+      "unittest.mock",
+      "mock"
+    ],
+    "forbidden_mock_names": [
+      "mock",
+      "patch",
+      "monkeypatch"
+    ],
+    "forbidden_mutation_calls": [
+      "setattr",
+      "delattr",
+      "setitem"
+    ],
+    "limitation": "CONTRACT mode can hide a genuine behavioral gap when the only witness uses type, identity, a custom object, or another excluded input. This deliberate false-negative risk means its rate is execution-grounded only under the stated caller contract, not universal truth.",
+    "program_replacement_rationale": "A test that replaces part of the program is no longer evidence about the program.",
+    "resolved_allowed_imports": [
+      "pytest",
+      "gradebook.analytics"
+    ],
+    "target_arguments": "plain literals, containers of plain literals, unary signed numeric literals, or local names bound directly to those values"
+  },
+  "mode": "CONTRACT",
+  "module_path": "gradebook.analytics",
+  "mutant": {
+    "candidate": {
+      "after": "59",
+      "anchor": {
+        "column": 18,
+        "end_column": 20,
+        "end_line": 19,
+        "line": 19
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "60",
+      "id": "db66414d596970b4",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "60"
+    },
+    "execution": {
+      "duration_seconds": 1.0297014110001328,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0016-w1xo2gdc/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 18,
+      "end_column": 20,
+      "end_line": 18,
+      "line": 18
+    }
+  },
+  "mutated_function": "def letter_grade(score):\n    \"\"\"Return the letter grade for a numeric score.\n\n    A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n    \"\"\"\n    if score >= 90:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    elif score >= 70:\n        return 'C'\n    elif score >= 59:\n        return 'D'\n    else:\n        return 'F'",
+  "original_function": "def letter_grade(score):\n    \"\"\"Return the letter grade for a numeric score.\n\n    A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n    \"\"\"\n    if score >= 90:\n        return \"A\"\n    elif score >= 80:\n        return \"B\"\n    elif score >= 70:\n        return \"C\"\n    elif score >= 60:\n        return \"D\"\n    else:\n        return \"F\"",
+  "qualified_function_name": "letter_grade",
+  "unified_diff": "--- original\n+++ mutant\n@@ -4,12 +4,12 @@\n     A: 90-100, B: 80-89, C: 70-79, D: 60-69, F: below 60\n     \"\"\"\n     if score >= 90:\n-        return \"A\"\n+        return 'A'\n     elif score >= 80:\n-        return \"B\"\n+        return 'B'\n     elif score >= 70:\n-        return \"C\"\n-    elif score >= 60:\n-        return \"D\"\n+        return 'C'\n+    elif score >= 59:\n+        return 'D'\n     else:\n-        return \"F\"\n+        return 'F'"
+}

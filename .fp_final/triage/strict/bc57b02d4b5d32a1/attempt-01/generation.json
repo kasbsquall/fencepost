@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 8.406000000002678,
+  "input_tokens": 12880,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 151,
+  "provider": "codex-cli",
+  "response_id": "019f6a92-9b6a-72a2-8a60-70901e7e497b",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_includes_80_in_b_range():\n    assert letter_grade(80) == \"B\"",
+  "targeted_behavior": "At the inclusive B-grade boundary, a score of 80 must return 'B' (the mutant incorrectly falls through to 'C')."
+}

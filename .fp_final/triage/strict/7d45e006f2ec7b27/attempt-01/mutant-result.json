@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.8439075100013724,
+  "exit_code": 1,
+  "failure": {
+    "detail": "def test_letter_grade_accepts_60_as_d():\n>       assert analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0011/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 'F' == 'D'\n  \n  - D\n  + F",
+    "nodeid": ".fencepost-generated-0011.test_adversarial::test_letter_grade_accepts_60_as_d"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________________ test_letter_grade_accepts_60_as_d _______________________\n\n    def test_letter_grade_accepts_60_as_d():\n>       assert analytics.letter_grade(60) == \"D\"\nE       AssertionError: assert 'F' == 'D'\nE         \nE         - D\nE         + F\n\n.fencepost-generated-0011/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0011-pvyny51j/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0011/test_adversarial.py::test_letter_grade_accepts_60_as_d\n1 failed in 0.04s\n",
+  "tests_collected": 1,
+  "tests_skipped": 0,
+  "timed_out": false
+}

@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 7.860000000000582,
+  "input_tokens": 12875,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 122,
+  "provider": "codex-cli",
+  "response_id": "019f6a93-a2ed-70c1-a37d-51d6bb973858",
+  "source": "import gradebook.analytics as analytics\n\n\ndef test_letter_grade_accepts_60_as_d():\n    assert analytics.letter_grade(60) == \"D\"",
+  "targeted_behavior": "The exact lower boundary of the D range: a score of 60 is D in the original but F in the mutant."
+}
