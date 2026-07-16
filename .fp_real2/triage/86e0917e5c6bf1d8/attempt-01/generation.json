@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 7.34400000000096,
+  "input_tokens": 12825,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 82,
+  "provider": "codex-cli",
+  "response_id": "019f6a4f-9f28-7902-b3d3-cd17dd29a6b2",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_90_is_an_a():\n    assert letter_grade(90) == \"A\"",
+  "targeted_behavior": "The inclusive A-grade boundary: a score of exactly 90 must return 'A', not fall through to 'B'."
+}

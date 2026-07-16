@@ -8,12 +8,13 @@ Docker sandbox.  Blame coordinates are therefore never taken from generated
 from __future__ import annotations
 
 import io
+import shutil
 import subprocess
 import tarfile
 import tokenize
 from dataclasses import dataclass
 from hashlib import sha256
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from .models import BlameLine
 
@@ -67,9 +68,15 @@ def tracked_python_files(repo: Path, commit: str) -> tuple[str, ...]:
 
 
 def is_test_path(path: str) -> bool:
-    parts = Path(path).parts
-    name = Path(path).name
-    return "tests" in parts or name.startswith("test_") or name.endswith("_test.py")
+    parts = PurePosixPath(path).parts
+    name = parts[-1] if parts else ""
+    directories = parts[:-1]
+    return (
+        any(part in {"test", "tests"} for part in directories)
+        or name == "conftest.py"
+        or name.startswith("test_")
+        or name.endswith("_test.py")
+    )
 
 
 def load_source_files(repo: Path, commit: str) -> tuple[SourceFile, ...]:
@@ -145,12 +152,73 @@ def extract_archive(repo: Path, commit: str, destination: Path) -> None:
     if archived.returncode != 0:
         raise RepositoryError(archived.stderr.decode("utf-8", "replace"))
     destination.mkdir(parents=True, exist_ok=True)
+    root = destination.resolve()
     with tarfile.open(fileobj=io.BytesIO(archived.stdout), mode="r:") as archive:
-        for member in archive.getmembers():
-            target = (destination / member.name).resolve()
-            if destination.resolve() not in target.parents and target != destination.resolve():
-                raise RepositoryError("unsafe member in Git archive")
-        # Members were validated above.  Extract individually to retain the
-        # Python 3.9 compatibility required by the AST mutator.
-        for member in archive.getmembers():
-            archive.extract(member, destination)
+        members = archive.getmembers()
+        safe_members: list[tuple[tarfile.TarInfo, PurePosixPath]] = []
+        for member in members:
+            relative = PurePosixPath(member.name)
+            if (
+                relative.is_absolute()
+                or not relative.parts
+                or ".." in relative.parts
+                or "\\" in member.name
+            ):
+                raise RepositoryError(
+                    f"unsafe path in Git archive: {member.name!r}"
+                )
+            # Git preserves symbolic links in archives.  Extracting them before
+            # a later member creates a classic TOCTOU tar-slip: the later write
+            # follows a link that did not exist during lexical validation.
+            # Fencepost snapshots need only directories and regular files, so
+            # reject links (and every other special member) outright.
+            if member.issym() or member.islnk():
+                raise RepositoryError(
+                    f"links are not allowed in Git archives: {member.name!r}"
+                )
+            if not (member.isdir() or member.isreg()):
+                raise RepositoryError(
+                    f"unsupported member in Git archive: {member.name!r}"
+                )
+            safe_members.append((member, relative))
+
+        directories: list[tuple[Path, int]] = []
+        for member, relative in safe_members:
+            target = destination.joinpath(*relative.parts)
+            resolved = target.resolve(strict=False)
+            if resolved != root and root not in resolved.parents:
+                raise RepositoryError(
+                    f"unsafe path in Git archive: {member.name!r}"
+                )
+            if target.is_symlink():
+                raise RepositoryError(
+                    f"archive destination contains a link: {member.name!r}"
+                )
+            if member.isdir():
+                target.mkdir(parents=True, exist_ok=True)
+                directories.append((target, member.mode))
+                continue
+
+            target.parent.mkdir(parents=True, exist_ok=True)
+            parent = target.parent.resolve(strict=True)
+            if parent != root and root not in parent.parents:
+                raise RepositoryError(
+                    f"unsafe parent in Git archive: {member.name!r}"
+                )
+            source = archive.extractfile(member)
+            if source is None:
+                raise RepositoryError(
+                    f"cannot read regular archive member: {member.name!r}"
+                )
+            try:
+                with source, target.open("xb") as output:
+                    shutil.copyfileobj(source, output)
+            except FileExistsError as exc:
+                raise RepositoryError(
+                    f"archive member would overwrite an existing path: {member.name!r}"
+                ) from exc
+            target.chmod(member.mode & 0o777)
+
+        # Apply directory modes after their children have been materialized.
+        for directory, mode in reversed(directories):
+            directory.chmod(mode & 0o777)

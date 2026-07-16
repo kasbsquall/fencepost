@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 9.281999999999243,
+  "input_tokens": 12822,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 207,
+  "provider": "codex-cli",
+  "response_id": "019f6a4f-dcc6-7ee0-a825-43aa5cb42e44",
+  "source": "\"\"\"Mutation-killing tests for gradebook.analytics.letter_grade.\"\"\"\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_includes_90_in_a_range():\n    assert letter_grade(90) == \"A\"",
+  "targeted_behavior": "Checks the inclusive A-grade lower boundary exactly at 90."
+}

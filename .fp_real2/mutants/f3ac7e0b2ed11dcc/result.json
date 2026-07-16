@@ -1,0 +1,58 @@
+{
+  "candidate": {
+    "after": "GtE",
+    "anchor": {
+      "column": 11,
+      "end_column": 21,
+      "end_line": 48,
+      "line": 48
+    },
+    "ast_path": [
+      {
+        "field": "body",
+        "index": 4
+      },
+      {
+        "field": "body",
+        "index": 2
+      },
+      {
+        "field": "body",
+        "index": 0
+      },
+      {
+        "field": "test",
+        "index": null
+      }
+    ],
+    "before": "Gt",
+    "id": "f3ac7e0b2ed11dcc",
+    "kind": "compare",
+    "parameters": [
+      [
+        "op_index",
+        "0"
+      ]
+    ],
+    "path": "gradebook/analytics.py",
+    "source_segment": "s > target"
+  },
+  "execution": {
+    "duration_seconds": 1.1843394220004484,
+    "exit_code": 1,
+    "failing_tests": [
+      "tests.test_analytics::test_rank_middle",
+      "tests.test_analytics::test_rank_highest"
+    ],
+    "status": "killed",
+    "stderr": "",
+    "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.......FF.                                                               [100%]\n=================================== FAILURES ===================================\n_______________________________ test_rank_middle _______________________________\n\n    def test_rank_middle():\n>       assert rank([90, 80, 70], 80) == 2\nE       assert 3 == 2\nE        +  where 3 = rank([90, 80, 70], 80)\n\ntests/test_analytics.py:35: AssertionError\n______________________________ test_rank_highest _______________________________\n\n    def test_rank_highest():\n>       assert rank([90, 80, 70], 90) == 1\nE       assert 2 == 1\nE        +  where 2 = rank([90, 80, 70], 90)\n\ntests/test_analytics.py:39: AssertionError\n------------ generated xml file: /work/jobs/0039-4c16ukeu/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_rank_middle - assert 3 == 2\nFAILED tests/test_analytics.py::test_rank_highest - assert 2 == 1\n2 failed, 8 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "generated_anchor": {
+    "column": 11,
+    "end_column": 22,
+    "end_line": 44,
+    "line": 44
+  }
+}

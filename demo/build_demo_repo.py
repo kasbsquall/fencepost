@@ -91,6 +91,26 @@ def percentile(scores, p):
     return ordered[k]
 '''
 
+STEP_PERCENTILE_V3 = '''
+def clamp_percent(p):
+    """Clamp a percentage to the inclusive 0-100 interval."""
+    if p < 0:
+        p = 0
+    if p > 100:
+        p = 100
+    return p
+
+
+def percentile(scores, p):
+    """Return the p-th percentile of scores (p between 0 and 100)."""
+    p = clamp_percent(p)
+    ordered = sorted(scores)
+    k = int(len(ordered) * p / 100)
+    if k >= len(ordered):
+        k = len(ordered) - 1
+    return ordered[k]
+'''
+
 STEP_RANK_TOPN = '''
 def rank(scores, target):
     """Return the 1-based rank of target within scores. Highest score is rank 1."""
@@ -126,7 +146,7 @@ def test_letter_grade_c():
     assert letter_grade(72) == "C"
 '''
 
-TESTS_FULL = '''from gradebook.analytics import letter_grade, percentile, rank, top_n
+TESTS_FULL = '''from gradebook.analytics import clamp_percent, letter_grade, percentile, rank, top_n
 
 
 def test_letter_grade_f():
@@ -153,6 +173,12 @@ def test_percentile_low():
     assert percentile([10, 20, 30, 40, 50], 20) == 20
 
 
+def test_clamp_percent_outside_interval():
+    assert clamp_percent(-5) == 0
+    assert clamp_percent(50) == 50
+    assert clamp_percent(120) == 100
+
+
 def test_rank_middle():
     assert rank([90, 80, 70], 80) == 2
 
@@ -169,7 +195,7 @@ STUDENT_README = """# Assignment 3 - Gradebook Analytics
 
 CS2, Prof. Martinez.
 
-Implemented `letter_grade`, `percentile`, `rank` and `top_n`.
+Implemented `letter_grade`, `percentile`, `clamp_percent`, `rank` and `top_n`.
 All tests pass: `pytest -q`
 """
 
@@ -217,6 +243,12 @@ HISTORY = [
         [("gradebook/analytics.py", None)],
     ),
     (
+        "clamp percentile inputs to the valid interval",
+        STUDENT,
+        "2026-07-10T01:55:00",
+        [("gradebook/analytics.py", None)],
+    ),
+    (
         "add remaining tests, all green",
         STUDENT,
         "2026-07-10T02:03:00",
@@ -260,6 +292,16 @@ def _analytics_at(step: int) -> str:
             + STEP_LETTER_GRADE
             + "\n"
             + STEP_PERCENTILE_V2
+            + "\n"
+            + STEP_RANK_TOPN
+        )
+    if step == 6:  # clamp is wired into percentile
+        return (
+            header
+            + "\n"
+            + STEP_LETTER_GRADE
+            + "\n"
+            + STEP_PERCENTILE_V3
             + "\n"
             + STEP_RANK_TOPN
         )

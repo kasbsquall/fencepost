@@ -1,0 +1,16 @@
+{
+  "duration_seconds": 0.6928218059993014,
+  "exit_code": 1,
+  "failure": {
+    "detail": "score = 79, expected = 'C'\n\n    @pytest.mark.parametrize(\n        (\"score\", \"expected\"),\n        [\n            (79, \"C\"),\n            (80, \"B\"),\n        ],\n    )\n    def test_b_grade_starts_at_80(score, expected):\n>       assert letter_grade(score) == expected\nE       AssertionError: assert 'B' == 'C'\nE         \nE         - C\nE         + B\n\n.fencepost-generated-0004/test_adversarial.py:14: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 'B' == 'C'\n  \n  - C\n  + B",
+    "nodeid": ".fencepost-generated-0004.test_adversarial::test_b_grade_starts_at_80[79-C]"
+  },
+  "status": "failed",
+  "stderr": "",
+  "stdout": "F.                                                                       [100%]\n=================================== FAILURES ===================================\n_______________________ test_b_grade_starts_at_80[79-C] ________________________\n\nscore = 79, expected = 'C'\n\n    @pytest.mark.parametrize(\n        (\"score\", \"expected\"),\n        [\n            (79, \"C\"),\n            (80, \"B\"),\n        ],\n    )\n    def test_b_grade_starts_at_80(score, expected):\n>       assert letter_grade(score) == expected\nE       AssertionError: assert 'B' == 'C'\nE         \nE         - C\nE         + B\n\n.fencepost-generated-0004/test_adversarial.py:14: AssertionError\n----- generated xml file: /work/jobs/triage-0004-gf9gwc7u/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0004/test_adversarial.py::test_b_grade_starts_at_80[79-C]\n1 failed, 1 passed in 0.02s\n",
+  "tests_collected": 2,
+  "tests_skipped": 0,
+  "timed_out": false
+}

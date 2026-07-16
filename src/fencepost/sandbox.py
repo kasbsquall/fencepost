@@ -12,7 +12,6 @@ import math
 import subprocess
 import time
 import uuid
-import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -144,7 +143,6 @@ class TriageSession:
             json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
 
-        result_name = f"{round_name}-results.json"
         command = [
             "docker",
             "exec",
@@ -153,7 +151,6 @@ class TriageSession:
             "/opt/fencepost/batch_driver.py",
             "triage",
             f"/input/{round_name}/manifest.json",
-            f"/out/{result_name}",
         ]
         waves = max(1, math.ceil(len(jobs) / self.workers))
         timeout = max(
@@ -161,20 +158,20 @@ class TriageSession:
             waves * ((2.0 * self.per_test_timeout) + 2.0) + 15.0,
         )
         raw = DockerSandbox._execute_container(command, self.name, timeout)
-        result_path = self.output_dir / result_name
         if raw.timed_out:
             raise SandboxError(
                 f"triage round {round_id} exceeded {timeout:.1f}s; its session was killed"
             )
-        if raw.exit_code != 0 or not result_path.exists():
+        payload = _driver_payload(raw, f"triage round {round_id}")
+        result_path = self.output_dir / f"{round_name}-results.json"
+        result_path.write_text(
+            json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        if raw.exit_code != 0:
             raise SandboxError(
                 f"triage round {round_id} failed; exit={raw.exit_code}\n"
                 f"stdout:\n{raw.stdout}\nstderr:\n{raw.stderr}"
             )
-        try:
-            payload = json.loads(result_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as exc:
-            raise SandboxError(f"invalid triage result JSON: {exc}") from exc
         return {
             job_id: TriageJobResult(
                 id=job_id,
@@ -301,35 +298,33 @@ class DockerSandbox:
             pids=pids,
         ) + [
             "--tmpfs",
-            "/work:rw,nosuid,size=512m",
+            "/work:rw,noexec,nosuid,size=512m",
             "--workdir",
             "/baseline",
             "--mount",
             f"type=bind,src={source_tree},dst=/baseline,readonly",
             "--mount",
             f"type=bind,src={input_dir},dst=/input,readonly",
-            "--mount",
-            f"type=bind,src={output_dir.resolve()},dst=/out",
             self.image,
             "batch",
         ]
         rounds = max(1, math.ceil(mutant_count / workers))
         container_timeout = max(60.0, (rounds * per_mutant_timeout) + 30.0)
         raw = self._execute_container(command, name, container_timeout)
-        result_path = output_dir / "batch-results.json"
         if raw.timed_out:
             raise SandboxError(
                 f"mutant batch container exceeded {container_timeout:.1f}s and was killed"
             )
-        if raw.exit_code not in (0, 12) or not result_path.exists():
+        payload = _driver_payload(raw, "mutant batch")
+        result_path = output_dir / "batch-results.json"
+        result_path.write_text(
+            json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        if raw.exit_code not in (0, 12):
             raise SandboxError(
                 "mutant batch driver failed; "
                 f"exit={raw.exit_code}\nstdout:\n{raw.stdout}\nstderr:\n{raw.stderr}"
             )
-        try:
-            payload = json.loads(result_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as exc:
-            raise SandboxError(f"invalid batch-results.json: {exc}") from exc
         results = {
             mutant_id: ExecutionResult(
                 status=value["status"],
@@ -378,15 +373,13 @@ class DockerSandbox:
         ) + [
             "--detach",
             "--tmpfs",
-            "/work:rw,nosuid,size=512m",
+            "/work:rw,noexec,nosuid,size=512m",
             "--workdir",
             "/baseline",
             "--mount",
             f"type=bind,src={source_tree},dst=/baseline,readonly",
             "--mount",
             f"type=bind,src={input_dir},dst=/input,readonly",
-            "--mount",
-            f"type=bind,src={output_dir},dst=/out",
             self.image,
             "triage-session",
         ]
@@ -430,8 +423,6 @@ class DockerSandbox:
             f"PYTHONPATH={self._pythonpath(source_tree)}",
             "--mount",
             f"type=bind,src={source_tree},dst=/workspace,readonly",
-            "--mount",
-            f"type=bind,src={output_dir.resolve()},dst=/out",
             self.image,
             mode,
         ]
@@ -453,6 +444,23 @@ class DockerSandbox:
                 stdout=raw.stdout,
                 stderr=raw.stderr,
             )
+        if mode == "baseline":
+            payload = _driver_payload(raw, "baseline")
+            if raw.exit_code != 0:
+                raise SandboxError(
+                    "baseline driver failed; "
+                    f"exit={raw.exit_code}\nstdout:\n{raw.stdout}\nstderr:\n{raw.stderr}"
+                )
+            execution_value = payload.get("execution")
+            if not isinstance(execution_value, dict):
+                raise SandboxError("baseline driver omitted its execution result")
+            coverage_value = payload.get("coverage")
+            if isinstance(coverage_value, dict):
+                (output_dir / "coverage.json").write_text(
+                    json.dumps(coverage_value, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+            return _execution_result(execution_value)
         if raw.exit_code == 0:
             status = "survived"
         elif raw.exit_code == 1:
@@ -465,7 +473,6 @@ class DockerSandbox:
             duration_seconds=raw.duration_seconds,
             stdout=raw.stdout,
             stderr=raw.stderr,
-            failing_tests=_failing_tests(output_dir / "junit.xml"),
         )
 
     @staticmethod
@@ -577,20 +584,34 @@ class DockerSandbox:
         return tuple(roots)
 
 
-def _failing_tests(junit_path: Path) -> tuple[str, ...]:
-    if not junit_path.exists():
-        return ()
+def _driver_payload(raw: _ContainerRun, context: str) -> dict[str, object]:
+    """Decode the trusted driver's sole stdout envelope.
+
+    Pytest children are always captured by the in-container driver, so student
+    output cannot prefix or replace this document.
+    """
     try:
-        root = ET.parse(junit_path).getroot()
-    except ET.ParseError:
-        return ()
-    failed: list[str] = []
-    for case in root.iter("testcase"):
-        if case.find("failure") is not None or case.find("error") is not None:
-            classname = case.attrib.get("classname", "")
-            name = case.attrib.get("name", "")
-            failed.append("::".join(part for part in (classname, name) if part))
-    return tuple(failed)
+        payload = json.loads(raw.stdout)
+    except (json.JSONDecodeError, TypeError) as exc:
+        raise SandboxError(
+            f"{context} driver returned invalid JSON; exit={raw.exit_code}\n"
+            f"stdout:\n{raw.stdout}\nstderr:\n{raw.stderr}"
+        ) from exc
+    if not isinstance(payload, dict):
+        raise SandboxError(f"{context} driver result must be a JSON object")
+    return payload
+
+
+def _execution_result(value: dict[str, object]) -> ExecutionResult:
+    return ExecutionResult(
+        status=value["status"],
+        exit_code=value.get("exit_code"),
+        duration_seconds=float(value.get("duration_seconds", 0.0)),
+        stdout=str(value.get("stdout", "")),
+        stderr=str(value.get("stderr", "")),
+        timed_out=bool(value.get("timed_out", False)),
+        failing_tests=tuple(str(item) for item in value.get("failing_tests", ())),
+    )
 
 
 def _adversarial_execution(value: dict[str, object]) -> AdversarialExecution:

@@ -1,0 +1,130 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "generated_test": {
+        "generation_duration_seconds": 10.406000000002678,
+        "input_tokens": 12820,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 229,
+        "provider": "codex-cli",
+        "response_id": "019f6a50-a79b-7f80-8040-3e13610e11d2",
+        "source": "from gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_assigns_c_at_exact_lower_boundary():\n    assert letter_grade(70) == \"C\"",
+        "targeted_behavior": "The inclusive lower bound for a C is exactly 70."
+      },
+      "mutant": {
+        "duration_seconds": 0.659848241999498,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_letter_grade_assigns_c_at_exact_lower_boundary():\n>       assert letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+          "nodeid": ".fencepost-generated-0008.test_adversarial::test_letter_grade_assigns_c_at_exact_lower_boundary"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_____________ test_letter_grade_assigns_c_at_exact_lower_boundary ______________\n\n    def test_letter_grade_assigns_c_at_exact_lower_boundary():\n>       assert letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0008-ruj3zwr_/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0008/test_adversarial.py::test_letter_grade_assigns_c_at_exact_lower_boundary\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.6541495640003632,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0008-ruj3zwr_/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_letter_grade_assigns_c_at_exact_lower_boundary():\n>       assert letter_grade(70) == \"C\"\nE       AssertionError: assert 'D' == 'C'\nE         \nE         - C\nE         + D\n\n.fencepost-generated-0008/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 'D' == 'C'\n  \n  - C\n  + D",
+    "nodeid": ".fencepost-generated-0008.test_adversarial::test_letter_grade_assigns_c_at_exact_lower_boundary"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mutant": {
+    "candidate": {
+      "after": "71",
+      "anchor": {
+        "column": 18,
+        "end_column": 20,
+        "end_line": 17,
+        "line": 17
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "70",
+      "id": "8e3bb3b74b5e7623",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "70"
+    },
+    "execution": {
+      "duration_seconds": 0.9937931989998106,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0012-zrs77u0g/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 18,
+      "end_column": 20,
+      "end_line": 16,
+      "line": 16
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 10.406000000002678,
+    "input_tokens": 12820,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 229,
+    "provider": "codex-cli",
+    "response_id": "019f6a50-a79b-7f80-8040-3e13610e11d2",
+    "source": "from gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_assigns_c_at_exact_lower_boundary():\n    assert letter_grade(70) == \"C\"",
+    "targeted_behavior": "The inclusive lower bound for a C is exactly 70."
+  }
+}

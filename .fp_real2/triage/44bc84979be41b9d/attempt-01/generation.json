@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.03099999999904,
+  "input_tokens": 12593,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 208,
+  "provider": "codex-cli",
+  "response_id": "019f6a51-9c3a-72a0-a75b-5a002b3da965",
+  "source": "import pytest\n\nfrom gradebook.analytics import clamp_percent\n\n\ndef test_clamp_percent_preserves_positive_fraction_below_one():\n    assert clamp_percent(0.5) == pytest.approx(0.5)",
+  "targeted_behavior": "A positive fractional percentage below 1 must be preserved, not clamped to zero."
+}

@@ -18,30 +18,25 @@ def test_batch_uses_one_hardened_container_for_all_mutants(tmp_path, monkeypatch
 
     def fake_execute(command, name, timeout):
         calls.append(command)
-        (output / "batch-results.json").write_text(
-            json.dumps(
-                {
-                    "results": {
-                        "m1": {
-                            "status": "survived",
-                            "exit_code": 0,
-                            "duration_seconds": 0.25,
-                            "stdout": "",
-                            "stderr": "",
-                            "timed_out": False,
-                            "failing_tests": [],
-                        }
-                    },
-                    "aborted_all_broken": False,
-                    "duration_seconds": 1.0,
+        payload = {
+            "results": {
+                "m1": {
+                    "status": "survived",
+                    "exit_code": 0,
+                    "duration_seconds": 0.25,
+                    "stdout": "",
+                    "stderr": "",
+                    "timed_out": False,
+                    "failing_tests": [],
                 }
-            ),
-            encoding="utf-8",
-        )
+            },
+            "aborted_all_broken": False,
+            "duration_seconds": 1.0,
+        }
         return SimpleNamespace(
             exit_code=0,
             duration_seconds=1.0,
-            stdout="",
+            stdout=json.dumps(payload),
             stderr="",
             timed_out=False,
         )
@@ -62,10 +57,13 @@ def test_batch_uses_one_hardened_container_for_all_mutants(tmp_path, monkeypatch
     command = calls[0]
     assert "fencepost-runner:test" in command
     assert command[-1] == "batch"
-    assert "/work:rw,nosuid,size=512m" in command
+    assert "/work:rw,noexec,nosuid,size=512m" in command
     assert f"type=bind,src={baseline.resolve()},dst=/baseline,readonly" in command
     assert f"type=bind,src={batch_input.resolve()},dst=/input,readonly" in command
+    assert not any("dst=/out" in argument for argument in command)
+    assert not any(str(output.resolve()) in argument for argument in command)
     assert result.results["m1"].status == "survived"
+    assert (output / "batch-results.json").exists()
 
 
 def test_triage_reuses_one_persistent_hardened_container_for_retry_rounds(
@@ -84,45 +82,39 @@ def test_triage_reuses_one_persistent_hardened_container_for_retry_rounds(
 
     def fake_execute(command, name, timeout):
         exec_calls.append(command)
-        result_name = command[-1].removeprefix("/out/")
-        output.mkdir(parents=True, exist_ok=True)
-        (output / result_name).write_text(
-            json.dumps(
-                {
-                    "results": {
-                        command[-2].split("/")[-2] + "-job": {
-                            "outcome": "NOT_DISTINGUISHED",
-                            "original": {
-                                "status": "passed",
-                                "exit_code": 0,
-                                "duration_seconds": 0.01,
-                                "stdout": "",
-                                "stderr": "",
-                                "tests_collected": 1,
-                                "tests_skipped": 0,
-                                "failure": None,
-                            },
-                            "mutant": {
-                                "status": "passed",
-                                "exit_code": 0,
-                                "duration_seconds": 0.01,
-                                "stdout": "",
-                                "stderr": "",
-                                "tests_collected": 1,
-                                "tests_skipped": 0,
-                                "failure": None,
-                            },
-                        }
+        round_name = command[-1].split("/")[-2]
+        payload = {
+            "results": {
+                round_name + "-job": {
+                    "outcome": "NOT_DISTINGUISHED",
+                    "original": {
+                        "status": "passed",
+                        "exit_code": 0,
+                        "duration_seconds": 0.01,
+                        "stdout": "",
+                        "stderr": "",
+                        "tests_collected": 1,
+                        "tests_skipped": 0,
+                        "failure": None,
                     },
-                    "infrastructure_errors": [],
+                    "mutant": {
+                        "status": "passed",
+                        "exit_code": 0,
+                        "duration_seconds": 0.01,
+                        "stdout": "",
+                        "stderr": "",
+                        "tests_collected": 1,
+                        "tests_skipped": 0,
+                        "failure": None,
+                    },
                 }
-            ),
-            encoding="utf-8",
-        )
+            },
+            "infrastructure_errors": [],
+        }
         return SimpleNamespace(
             exit_code=0,
             duration_seconds=0.1,
-            stdout="",
+            stdout=json.dumps(payload),
             stderr="",
             timed_out=False,
         )
@@ -164,6 +156,57 @@ def test_triage_reuses_one_persistent_hardened_container_for_retry_rounds(
     start = starts[0]
     assert "--network" in start and "none" in start
     assert "--read-only" in start
-    assert "/work:rw,nosuid,size=512m" in start
+    assert "/work:rw,noexec,nosuid,size=512m" in start
     assert f"type=bind,src={baseline.resolve()},dst=/baseline,readonly" in start
     assert f"type=bind,src={triage_input.resolve()},dst=/input,readonly" in start
+    assert not any("dst=/out" in argument for argument in start)
+    assert not any(str(output.resolve()) in argument for argument in start)
+    assert all(not any("/out" in argument for argument in call) for call in exec_calls)
+    assert (output / "round-001-results.json").exists()
+    assert (output / "round-002-results.json").exists()
+
+
+def test_baseline_result_is_returned_by_driver_not_a_host_mount(
+    tmp_path, monkeypatch
+) -> None:
+    baseline = tmp_path / "baseline"
+    output = tmp_path / "output"
+    baseline.mkdir()
+    calls: list[list[str]] = []
+
+    def fake_execute(command, name, timeout):
+        calls.append(command)
+        payload = {
+            "execution": {
+                "status": "survived",
+                "exit_code": 0,
+                "duration_seconds": 0.5,
+                "stdout": "1 passed",
+                "stderr": "",
+                "timed_out": False,
+                "failing_tests": [],
+            },
+            "coverage": {
+                "files": {"pkg/module.py": {"executed_lines": [1, 2]}}
+            },
+        }
+        return SimpleNamespace(
+            exit_code=0,
+            duration_seconds=0.6,
+            stdout=json.dumps(payload),
+            stderr="",
+            timed_out=False,
+        )
+
+    monkeypatch.setattr(DockerSandbox, "_execute_container", staticmethod(fake_execute))
+    sandbox = DockerSandbox("fencepost-runner:test", tmp_path, build_image=False)
+
+    result = sandbox.baseline(baseline, output, timeout=5.0)
+
+    assert result.execution.status == "survived"
+    assert result.covered_lines == {"pkg/module.py": (1, 2)}
+    assert not any("dst=/out" in argument for argument in calls[0])
+    assert not any(str(output.resolve()) in argument for argument in calls[0])
+    assert json.loads((output / "coverage.json").read_text(encoding="utf-8")) == {
+        "files": {"pkg/module.py": {"executed_lines": [1, 2]}}
+    }

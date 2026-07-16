@@ -26,7 +26,8 @@ def _parser() -> argparse.ArgumentParser:
             "Scope: committed projects using only the standard library and pytest. "
             "Fencepost adds the repository root, conventional src/, and detected top-level packages to PYTHONPATH; "
             "it does not install requirements.txt, pyproject, or setup.py dependencies, or support custom build layouts. "
-            "Real triage makes one model call per generated test, can take several minutes, and consumes the selected "
+            "Real triage runs both STRICT and CONTRACT modes and makes one model call per generated test; it can take "
+            "several minutes and consumes the selected "
             "provider's usage allowance; use --triage-attempts and --max-survivors-triaged to bound a demo."
         ),
     )
@@ -164,19 +165,36 @@ def main(argv: list[str] | None = None) -> int:
     )
     if result.triage is not None:
         triage = result.triage
-        rate = (
+        strict_rate = (
             "null"
-            if triage.equivalent_rate is None
-            else f"{triage.equivalent_rate:.3f}"
+            if triage.equivalent_rate_strict is None
+            else f"{triage.equivalent_rate_strict:.3f}"
+        )
+        contract_rate = (
+            "null"
+            if triage.equivalent_rate_contract is None
+            else f"{triage.equivalent_rate_contract:.3f}"
         )
         print(
-            f"triage: survivors={triage.total_survivors} "
+            f"triage STRICT: survivors={triage.total_survivors} "
             f"selected={triage.selected_survivor_count} "
-            f"real_gap={triage.real_gap_count} "
-            f"probable_equivalent={triage.probable_equivalent_count} "
-            f"unresolved={triage.unresolved_count} "
-            f"equivalent_rate={rate} complete={triage.triage_complete}"
+            f"real_gap={triage.real_gap_count_strict} "
+            f"probable_equivalent={triage.probable_equivalent_count_strict} "
+            f"unresolved={triage.unresolved_count_strict} "
+            f"equivalent_rate_strict={strict_rate}"
         )
+        print(
+            f"triage CONTRACT: survivors={triage.total_survivors} "
+            f"selected={triage.selected_survivor_count} "
+            f"real_gap={triage.real_gap_count_contract} "
+            f"probable_equivalent={triage.probable_equivalent_count_contract} "
+            f"unresolved={triage.unresolved_count_contract} "
+            f"invalid_contract={triage.invalid_contract_attempts} "
+            f"equivalent_rate_contract={contract_rate} "
+            f"contract_shielded={len(triage.contract_shielded)} "
+            f"complete={triage.triage_complete}"
+        )
+        print(f"CONTRACT limitation: {triage.contract_limitation}")
         print(
             f"generation: calls={triage.generator_call_count} "
             f"model_wall={triage.generator_wall_clock_seconds:.2f}s "

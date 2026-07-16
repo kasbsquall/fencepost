@@ -11,8 +11,12 @@ ExecutionStatus = Literal[
     "survived", "killed", "broken", "timed_out", "infrastructure_error"
 ]
 TriageLabel = Literal["REAL_GAP", "PROBABLE_EQUIVALENT", "UNRESOLVED"]
+TriageMode = Literal["STRICT", "CONTRACT"]
 AttemptOutcome = Literal[
-    "INVALID_ON_ORIGINAL", "NOT_DISTINGUISHED", "DISTINGUISHED"
+    "INVALID_CONTRACT",
+    "INVALID_ON_ORIGINAL",
+    "NOT_DISTINGUISHED",
+    "DISTINGUISHED",
 ]
 AdversarialExecutionStatus = Literal[
     "passed", "failed", "timed_out", "infrastructure_error"
@@ -109,6 +113,14 @@ class FailureEvidence:
 
 
 @dataclass(frozen=True)
+class ContractViolation:
+    rule: str
+    line: int | None
+    column: int | None
+    message: str
+
+
+@dataclass(frozen=True)
 class AdversarialExecution:
     status: AdversarialExecutionStatus
     exit_code: int | None
@@ -128,6 +140,7 @@ class AttemptFeedback:
     outcome: AttemptOutcome
     original_summary: str
     mutant_summary: str | None = None
+    invalid_reason: str | None = None
 
 
 @dataclass(frozen=True)
@@ -140,6 +153,8 @@ class AdversarialTestRequest:
     original_function: str
     mutated_function: str
     unified_diff: str
+    mode: TriageMode = "STRICT"
+    contract_rules: dict[str, object] | None = None
     prior_attempts: tuple[AttemptFeedback, ...] = ()
 
 
@@ -178,12 +193,14 @@ class AdversarialAttempt:
     valid_attempt_number: int | None
     generated_test: GeneratedAdversarialTest
     outcome: AttemptOutcome
-    original: AdversarialExecution
+    original: AdversarialExecution | None
     mutant: AdversarialExecution | None
+    contract_violations: tuple[ContractViolation, ...] = ()
 
 
 @dataclass(frozen=True)
 class SurvivorTriageResult:
+    mode: TriageMode
     mutant: MutantResult
     label: TriageLabel
     attempts: tuple[AdversarialAttempt, ...]
@@ -196,7 +213,8 @@ class SurvivorTriageResult:
 
 
 @dataclass(frozen=True)
-class TriageSummary:
+class TriageModeSummary:
+    mode: TriageMode
     total_survivors: int
     selected_survivor_count: int
     real_gap_count: int
@@ -207,10 +225,56 @@ class TriageSummary:
     total_attempts: int
     valid_attempts: int
     invalid_original_attempts: int
+    invalid_contract_attempts: int
     generator_call_count: int
     generator_wall_clock_seconds: float
     triage_wall_clock_seconds: float
     results: tuple[SurvivorTriageResult, ...]
+
+
+@dataclass(frozen=True)
+class DualSurvivorTriageResult:
+    mutant: MutantResult
+    label_strict: TriageLabel
+    label_contract: TriageLabel
+    strict: SurvivorTriageResult
+    contract: SurvivorTriageResult
+
+
+@dataclass(frozen=True)
+class ContractShieldedResult:
+    mutant: MutantResult
+    label_strict: TriageLabel
+    label_contract: TriageLabel
+    strict_winning_test: GeneratedAdversarialTest
+    strict_failure_evidence: FailureEvidence
+    strict_killing_attempt: AdversarialAttempt
+
+
+@dataclass(frozen=True)
+class TriageSummary:
+    total_survivors: int
+    selected_survivor_count: int
+    real_gap_count_strict: int
+    probable_equivalent_count_strict: int
+    unresolved_count_strict: int
+    equivalent_rate_strict: float | None
+    real_gap_count_contract: int
+    probable_equivalent_count_contract: int
+    unresolved_count_contract: int
+    equivalent_rate_contract: float | None
+    invalid_contract_attempts: int
+    triage_complete: bool
+    generator_call_count: int
+    generator_wall_clock_seconds: float
+    triage_wall_clock_seconds: float
+    strict: TriageModeSummary
+    contract: TriageModeSummary
+    results: tuple[DualSurvivorTriageResult, ...]
+    contract_shielded: tuple[ContractShieldedResult, ...]
+    probe_target_mutant_ids: tuple[str, ...]
+    contract_rules: dict[str, object]
+    contract_limitation: str
 
 
 @dataclass(frozen=True)

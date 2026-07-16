@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.2029999999977,
+  "input_tokens": 12589,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 261,
+  "provider": "codex-cli",
+  "response_id": "019f6a51-c336-7042-98e4-6a239d61b0e0",
+  "source": "import pytest\nfrom decimal import Decimal\n\nfrom gradebook.analytics import clamp_percent\n\n\ndef test_upper_boundary_preserves_decimal_instance():\n    boundary = Decimal(\"100\")\n    result = clamp_percent(boundary)\n\n    assert result is boundary\n    assert isinstance(result, Decimal)",
+  "targeted_behavior": "At the exact upper boundary, the original preserves and returns the supplied value, while the mutant replaces it with the integer literal 100."
+}

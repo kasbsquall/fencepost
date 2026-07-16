@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from .contract import CONTRACT_LIMITATION, CONTRACT_RULES
 from .models import (
     AnalysisResult,
     BlameLine,
@@ -65,26 +66,37 @@ def _summary_payload(result: AnalysisResult) -> dict[str, object]:
     payload = json_value(result)
     triage = result.triage
     cost_note = (
-        "Each real adversarial generation is a separate model call. A full run can "
-        "take several minutes and consume the configured provider's usage allowance; "
+        "STRICT and CONTRACT each generate tests independently, and every generation "
+        "is a separate model call. A full two-mode run can take several minutes and "
+        "consume the configured provider's usage allowance; "
         "use triage_attempts and max_survivors to bound a demonstration run."
     )
     if triage is None:
+        survivors = sum(
+            mutant.execution.status == "survived"
+            for mutant in result.mutant_results
+        )
         payload.update(
             {
-                "total_survivors": sum(
-                    mutant.execution.status == "survived"
-                    for mutant in result.mutant_results
-                ),
-                "real_gap_count": 0,
-                "probable_equivalent_count": 0,
-                "unresolved_count": 0,
-                "equivalent_rate": None,
+                "total_survivors": survivors,
+                "real_gap_count_strict": 0,
+                "probable_equivalent_count_strict": 0,
+                "unresolved_count_strict": survivors,
+                "equivalent_rate_strict": None,
+                "real_gap_count_contract": 0,
+                "probable_equivalent_count_contract": 0,
+                "unresolved_count_contract": survivors,
+                "equivalent_rate_contract": None,
+                "invalid_contract_attempts": 0,
                 "triage_complete": False,
                 "selected_survivor_count": 0,
                 "generator_call_count": 0,
                 "generator_wall_clock_seconds": 0.0,
                 "triage_wall_clock_seconds": 0.0,
+                "contract_shielded": [],
+                "probe_target_mutant_ids": [],
+                "contract_rules": json_value(CONTRACT_RULES),
+                "contract_limitation": CONTRACT_LIMITATION,
                 "triage_cost_note": cost_note,
             }
         )
@@ -92,15 +104,24 @@ def _summary_payload(result: AnalysisResult) -> dict[str, object]:
         payload.update(
             {
                 "total_survivors": triage.total_survivors,
-                "real_gap_count": triage.real_gap_count,
-                "probable_equivalent_count": triage.probable_equivalent_count,
-                "unresolved_count": triage.unresolved_count,
-                "equivalent_rate": triage.equivalent_rate,
+                "real_gap_count_strict": triage.real_gap_count_strict,
+                "probable_equivalent_count_strict": triage.probable_equivalent_count_strict,
+                "unresolved_count_strict": triage.unresolved_count_strict,
+                "equivalent_rate_strict": triage.equivalent_rate_strict,
+                "real_gap_count_contract": triage.real_gap_count_contract,
+                "probable_equivalent_count_contract": triage.probable_equivalent_count_contract,
+                "unresolved_count_contract": triage.unresolved_count_contract,
+                "equivalent_rate_contract": triage.equivalent_rate_contract,
+                "invalid_contract_attempts": triage.invalid_contract_attempts,
                 "triage_complete": triage.triage_complete,
                 "selected_survivor_count": triage.selected_survivor_count,
                 "generator_call_count": triage.generator_call_count,
                 "generator_wall_clock_seconds": triage.generator_wall_clock_seconds,
                 "triage_wall_clock_seconds": triage.triage_wall_clock_seconds,
+                "contract_shielded": triage.contract_shielded,
+                "probe_target_mutant_ids": triage.probe_target_mutant_ids,
+                "contract_rules": triage.contract_rules,
+                "contract_limitation": triage.contract_limitation,
                 "triage_cost_note": cost_note,
             }
         )
@@ -252,6 +273,12 @@ def run_analysis(
                 else None,
                 "model": getattr(adversarial_generator, "model", None),
                 "config": triage_config,
+                "modes": {
+                    "STRICT": "unrestricted Python distinguishability",
+                    "CONTRACT": "statically validated plain-caller domain",
+                },
+                "contract_rules": CONTRACT_RULES,
+                "contract_limitation": CONTRACT_LIMITATION,
             },
             "scope": {
                 "supported": (

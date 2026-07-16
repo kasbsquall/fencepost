@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 7.7189999999973224,
+  "input_tokens": 12822,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 139,
+  "provider": "codex-cli",
+  "response_id": "019f6a50-89db-72a3-807c-ed9f9b56ea2a",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_letter_grade_69_is_d_not_c():\n    assert letter_grade(69) == \"D\"",
+  "targeted_behavior": "The C/D cutoff: a score of 69 is a D in the original implementation but C in the mutant."
+}

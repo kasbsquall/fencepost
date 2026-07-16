@@ -33,7 +33,7 @@ def test_demo_pipeline_reproduces_required_classifications(tmp_path: Path) -> No
         cwd=ROOT,
     )
     analytics_source = (repo / "gradebook" / "analytics.py").read_text(encoding="utf-8")
-    assert len(enumerate_candidates(analytics_source, "gradebook/analytics.py")) == 45
+    assert len(enumerate_candidates(analytics_source, "gradebook/analytics.py")) == 56
 
     result = run_analysis(
         RunConfig(
@@ -46,6 +46,8 @@ def test_demo_pipeline_reproduces_required_classifications(tmp_path: Path) -> No
     for score in (90, 80, 70, 60):
         assert _compare_status(result, f"score >= {score}", "Gt") == "survived"
     assert _compare_status(result, "k >= len(ordered)", "Gt") == "survived"
+    assert _compare_status(result, "p < 0", "LtE") == "survived"
+    assert _compare_status(result, "p > 100", "GtE") == "survived"
     assert _compare_status(result, "s > target", "GtE") == "killed"
 
     top_n = [
@@ -56,10 +58,11 @@ def test_demo_pipeline_reproduces_required_classifications(tmp_path: Path) -> No
         and mutant.candidate.after == "n + 1"
     ]
     assert top_n == ["killed"]
-    # Fencepost mutates production code, never pytest assertions. The fixture has
-    # 45 raw AST candidates in analytics.py; five lack the required student-authored
-    # and covered evidence, leaving these 40 meaningful execution candidates.
-    assert result.mutant_count == 40
+    # Fencepost mutates production code, never pytest assertions. It finds 56 raw
+    # AST candidates in analytics.py. Five candidates sit
+    # on the deliberately uncovered percentile-guard body or return-D body; the
+    # remaining 51 have both student authorship and submitted-suite coverage.
+    assert result.mutant_count == 51
     assert {mutant.candidate.path for mutant in result.mutant_results} == {
         "gradebook/analytics.py"
     }

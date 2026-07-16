@@ -1,0 +1,118 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "generated_test": {
+        "generation_duration_seconds": 10.2029999999977,
+        "input_tokens": 12589,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 261,
+        "provider": "codex-cli",
+        "response_id": "019f6a51-c336-7042-98e4-6a239d61b0e0",
+        "source": "import pytest\nfrom decimal import Decimal\n\nfrom gradebook.analytics import clamp_percent\n\n\ndef test_upper_boundary_preserves_decimal_instance():\n    boundary = Decimal(\"100\")\n    result = clamp_percent(boundary)\n\n    assert result is boundary\n    assert isinstance(result, Decimal)",
+        "targeted_behavior": "At the exact upper boundary, the original preserves and returns the supplied value, while the mutant replaces it with the integer literal 100."
+      },
+      "mutant": {
+        "duration_seconds": 0.6702851569998529,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_upper_boundary_preserves_decimal_instance():\n        boundary = Decimal(\"100\")\n        result = clamp_percent(boundary)\n    \n>       assert result is boundary\nE       AssertionError: assert 100 is Decimal('100')\n\n.fencepost-generated-0015/test_adversarial.py:11: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 100 is Decimal('100')",
+          "nodeid": ".fencepost-generated-0015.test_adversarial::test_upper_boundary_preserves_decimal_instance"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________ test_upper_boundary_preserves_decimal_instance ________________\n\n    def test_upper_boundary_preserves_decimal_instance():\n        boundary = Decimal(\"100\")\n        result = clamp_percent(boundary)\n    \n>       assert result is boundary\nE       AssertionError: assert 100 is Decimal('100')\n\n.fencepost-generated-0015/test_adversarial.py:11: AssertionError\n----- generated xml file: /work/jobs/triage-0015-4mrur31u/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0015/test_adversarial.py::test_upper_boundary_preserves_decimal_instance\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.6570974919995933,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0015-4mrur31u/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_upper_boundary_preserves_decimal_instance():\n        boundary = Decimal(\"100\")\n        result = clamp_percent(boundary)\n    \n>       assert result is boundary\nE       AssertionError: assert 100 is Decimal('100')\n\n.fencepost-generated-0015/test_adversarial.py:11: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 100 is Decimal('100')",
+    "nodeid": ".fencepost-generated-0015.test_adversarial::test_upper_boundary_preserves_decimal_instance"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mutant": {
+    "candidate": {
+      "after": "GtE",
+      "anchor": {
+        "column": 7,
+        "end_column": 14,
+        "end_line": 29,
+        "line": 29
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "body",
+          "index": 2
+        },
+        {
+          "field": "test",
+          "index": null
+        }
+      ],
+      "before": "Gt",
+      "id": "92261c57ed4e3d56",
+      "kind": "compare",
+      "parameters": [
+        [
+          "op_index",
+          "0"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "p > 100"
+    },
+    "execution": {
+      "duration_seconds": 0.9258323139993081,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0025-brbcylf9/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 7,
+      "end_column": 15,
+      "end_line": 27,
+      "line": 27
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 10.2029999999977,
+    "input_tokens": 12589,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 261,
+    "provider": "codex-cli",
+    "response_id": "019f6a51-c336-7042-98e4-6a239d61b0e0",
+    "source": "import pytest\nfrom decimal import Decimal\n\nfrom gradebook.analytics import clamp_percent\n\n\ndef test_upper_boundary_preserves_decimal_instance():\n    boundary = Decimal(\"100\")\n    result = clamp_percent(boundary)\n\n    assert result is boundary\n    assert isinstance(result, Decimal)",
+    "targeted_behavior": "At the exact upper boundary, the original preserves and returns the supplied value, while the mutant replaces it with the integer literal 100."
+  }
+}

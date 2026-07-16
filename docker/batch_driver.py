@@ -395,6 +395,104 @@ def _run_mutant(
         shutil.rmtree(job_container, ignore_errors=True)
 
 
+def _run_baseline() -> dict[str, object]:
+    """Run coverage without exposing its files or result envelope to pytest.
+
+    The child process can write only inside container tmpfs.  Its stdout and
+    stderr are captured, and only this driver emits the JSON envelope after the
+    child has exited.
+    """
+    started = time.monotonic()
+    source_tree = Path.cwd()
+    private = Path(tempfile.mkdtemp(prefix="fencepost-baseline-", dir="/tmp"))
+    try:
+        data_file = private / ".coverage"
+        coverage_file = private / "coverage.json"
+        junit_file = private / "junit.xml"
+        environment = os.environ.copy()
+        environment["PYTHONPYCACHEPREFIX"] = str(private / "pycache")
+        environment["TMPDIR"] = str(private / "tmp")
+        (private / "tmp").mkdir()
+        # Docker owns the outer timeout.  This distant deadline exists only to
+        # satisfy the common subprocess helper.
+        deadline = started + (24 * 60 * 60)
+        exit_code, stdout, stderr, timed_out = _command(
+            [
+                sys.executable,
+                "-m",
+                "coverage",
+                "run",
+                "--rcfile=/opt/fencepost/coveragerc",
+                f"--data-file={data_file}",
+                "-m",
+                "pytest",
+                "-q",
+                "-p",
+                "no:cacheprovider",
+                f"--junitxml={junit_file}",
+            ],
+            source_tree,
+            environment,
+            deadline,
+        )
+        if timed_out:
+            status = "timed_out"
+        elif exit_code == 0:
+            status = "survived"
+        elif exit_code == 1:
+            status = "killed"
+        else:
+            status = "broken"
+        execution = _result(
+            status=status,
+            exit_code=exit_code,
+            started=started,
+            stdout=[stdout],
+            stderr=[stderr],
+            timed_out=timed_out,
+            failing_tests=_failing_tests(junit_file),
+        )
+
+        coverage_payload: dict[str, object] | None = None
+        if data_file.exists():
+            coverage_exit, coverage_stdout, coverage_stderr, coverage_timed_out = _command(
+                [
+                    sys.executable,
+                    "-m",
+                    "coverage",
+                    "json",
+                    "--rcfile=/opt/fencepost/coveragerc",
+                    f"--data-file={data_file}",
+                    "-o",
+                    str(coverage_file),
+                ],
+                source_tree,
+                environment,
+                deadline,
+            )
+            if coverage_exit == 0 and not coverage_timed_out and coverage_file.exists():
+                coverage_payload = json.loads(coverage_file.read_text(encoding="utf-8"))
+            elif execution["status"] == "survived":
+                execution["status"] = "infrastructure_error"
+                execution["stderr"] = "\n".join(
+                    part
+                    for part in (
+                        str(execution["stderr"]),
+                        coverage_stdout,
+                        coverage_stderr,
+                        "coverage.py did not produce a readable result",
+                    )
+                    if part
+                )
+        elif execution["status"] == "survived":
+            execution["status"] = "infrastructure_error"
+            execution["stderr"] = "coverage.py did not produce a data file"
+
+        return {"execution": execution, "coverage": coverage_payload}
+    finally:
+        shutil.rmtree(private, ignore_errors=True)
+
+
 def _run_batch(manifest: dict[str, object]) -> tuple[dict[str, dict[str, object]], bool]:
     mutants = manifest["mutants"]
     if not isinstance(mutants, list):
@@ -498,32 +596,44 @@ def _run_triage_batch(
 
 
 def main() -> int:
-    triage_mode = len(sys.argv) == 4 and sys.argv[1] == "triage"
-    offset = 2 if triage_mode else 1
-    manifest_path = Path(sys.argv[offset])
-    result_path = Path(sys.argv[offset + 1])
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    started = time.monotonic()
-    if triage_mode:
-        results, errors = _run_triage_batch(manifest, manifest_path.parent)
-        payload = {
-            "results": results,
-            "infrastructure_errors": errors,
-            "duration_seconds": time.monotonic() - started,
-        }
-    else:
-        results, aborted = _run_batch(manifest)
-        payload = {
-            "results": results,
-            "aborted_all_broken": aborted,
-            "duration_seconds": time.monotonic() - started,
-        }
-    temporary = result_path.with_suffix(".tmp")
-    temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    temporary.replace(result_path)
-    if triage_mode:
-        return 13 if errors else 0
-    return 12 if aborted else 0
+    try:
+        mode = sys.argv[1]
+        started = time.monotonic()
+        if mode == "baseline" and len(sys.argv) == 2:
+            payload = _run_baseline()
+            exit_code = 0
+        elif mode in {"batch", "triage"} and len(sys.argv) == 3:
+            manifest_path = Path(sys.argv[2])
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            if mode == "triage":
+                results, errors = _run_triage_batch(manifest, manifest_path.parent)
+                payload = {
+                    "results": results,
+                    "infrastructure_errors": errors,
+                    "duration_seconds": time.monotonic() - started,
+                }
+                exit_code = 13 if errors else 0
+            else:
+                results, aborted = _run_batch(manifest)
+                payload = {
+                    "results": results,
+                    "aborted_all_broken": aborted,
+                    "duration_seconds": time.monotonic() - started,
+                }
+                exit_code = 12 if aborted else 0
+        else:
+            print("invalid batch-driver arguments", file=sys.stderr)
+            return 64
+        # This is the only uncaptured stdout write in the driver.  Pytest output
+        # is data inside this envelope and cannot impersonate it.
+        print(json.dumps(payload, sort_keys=True))
+        return exit_code
+    except Exception as exc:
+        print(
+            f"batch driver infrastructure failure: {type(exc).__name__}: {exc}",
+            file=sys.stderr,
+        )
+        return 14
 
 
 if __name__ == "__main__":

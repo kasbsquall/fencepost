@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 10.920999999998457,
+  "input_tokens": 12824,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 200,
+  "provider": "codex-cli",
+  "response_id": "019f6a50-20c2-7022-b4f3-06213165a53b",
+  "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\n@pytest.mark.parametrize(\n    (\"score\", \"expected\"),\n    [\n        (79, \"C\"),\n        (80, \"B\"),\n    ],\n)\ndef test_b_grade_starts_at_80(score, expected):\n    assert letter_grade(score) == expected",
+  "targeted_behavior": "The B/C cutoff: score 79 must receive C; only scores beginning at 80 receive B."
+}

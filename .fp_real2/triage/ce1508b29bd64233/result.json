@@ -1,0 +1,126 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "generated_test": {
+        "generation_duration_seconds": 7.76600000000326,
+        "input_tokens": 12820,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 131,
+        "provider": "codex-cli",
+        "response_id": "019f6a50-4c15-75b3-8e4e-46f7736adc09",
+        "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_b_grade_includes_exactly_80():\n    assert letter_grade(80) == \"B\"",
+        "targeted_behavior": "The inclusive lower boundary for a B grade must classify exactly 80 as 'B'."
+      },
+      "mutant": {
+        "duration_seconds": 0.695296750000125,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_b_grade_includes_exactly_80():\n>       assert letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:7: AssertionError",
+          "kind": "failure",
+          "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+          "nodeid": ".fencepost-generated-0005.test_adversarial::test_b_grade_includes_exactly_80"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______________________ test_b_grade_includes_exactly_80 _______________________\n\n    def test_b_grade_includes_exactly_80():\n>       assert letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:7: AssertionError\n----- generated xml file: /work/jobs/triage-0005-ntozrsfu/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0005/test_adversarial.py::test_b_grade_includes_exactly_80\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.7937788939998427,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0005-ntozrsfu/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_b_grade_includes_exactly_80():\n>       assert letter_grade(80) == \"B\"\nE       AssertionError: assert 'C' == 'B'\nE         \nE         - B\nE         + C\n\n.fencepost-generated-0005/test_adversarial.py:7: AssertionError",
+    "kind": "failure",
+    "message": "AssertionError: assert 'C' == 'B'\n  \n  - B\n  + C",
+    "nodeid": ".fencepost-generated-0005.test_adversarial::test_b_grade_includes_exactly_80"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mutant": {
+    "candidate": {
+      "after": "81",
+      "anchor": {
+        "column": 18,
+        "end_column": 20,
+        "end_line": 15,
+        "line": 15
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "body",
+          "index": 1
+        },
+        {
+          "field": "orelse",
+          "index": 0
+        },
+        {
+          "field": "test",
+          "index": null
+        },
+        {
+          "field": "comparators",
+          "index": 0
+        }
+      ],
+      "before": "80",
+      "id": "ce1508b29bd64233",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "80"
+    },
+    "execution": {
+      "duration_seconds": 0.9649283909993756,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0007-co_5z0k3/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 18,
+      "end_column": 20,
+      "end_line": 14,
+      "line": 14
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 7.76600000000326,
+    "input_tokens": 12820,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 131,
+    "provider": "codex-cli",
+    "response_id": "019f6a50-4c15-75b3-8e4e-46f7736adc09",
+    "source": "import pytest\n\nfrom gradebook.analytics import letter_grade\n\n\ndef test_b_grade_includes_exactly_80():\n    assert letter_grade(80) == \"B\"",
+    "targeted_behavior": "The inclusive lower boundary for a B grade must classify exactly 80 as 'B'."
+  }
+}

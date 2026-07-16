@@ -1,0 +1,42 @@
+{
+  "attempt": 1,
+  "generated_test": {
+    "generation_duration_seconds": 8.484000000000378,
+    "input_tokens": 12820,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 166,
+    "provider": "codex-cli",
+    "response_id": "019f6a50-f2b5-7ea3-a5ed-c5f271ef5885",
+    "source": "from gradebook.analytics import letter_grade\n\n\ndef test_score_59_is_failing_grade():\n    assert letter_grade(59) == \"F\"",
+    "targeted_behavior": "Checks the exact lower boundary of a passing D grade: a score of 59 must be F."
+  },
+  "mutant": {
+    "duration_seconds": 0.6839845089998562,
+    "exit_code": 1,
+    "failure": {
+      "detail": "def test_score_59_is_failing_grade():\n>       assert letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:5: AssertionError",
+      "kind": "failure",
+      "message": "AssertionError: assert 'D' == 'F'\n  \n  - F\n  + D",
+      "nodeid": ".fencepost-generated-0010.test_adversarial::test_score_59_is_failing_grade"
+    },
+    "status": "failed",
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________________ test_score_59_is_failing_grade ________________________\n\n    def test_score_59_is_failing_grade():\n>       assert letter_grade(59) == \"F\"\nE       AssertionError: assert 'D' == 'F'\nE         \nE         - F\nE         + D\n\n.fencepost-generated-0010/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0010-54bb8orq/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0010/test_adversarial.py::test_score_59_is_failing_grade\n1 failed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "original": {
+    "duration_seconds": 0.6600913740003307,
+    "exit_code": 0,
+    "failure": null,
+    "status": "passed",
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0010-54bb8orq/original/junit.xml ----\n1 passed in 0.02s\n",
+    "tests_collected": 1,
+    "tests_skipped": 0,
+    "timed_out": false
+  },
+  "outcome": "DISTINGUISHED",
+  "valid_attempt_number": 1
+}

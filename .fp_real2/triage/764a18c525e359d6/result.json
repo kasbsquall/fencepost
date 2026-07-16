@@ -1,0 +1,126 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "generated_test": {
+        "generation_duration_seconds": 13.203000000001339,
+        "input_tokens": 12688,
+        "model": "gpt-5.6-terra",
+        "output_tokens": 377,
+        "provider": "codex-cli",
+        "response_id": "019f6a53-418c-76b1-bd09-f28e96ca08f5",
+        "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_exact_hundred_percent_scale_for_indexing():\n    assert analytics.percentile([90, 5, 20], 66) == 20",
+        "targeted_behavior": "Checks the percentile index calculation at a boundary where division by 100 selects the middle item but division by 99 selects the next item."
+      },
+      "mutant": {
+        "duration_seconds": 0.8319813119996979,
+        "exit_code": 1,
+        "failure": {
+          "detail": "def test_percentile_uses_exact_hundred_percent_scale_for_indexing():\n>       assert analytics.percentile([90, 5, 20], 66) == 20\nE       assert 90 == 20\nE        +  where 90 = <function percentile at 0x73f6ead24220>([90, 5, 20], 66)\nE        +    where <function percentile at 0x73f6ead24220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+          "kind": "failure",
+          "message": "assert 90 == 20\n +  where 90 = <function percentile at 0x73f6ead24220>([90, 5, 20], 66)\n +    where <function percentile at 0x73f6ead24220> = analytics.percentile",
+          "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_exact_hundred_percent_scale_for_indexing"
+        },
+        "status": "failed",
+        "stderr": "",
+        "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________ test_percentile_uses_exact_hundred_percent_scale_for_indexing _________\n\n    def test_percentile_uses_exact_hundred_percent_scale_for_indexing():\n>       assert analytics.percentile([90, 5, 20], 66) == 20\nE       assert 90 == 20\nE        +  where 90 = <function percentile at 0x73f6ead24220>([90, 5, 20], 66)\nE        +    where <function percentile at 0x73f6ead24220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError\n----- generated xml file: /work/jobs/triage-0019-t1n6hxy8/mutant/junit.xml -----\n=========================== short test summary info ============================\nFAILED .fencepost-generated-0019/test_adversarial.py::test_percentile_uses_exact_hundred_percent_scale_for_indexing\n1 failed in 0.02s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "original": {
+        "duration_seconds": 0.6488446229996043,
+        "exit_code": 0,
+        "failure": null,
+        "status": "passed",
+        "stderr": "",
+        "stdout": ".                                                                        [100%]\n---- generated xml file: /work/jobs/triage-0019-t1n6hxy8/original/junit.xml ----\n1 passed in 0.01s\n",
+        "tests_collected": 1,
+        "tests_skipped": 0,
+        "timed_out": false
+      },
+      "outcome": "DISTINGUISHED",
+      "valid_attempt_number": 1
+    }
+  ],
+  "attempts_used": 1,
+  "failure_evidence": {
+    "detail": "def test_percentile_uses_exact_hundred_percent_scale_for_indexing():\n>       assert analytics.percentile([90, 5, 20], 66) == 20\nE       assert 90 == 20\nE        +  where 90 = <function percentile at 0x73f6ead24220>([90, 5, 20], 66)\nE        +    where <function percentile at 0x73f6ead24220> = analytics.percentile\n\n.fencepost-generated-0019/test_adversarial.py:5: AssertionError",
+    "kind": "failure",
+    "message": "assert 90 == 20\n +  where 90 = <function percentile at 0x73f6ead24220>([90, 5, 20], 66)\n +    where <function percentile at 0x73f6ead24220> = analytics.percentile",
+    "nodeid": ".fencepost-generated-0019.test_adversarial::test_percentile_uses_exact_hundred_percent_scale_for_indexing"
+  },
+  "invalid_attempts": 0,
+  "label": "REAL_GAP",
+  "mutant": {
+    "candidate": {
+      "after": "99",
+      "anchor": {
+        "column": 31,
+        "end_column": 34,
+        "end_line": 38,
+        "line": 38
+      },
+      "ast_path": [
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "body",
+          "index": 3
+        },
+        {
+          "field": "value",
+          "index": null
+        },
+        {
+          "field": "args",
+          "index": 0
+        },
+        {
+          "field": "right",
+          "index": null
+        }
+      ],
+      "before": "100",
+      "id": "764a18c525e359d6",
+      "kind": "numeric_boundary",
+      "parameters": [
+        [
+          "direction",
+          "-1"
+        ]
+      ],
+      "path": "gradebook/analytics.py",
+      "source_segment": "100"
+    },
+    "execution": {
+      "duration_seconds": 1.053020223999738,
+      "exit_code": 0,
+      "failing_tests": [],
+      "status": "survived",
+      "stderr": "",
+      "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n..........                                                               [100%]\n------------ generated xml file: /work/jobs/0033-0c6p6w12/junit.xml ------------\n10 passed in 0.01s\n",
+      "timed_out": false
+    },
+    "generated_anchor": {
+      "column": 31,
+      "end_column": 33,
+      "end_line": 35,
+      "line": 35
+    }
+  },
+  "unresolved_reason": null,
+  "valid_attempts": 1,
+  "winning_test": {
+    "generation_duration_seconds": 13.203000000001339,
+    "input_tokens": 12688,
+    "model": "gpt-5.6-terra",
+    "output_tokens": 377,
+    "provider": "codex-cli",
+    "response_id": "019f6a53-418c-76b1-bd09-f28e96ca08f5",
+    "source": "import gradebook.analytics as analytics\n\n\ndef test_percentile_uses_exact_hundred_percent_scale_for_indexing():\n    assert analytics.percentile([90, 5, 20], 66) == 20",
+    "targeted_behavior": "Checks the percentile index calculation at a boundary where division by 100 selects the middle item but division by 99 selects the next item."
+  }
+}

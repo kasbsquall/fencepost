@@ -79,6 +79,8 @@ def test_openai_generator_uses_configured_model_and_structured_response() -> Non
     assert call["text"]["format"]["type"] == "json_schema"
     assert call["text"]["format"]["strict"] is True
     prompt = json.loads(call["input"])
+    assert prompt["triage_mode"] == "STRICT"
+    assert prompt["contract_rules"] is None
     assert prompt["original_function"].endswith("score >= 90")
     assert prompt["mutated_function"].endswith("score > 90")
     assert prompt["unified_diff"] == "- score >= 90\n+ score > 90"

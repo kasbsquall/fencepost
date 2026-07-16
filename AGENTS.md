@@ -40,21 +40,33 @@ Fencepost asks has a ground truth we obtained by running code.
    - `survived` - all tests pass. Either a comprehension gap or an equivalent mutant.
    - `broken`   - syntax/import error. Discard, it is a bug in our operator.
 
-5. **Triage the survivors.** This is the core of the project and the hardest part.
-   A survivor is either a real gap (behavior changed, tests do not check it) or
-   equivalent (behavior genuinely unchanged). Distinguishing them is undecidable
-   in general, so we resolve it empirically:
+5. **Triage the survivors in two modes.** This is the core of the project and
+   the hardest part. Equivalence is meaningful only relative to a domain
+   contract, so every survivor is tested independently through both lenses:
 
-   Ask Codex to write an aggressive adversarial test targeting that specific
-   function, then re-run.
-   - Strong test kills it -> **real gap**. Best probe target. We now know exactly
-     what breaks, which is the ground truth for grading the answer.
-   - Nothing kills it after N attempts -> **probable equivalent**. Discard.
+   - **STRICT** gives Codex all behavior Python permits, including custom
+     objects, dunder protocols, identity, and type behavior. This is the honest
+     upper bound on technical distinguishability.
+   - **CONTRACT** permits only tests a plain caller could write. Generated tests
+     are statically validated from their AST: no classes or nested helpers, no
+     identity or type-inspection operations, no imports beyond pytest and the
+     module under test, and only builtin scalar/container literal inputs.
 
-   This must emit a **measurable equivalent rate**. That number is the project's
-   credibility. If we cannot state it, we do not have a system.
+   In both modes, a test must pass on the original before it can kill a mutant.
+   A CONTRACT violation is `INVALID_CONTRACT`: it never executes, never counts
+   as a kill or valid attempt, consumes the separate invalid-retry budget, and
+   its exact rule violations are fed back to the generator. After N valid tests:
+   - Strong test kills it -> **real gap** under that mode.
+   - Nothing kills it -> **probable equivalent** under that mode.
 
-6. **Probe.** GPT-5.6 generates the question from the surviving gap mutant plus
+   Report both `equivalent_rate_strict` and `equivalent_rate_contract`, their
+   raw counts, and every per-survivor label. Never present either as "the"
+   equivalent rate. A strict real gap that is contract probable-equivalent is
+   `contract_shielded`; retain its strict killing test as evidence of the
+   behavior deliberately excluded from student probes.
+
+6. **Probe.** GPT-5.6 generates questions only from CONTRACT-mode real gaps,
+   using the surviving gap mutant plus
    diff context and blame metadata. It grades the student's answer against the
    execution result we already computed. The model phrases and evaluates; it does
    not decide truth.
@@ -73,6 +85,10 @@ Fencepost asks has a ground truth we obtained by running code.
   test run we performed, it does not go in the report.
 - **Equivalent mutants must be handled explicitly**, not ignored. Asking a student
   about a behaviorally-identical mutant is a question with no correct answer.
+- **CONTRACT is a stated trade, not universal truth.** It can hide a genuine
+  behavioral gap whose only witness requires type, identity, custom objects, or
+  another excluded input. This is a deliberate false-negative risk and must be
+  stated beside the contract rate in every artifact.
 
 ## Scope
 
@@ -86,7 +102,7 @@ persistence beyond a run artifact.
 
 `python demo/build_demo_repo.py` builds a synthetic student submission with
 realistic git history: an instructor scaffold commit, then a week of student
-commits. The student's 9 tests all pass. Known ground truth in that repo:
+commits. The student's 10 tests all pass. Known ground truth in that repo:
 
 - `letter_grade`: `score >= 90` -> `score > 90` **survives**. Consequence: a
   student scoring exactly 90 receives a B. Same for the 80/70/60 boundaries.
@@ -96,6 +112,20 @@ commits. The student's 9 tests all pass. Known ground truth in that repo:
   the fence and never verified it.
 - `rank`, `top_n`: their mutants are **killed**. The tool must not flag these.
   A tool that flags everything is a tool that found nothing.
+- `clamp_percent`: `p < 0` -> `p <= 0` and `p > 100` -> `p >= 100`
+  **survive** the submitted suite. Our original claim that they were universally
+  equivalent was wrong. STRICT Codex killed the upper mutant with
+  `Decimal("100")`: the original preserves the Decimal object while the mutant
+  assigns and returns integer `100`. It killed the lower mutant with an object
+  whose `__lt__` and `__le__` deliberately disagree. They are STRICT real gaps
+  but CONTRACT probable-equivalents under plain literal inputs.
+- Because `percentile` now clamps `p` before computing its index, its surviving
+  `/` -> `//` arithmetic mutant is indistinguishable for plain numeric
+  percentages but distinguishable through a custom object whose true-division
+  and floor-division protocols differ. It is likewise a STRICT real gap and a
+  CONTRACT probable-equivalent. The real unrestricted run therefore found all
+  21 survivors to be STRICT real gaps; the gap between modes is the finding,
+  not an error to collapse away.
 
 Use this repo as the fixture. If Fencepost cannot reproduce the classifications
 above, it is wrong.

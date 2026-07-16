@@ -1,0 +1,65 @@
+{
+  "candidate": {
+    "after": "n - 1",
+    "anchor": {
+      "column": 20,
+      "end_column": 21,
+      "end_line": 56,
+      "line": 56
+    },
+    "ast_path": [
+      {
+        "field": "body",
+        "index": 5
+      },
+      {
+        "field": "body",
+        "index": 2
+      },
+      {
+        "field": "value",
+        "index": null
+      },
+      {
+        "field": "slice",
+        "index": null
+      },
+      {
+        "field": "upper",
+        "index": null
+      }
+    ],
+    "before": "n",
+    "id": "0ae08414d2fa0b1a",
+    "kind": "slice_boundary",
+    "parameters": [
+      [
+        "direction",
+        "-1"
+      ],
+      [
+        "slice_field",
+        "upper"
+      ]
+    ],
+    "path": "gradebook/analytics.py",
+    "source_segment": "n"
+  },
+  "execution": {
+    "duration_seconds": 1.1181143869998778,
+    "exit_code": 1,
+    "failing_tests": [
+      "tests.test_analytics::test_top_n"
+    ],
+    "status": "killed",
+    "stderr": "",
+    "stdout": "tests/test_analytics.py::test_letter_grade_f\ntests/test_analytics.py::test_letter_grade_a\ntests/test_analytics.py::test_letter_grade_b\ntests/test_analytics.py::test_letter_grade_c\ntests/test_analytics.py::test_percentile_median\ntests/test_analytics.py::test_percentile_low\ntests/test_analytics.py::test_clamp_percent_outside_interval\ntests/test_analytics.py::test_rank_middle\ntests/test_analytics.py::test_rank_highest\ntests/test_analytics.py::test_top_n\n\n10 tests collected in 0.01s\n\n.........F                                                               [100%]\n=================================== FAILURES ===================================\n__________________________________ test_top_n __________________________________\n\n    def test_top_n():\n>       assert top_n([50, 90, 70, 60], 2) == [90, 70]\nE       assert [90] == [90, 70]\nE         \nE         Right contains one more item: 70\nE         Use -v to get more diff\n\ntests/test_analytics.py:43: AssertionError\n------------ generated xml file: /work/jobs/0049-fb8dc7s5/junit.xml ------------\n=========================== short test summary info ============================\nFAILED tests/test_analytics.py::test_top_n - assert [90] == [90, 70]\n1 failed, 9 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "generated_anchor": {
+    "column": 20,
+    "end_column": 25,
+    "end_line": 51,
+    "line": 51
+  }
+}

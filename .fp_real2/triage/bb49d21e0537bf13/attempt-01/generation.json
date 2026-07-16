@@ -1,0 +1,10 @@
+{
+  "generation_duration_seconds": 69.53199999999924,
+  "input_tokens": 70936,
+  "model": "gpt-5.6-terra",
+  "output_tokens": 2849,
+  "provider": "codex-cli",
+  "response_id": "019f6a52-3202-7452-aff1-5e5698036482",
+  "source": "from gradebook.analytics import percentile\n\n\nclass _Rank:\n    def __truediv__(self, divisor):\n        return 1.0\n\n    def __floordiv__(self, divisor):\n        return 0.0\n\n\nclass _Percent(float):\n    def __new__(cls):\n        return super().__new__(cls, 50.0)\n\n    def __rmul__(self, count):\n        return _Rank()\n\n\ndef test_percentile_uses_true_division_for_rank_calculation():\n    assert percentile([10, 20], _Percent()) == 20",
+  "targeted_behavior": "Uses a float-compatible percentage whose multiplication result deliberately distinguishes true division from floor division when computing the percentile index."
+}

@@ -46,19 +46,36 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     }
     triaged_ids = {item.mutant.candidate.id for item in triage.results}
 
-    assert len(stage4_survivors) == 15
-    assert triage.total_survivors == 15
+    assert len(stage4_survivors) == 21
+    assert len(stage4_killed) == 30
+    assert triage.total_survivors == 21
     assert triaged_ids == stage4_survivors
     assert triaged_ids.isdisjoint(stage4_killed)
-    assert triage.real_gap_count == 5
-    assert triage.probable_equivalent_count == 10
-    assert triage.unresolved_count == 0
-    assert triage.equivalent_rate == 10 / 15
+    assert triage.real_gap_count_strict == 21
+    assert triage.probable_equivalent_count_strict == 0
+    assert triage.unresolved_count_strict == 0
+    assert triage.equivalent_rate_strict == 0.0
+    assert triage.real_gap_count_contract == 18
+    assert triage.probable_equivalent_count_contract == 3
+    assert triage.unresolved_count_contract == 0
+    assert triage.equivalent_rate_contract == 3 / 21
+    assert triage.invalid_contract_attempts == 3
     assert triage.triage_complete is True
-    assert {item.label for item in triage.results} == {
+    assert {item.label_strict for item in triage.results} == {"REAL_GAP"}
+    assert {item.label_contract for item in triage.results} == {
         "REAL_GAP",
         "PROBABLE_EQUIVALENT",
     }
+    for item in triage.results:
+        assert item.strict.winning_test is not None
+        assert item.strict.failure_evidence is not None
+        winning = item.strict.attempts[-1]
+        assert winning.original.status == "passed"
+        assert winning.mutant is not None
+        assert winning.mutant.status in {"failed", "timed_out"}
+        if item.label_contract == "REAL_GAP":
+            assert item.contract.winning_test is not None
+            assert item.contract.failure_evidence is not None
 
     required_segments = {
         "score >= 90",
@@ -70,26 +87,63 @@ def test_demo_survivors_are_triaged_with_execution_evidence(tmp_path: Path) -> N
     required = [
         item
         for item in triage.results
-        if item.mutant.candidate.kind == "compare"
-        and item.mutant.candidate.after == "Gt"
-        and item.mutant.candidate.source_segment.strip() in required_segments
+        if item.contract.mutant.candidate.kind == "compare"
+        and item.contract.mutant.candidate.after == "Gt"
+        and item.contract.mutant.candidate.source_segment.strip() in required_segments
     ]
     assert len(required) == 5
     for item in required:
-        assert item.label == "REAL_GAP"
-        assert item.winning_test is not None
-        assert item.failure_evidence is not None
-        winning = item.attempts[-1]
-        assert winning.original.status == "passed"
-        assert winning.mutant is not None
-        assert winning.mutant.status in {"failed", "timed_out"}
+        assert item.label_contract == "REAL_GAP"
+
+    expected_shielded = [
+        item
+        for item in triage.results
+        if (
+            item.mutant.candidate.kind,
+            item.mutant.candidate.source_segment.strip(),
+            item.mutant.candidate.after,
+        )
+        in {
+            ("compare", "p < 0", "LtE"),
+            ("compare", "p > 100", "GtE"),
+            ("arithmetic", "len(ordered) * p / 100", "FloorDiv"),
+        }
+    ]
+    assert len(expected_shielded) == 3
+    assert len(triage.contract_shielded) == 3
+    for item in expected_shielded:
+        assert item.label_strict == "REAL_GAP"
+        assert item.label_contract == "PROBABLE_EQUIVALENT"
+        assert len(item.contract.attempts) == 4
+        rejected = item.contract.attempts[0]
+        assert rejected.outcome == "INVALID_CONTRACT"
+        assert rejected.original is None
+        assert rejected.contract_violations
+        valid = item.contract.attempts[1:]
+        assert all(attempt.original.status == "passed" for attempt in valid)
+        assert all(
+            attempt.mutant is not None and attempt.mutant.status == "passed"
+            for attempt in valid
+        )
+    assert set(triage.probe_target_mutant_ids) == {
+        item.mutant.candidate.id
+        for item in triage.results
+        if item.label_contract == "REAL_GAP"
+    }
 
     summary = json.loads(
         (result.artifact_dir / "summary.json").read_text(encoding="utf-8")
     )
-    assert summary["total_survivors"] == 15
-    assert summary["real_gap_count"] == 5
-    assert summary["probable_equivalent_count"] == 10
-    assert summary["unresolved_count"] == 0
-    assert summary["equivalent_rate"] == 10 / 15
+    assert summary["total_survivors"] == 21
+    assert summary["real_gap_count_strict"] == 21
+    assert summary["probable_equivalent_count_strict"] == 0
+    assert summary["equivalent_rate_strict"] == 0.0
+    assert summary["real_gap_count_contract"] == 18
+    assert summary["probable_equivalent_count_contract"] == 3
+    assert summary["equivalent_rate_contract"] == 3 / 21
+    assert summary["invalid_contract_attempts"] == 3
+    assert len(summary["contract_shielded"]) == 3
+    assert len(summary["probe_target_mutant_ids"]) == 18
+    assert "false-negative risk" in summary["contract_limitation"].lower()
+    assert "hide a genuine behavioral gap" in summary["contract_limitation"]
     assert summary["triage_complete"] is True
