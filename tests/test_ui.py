@@ -165,6 +165,18 @@ def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None
     assert "co-author trailer: sam@example.edu" in visible
     assert "-M move match" in visible
     assert "blame origin pkg/analytics.py:2" in visible
+    hero = document.split('<article class="hero-evidence"', 1)[1].split(
+        "</article>", 1
+    )[0]
+    assert "Top-ranked execution evidence" in hero
+    assert "value &gt;= 1" in hero
+    assert "value &gt; 1" in hero
+    assert "Their 10 tests" in hero
+    assert "assert False" in hero
+    assert "<details" not in hero
+    assert document.index('<article class="hero-evidence"') < document.index(
+        '<section class="mutation-flow"'
+    )
     assert "suite-output" not in document
     assert parsed.tags.count("details") >= 2
     assert "script" not in parsed.tags

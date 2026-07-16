@@ -912,6 +912,63 @@ def _conversation_groups(report: Mapping[str, Any]) -> str:
     return "".join(rendered)
 
 
+def _top_ranked_place(report: Mapping[str, Any]) -> Mapping[str, Any]:
+    places = [_mapping(item) for item in _sequence(report.get("places"))]
+    by_id = {
+        item.get("site_id"): item for item in places if item.get("site_id")
+    }
+    for group in (
+        _mapping(item) for item in _sequence(report.get("function_groups"))
+    ):
+        for site_id in _sequence(group.get("site_ids")):
+            if site_id in by_id:
+                return by_id[site_id]
+    return places[0] if places else {}
+
+
+def _hero_evidence(report: Mapping[str, Any]) -> str:
+    """Render the top-ranked execution flip without a disclosure or new claims."""
+    place = _top_ranked_place(report)
+    grounding = _mapping(place.get("grounding"))
+    mutants = [_mapping(item) for item in _sequence(place.get("mutants"))]
+    if not grounding or not mutants:
+        return ""
+    mutant = mutants[0]
+    mutation = _mapping(mutant.get("mutation"))
+    evidence = _mapping(mutant.get("evidence"))
+    change = _change_line(mutation)
+    suite = _suite_state(mutant)
+    hero_failure = dict(_mapping(evidence.get("failing_assertion")))
+    if hero_failure.get("message") is None:
+        return ""
+    hero_failure.pop("detail", None)
+    failure = _failure_section(
+        {
+            "failing_assertion": hero_failure,
+            "mutant_execution": evidence.get("mutant_execution"),
+        }
+    )
+    source = _source_section(grounding)
+    if not source or not change or not suite or not failure:
+        return ""
+    question = _mapping(place.get("question")).get("question_text")
+    return f"""<article class="hero-evidence" aria-label="Top-ranked execution evidence">
+  <header class="hero-evidence-header">
+    <p class="eyebrow">Top-ranked execution evidence</p>
+    {f'<p class="hero-question">{_text(question)}</p>' if question else ''}
+  </header>
+  <div class="hero-source">{source}</div>
+  <section class="hero-change">
+    <p class="step-label"><span>2</span> Change considered</p>
+    <div class="change-line">{change}</div>
+  </section>
+  <div class="hero-results">
+    <div><p class="step-label"><span>3</span> Submitted tests</p>{suite}</div>
+    {failure}
+  </div>
+</article>"""
+
+
 def render_report_document(report: Mapping[str, Any]) -> str:
     """Render schema 2.0 as a self-contained semantic HTML document."""
     schema = report.get("schema_version")
@@ -950,6 +1007,7 @@ def render_report_document(report: Mapping[str, Any]) -> str:
         empty_conversations = "No fair question sites are present in this report."
     formative = report.get("formative_notice")
     title = report.get("title") or "Fencepost comprehension report"
+    hero = _hero_evidence(report)
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -967,10 +1025,13 @@ def render_report_document(report: Mapping[str, Any]) -> str:
   </header>
   <main class="shell" id="main">
     {f'<aside class="formative-notice"><strong>Formative, human-reviewed.</strong><span>{_text(formative)}</span></aside>' if formative else ''}
-    <section class="run-header" aria-labelledby="run-title">
-      {f'<p class="run-meta">{" · ".join(run_meta)}</p>' if run_meta else ''}
-      <h1 id="run-title">{_data_text(headline)}</h1>
-      {f'<p class="headline-detail">{_data_text(summary)}</p>' if summary else ''}
+    <section class="report-lead{' report-lead-summary-only' if not hero else ''}">
+      <header class="run-header" aria-labelledby="run-title">
+        {f'<p class="run-meta">{" · ".join(run_meta)}</p>' if run_meta else ''}
+        <h1 id="run-title">{_data_text(headline)}</h1>
+        {f'<p class="headline-detail">{_data_text(summary)}</p>' if summary else ''}
+      </header>
+      {hero}
     </section>
     {_mutation_flow(report)}
     {_coverage_section(report)}
