@@ -31,3 +31,5 @@ Thumbs.db
 .fp_probe/
 .fp_real/
 .pytest-unit-local/
+.pytest-contract-*/
+.fp_two/
