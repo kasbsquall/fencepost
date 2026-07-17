@@ -9,6 +9,8 @@ Every question is grounded in a test run. Never in a model's opinion.
 
 *Built for OpenAI Build Week — Education track — with Codex and GPT-5.6.*
 
+**[Watch the 2-minute demo](https://youtu.be/0sWIWBWEmkA)**
+
 ![The instructor's report](docs/img/report.png)
 
 </div>
