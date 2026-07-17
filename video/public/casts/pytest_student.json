@@ -1,0 +1,16 @@
+{
+  "cmd": "pytest -q",
+  "cwd": "demo/student-repo",
+  "exit": 0,
+  "duration": 1.0,
+  "events": [
+    {
+      "t": 0.937,
+      "s": "..........                                                               [100%]"
+    },
+    {
+      "t": 0.937,
+      "s": "10 passed in 0.02s"
+    }
+  ]
+}

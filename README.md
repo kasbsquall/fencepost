@@ -195,6 +195,8 @@ Where the decisions were made, honestly:
 
 That last one is the project in miniature: a human and two models were confident and wrong, and the test run settled it. Which is exactly what Fencepost does to a student's green suite.
 
+**The demo film was built the same way.** The pipeline under [`tools/`](tools/) and [`video/`](video/) is a Remotion (video-as-React) project fed by a set of small tools, and it holds the project's honesty rule even where nobody would check: the on-screen diff, line numbers, commit subject, and the 51/30/21 counts are read from a real run by [`tools/film_facts.py`](tools/film_facts.py) — an earlier cut hand-typed a diff that did not exist, and the fix was to stop typing facts. The voiceover is verified by transcribing it back with Whisper so a model name that does not survive synthesis fails the build ([`tools/make_vo.py`](tools/make_vo.py)), and the Codex shot in the film is the real stage-5 call captured through the product's own request builder ([`tools/capture_codex_shot.py`](tools/capture_codex_shot.py)), not a re-typed lookalike.
+
 ## Security
 
 The student's repo and every model-generated test are untrusted input. They execute in Docker with `--network none`, a read-only root filesystem, a read-only source mount, all capabilities dropped, `no-new-privileges`, a non-root user, and memory/CPU/PID limits.

@@ -171,10 +171,31 @@ after the voice stops.
 
 ## Compliance
 
-- [x] Under 3:00 — ~2:24
-- [ ] Public YouTube
-- [x] Audio names **Codex** — scene 7, built it AND runs inside it
-- [x] Audio names **GPT-5.6** — scenes 4 and 7
+**Read against the rules verbatim, not from memory.** An earlier draft of this checklist said
+"audio names Codex" and "audio names GPT-5.6". That was the wrong bar. The rule asks for
+explanation, not mention:
+
+> "must include a clear demo with audio that covers what you built and how you used Codex
+> and GPT-5.6" — [official rules](https://openai.devpost.com/rules)
+
+> "it needs a voiceover which can be recorded yourself or AI-assisted, either works."
+> "A screencast with music won't meet the requirement." — [submissions update](https://openai.devpost.com/updates/45282-openai-build-week-submissions-are-open-plugin-launch)
+
+> "must not include third party trademarks, or copyrighted music or other material unless
+> the Entrant has permission to use such material" — official rules
+
+- [x] Under 3:00 — ~2:24. *"Judges are not required to watch beyond three minutes."*
+- [ ] Public YouTube, link on the submission form
+- [x] **Audio covers HOW Codex was used** — scene 7: it wrote the engine, it owned a false
+      passing gate, and it runs *inside* the product at runtime. Not a name-drop.
+- [x] **Audio covers HOW GPT-5.6 was used** — scene 4 (writes the distinguishing test) and
+      scene 7 (the runtime call, on the instructor's own plan).
+- [x] **Audio covers what was built** — scenes 1–3.
+- [x] AI-assisted voiceover — explicitly allowed. Cartesia `sonic-2`.
+- [x] **Music cleared** — Suno Pro grants commercial rights *for songs generated while the
+      paid plan is active*. Rights attach at generation time; free-tier songs never convert.
+      The track was generated under Pro. This rule is why that mattered.
+- [x] Not a screencast with music — there is a voiceover throughout.
 - [x] Shows it working — scenes 3–8, real recorded UI
 - [x] **Says the repo is synthetic** — scene 3, first line
 - [x] Prior-art claim limited to what we verified — scene 8

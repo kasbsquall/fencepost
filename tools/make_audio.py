@@ -62,12 +62,20 @@ def _write(path, x, peak=0.7):
 # ---------------------------------------------------------------- SFX
 
 def pop(dur=0.09):
-    """A soft element-reveal tick. Pitched blip, fast decay, no click."""
+    """A soft element-reveal tick. Pitched blip, fast decay, no click.
+
+    The chirp's asymptote is E4 (329.63 Hz), not 320. The track is in E major; the old
+    landing measured 51 cents flat of E4, audibly out of tune, and this is the most-used
+    cue (16 of 32). The clip is too short for the chirp to fully settle, so the audible
+    tail sits around E5 (+18 cents) — the tonic an octave up, in tune with the key, which
+    is what the fix was for. Plus a noise transient so it reads as a tick, not a boop.
+    """
     n = int(dur * SR)
     t = np.arange(n) / SR
-    f = 880 * np.exp(-t * 14) + 320          # a quick downward chirp
+    f = 880 * np.exp(-t * 14) + 329.63       # a quick downward chirp, landing on E4
     x = np.sin(2 * np.pi * np.cumsum(f) / SR)
-    return x * _env(n, 0.002, dur - 0.002, 0.0)
+    click = np.random.default_rng(5).normal(0, 1, n) * np.exp(-t * 400) * 0.4
+    return (x + click) * _env(n, 0.001, dur - 0.001, 0.0)
 
 
 def whoosh(dur=0.42):

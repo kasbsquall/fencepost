@@ -1,0 +1,18 @@
+{
+  "cmd": "pytest tests/integration -q",
+  "cwd": ".",
+  "exit": 0,
+  "duration": 2.6,
+  "events": [
+    {
+      "t": 0.0,
+      "s": "..                                                                       [100%]"
+    },
+    {
+      "t": 2.4,
+      "s": "2 passed in 117.18s (0:01:57)"
+    }
+  ],
+  "real_duration": 118.062,
+  "note": "replay compressed from 117.18s to 2.6s; the real elapsed time stays visible in the '2 passed in 117.18s' line, so nothing is hidden by the compression"
+}

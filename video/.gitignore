@@ -1,0 +1,22 @@
+# Remotion project — commit source, not generated artifacts.
+
+# dependencies
+node_modules/
+
+# renders and probe frames (regenerate with: npx remotion render)
+out/
+
+# generated media assets (regenerate with the tools/ pipeline):
+#   audio bed + VO from tools/make_vo.py, tools/mix_audio.py
+#   SFX from tools/make_audio.py
+#   recordings from tools/record.js
+# kept out of git because they are large and reproducible from source.
+public/audio/
+public/vo/
+public/sfx/
+public/raw/
+public/casts/*.mp3
+public/casts/word_timings.json
+
+# remotion cache
+.remotion/

@@ -39,5 +39,7 @@ Thumbs.db
 answers.json
 docs/video/raw/
 docs/video/audio/*.mp3
+docs/video/audio/*.wav
+docs/video/audio/stems/
 docs/video/audio/sfx/
 docs/video/audio/*.json

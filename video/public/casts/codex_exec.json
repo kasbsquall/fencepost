@@ -1,0 +1,62 @@
+{
+  "cmd": "codex exec -m gpt-5.6-terra -c mcp_servers={} -c sandbox_mode=\"read-only\" \\\n  --output-schema schema.json --json \\\n  --output-last-message last-message.json --skip-git-repo-check -",
+  "argv": [
+    "C:\\Users\\User\\AppData\\Roaming\\npm\\codex.CMD",
+    "exec",
+    "-m",
+    "gpt-5.6-terra",
+    "-c",
+    "mcp_servers={}",
+    "-c",
+    "sandbox_mode=\"read-only\"",
+    "--output-schema",
+    "C:\\Users\\User\\AppData\\Local\\Temp\\fencepost-shot-myrn0w4r\\schema.json",
+    "--json",
+    "--output-last-message",
+    "C:\\Users\\User\\AppData\\Local\\Temp\\fencepost-shot-myrn0w4r\\last-message.json",
+    "--skip-git-repo-check",
+    "-"
+  ],
+  "exit": 0,
+  "duration": 15.719,
+  "mutant": "92261c57ed4e3d56",
+  "mode": "STRICT",
+  "model": "gpt-5.6-terra",
+  "events": [
+    {
+      "t": 2.359,
+      "s": "{\"type\":\"thread.started\",\"thread_id\":\"019f6e9a-acec-76e2-843f-2863a07d7809\"}"
+    },
+    {
+      "t": 2.781,
+      "s": "{\"type\":\"turn.started\"}"
+    },
+    {
+      "t": 14.937,
+      "s": "{\"type\":\"item.completed\",\"item\":{\"id\":\"item_0\",\"type\":\"agent_message\",\"text\":\"{\\\"targeted_behavior\\\":\\\"At the inclusive upper boundary, the original preserves a float input of 100.0 while the mutant replaces it with integer 100.\\\",\\\"test_source\\\":\\\"import gradebook.analytics as analytics\\\\n\\\\n\\\\ndef test_clamp_percent_preserves_float_at_inclusive_upper_boundary():\\\\n    result = analytics.clamp_percent(100.0)\\\\n    assert str(result) == \\\\\\\"100.0\\\\\\\"\\\\n\\\"}\"}}"
+    },
+    {
+      "t": 15.031,
+      "s": "{\"type\":\"turn.completed\",\"usage\":{\"input_tokens\":16625,\"cached_input_tokens\":0,\"output_tokens\":188,\"reasoning_output_tokens\":90}}"
+    }
+  ],
+  "result": {
+    "targeted_behavior": "At the inclusive upper boundary, the original preserves a float input of 100.0 while the mutant replaces it with integer 100.",
+    "test_source": "import gradebook.analytics as analytics\n\n\ndef test_clamp_percent_preserves_float_at_inclusive_upper_boundary():\n    result = analytics.clamp_percent(100.0)\n    assert str(result) == \"100.0\"\n"
+  },
+  "stderr_events": [
+    {
+      "t": 2.609,
+      "s": "2026-07-17T05:44:19.094336Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when Client(HttpRequest(HttpRequest(\"http/request failed: error sending request for url (https://clinikanew.avanc3.pe/index.php/wp-json/mcp/elementor-mcp-server)\")))"
+    },
+    {
+      "t": 3.187,
+      "s": "2026-07-17T05:44:19.674878Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when Client(HttpRequest(HttpRequest(\"http/request failed: error sending request for url (https://clinikanew.avanc3.pe/index.php/wp-json/mcp/elementor-mcp-server)\")))"
+    },
+    {
+      "t": 4.515,
+      "s": "2026-07-17T05:44:21.004918Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when Client(HttpRequest(HttpRequest(\"http/request failed: error sending request for url (https://clinikanew.avanc3.pe/index.php/wp-json/mcp/elementor-mcp-server)\")))"
+    }
+  ],
+  "stream_note": "stdout is what adversarial.py reads and what the film renders. stderr_events are transport errors from an unrelated MCP server in the host's global codex config; the product captures the streams separately and never reads them."
+}
