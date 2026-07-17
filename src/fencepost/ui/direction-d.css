@@ -37,10 +37,16 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  max-width: 100%;
+  overflow-x: clip;
+  scroll-behavior: smooth;
+}
 
 body {
+  max-width: 100%;
   margin: 0;
+  overflow-x: clip;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--sans);
@@ -67,7 +73,11 @@ pre {
   font-variant-ligatures: none;
 }
 
-pre { margin: 0; }
+pre {
+  max-width: 100%;
+  margin: 0;
+  overflow-x: auto;
+}
 
 h1,
 h2,
@@ -88,7 +98,51 @@ h4 { line-height: 1.18; }
 .shell {
   width: min(100% - 56px, 1020px);
   margin-inline: auto;
+  min-width: 0;
 }
+
+/* Long evidence belongs in its own scrollable well, never in page geometry. */
+.masthead-inner,
+.question-card,
+.question-card-header,
+.question-card-body,
+.runs,
+.run,
+.execution-quote,
+.withheld-stack,
+.function-columns,
+.function-column,
+.function-flow-list,
+.function-flow-row,
+.coverage-context,
+.attribution-context,
+.places,
+.conversation-group,
+.site-card,
+.site-evidence,
+.mutation-story,
+.mutation-story > summary,
+.mutation-evidence,
+.method-main,
+.landing-main,
+.landing-hero,
+.run-facts,
+.run-facts > div,
+.view-choices,
+.view-choice,
+.command-list,
+.command-list li,
+.method-door,
+.method-door > div,
+.probe-main,
+.probe-grounding,
+.probe-question,
+.probe-answer-form,
+.probe-answer-committed,
+.probe-reveal,
+.reveal-sequence,
+.probe-actions,
+footer { min-width: 0; }
 
 .visually-hidden,
 .icon-sprite {
@@ -231,6 +285,7 @@ h4 { line-height: 1.18; }
   color: var(--faint);
   font-family: var(--mono);
   font-size: 11.5px;
+  overflow-wrap: anywhere;
 }
 
 .report-meta {
@@ -411,15 +466,17 @@ h4 { line-height: 1.18; }
   font-size: 13px;
 }
 
-.run-who { min-width: 210px; }
+.run-who { min-width: 210px; overflow-wrap: anywhere; }
 .run-verb { font-weight: 700; }
 .run-ok .run-verb { color: var(--pass); }
 .run-no .run-verb { color: var(--fail); }
 
 .run .run-meta {
+  min-width: 0;
   margin-left: auto;
   color: var(--faint);
   font-size: 11px;
+  overflow-wrap: anywhere;
 }
 
 .execution-quote {
@@ -558,7 +615,7 @@ details[open] > summary .disclosure-icon { transform: rotate(180deg); }
 .function-flow-list { margin-top: 12px; padding: 18px; }
 .function-flow-list > .eyebrow { margin-bottom: 14px; }
 .function-flow-list ul { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
-.function-flow-row { display: grid; grid-template-columns: 240px 1fr; gap: 18px; align-items: end; }
+.function-flow-row { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 18px; align-items: end; }
 .function-flow-name { display: flex; gap: 10px; justify-content: space-between; }
 .function-flow-name > span { color: var(--faint); font-family: var(--mono); font-size: 11px; }
 .outcome-flow caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
@@ -633,7 +690,7 @@ details[open] > summary .disclosure-icon { transform: rotate(180deg); }
 .mutation-story > summary:hover { background: var(--sunk); }
 .mutation-summary-copy { display: grid; gap: 7px; }
 .change-line { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-family: var(--mono); font-size: 12px; }
-.change-line code { padding: 3px 6px; border: 1px solid var(--line); border-radius: 4px; background: var(--sunk); }
+.change-line code { max-width: 100%; padding: 3px 6px; overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; background: var(--sunk); white-space: pre; }
 .change-arrow { display: inline-flex; color: var(--faint); }
 .mutation-evidence { padding: 14px; border-top: 1px solid var(--line); }
 .state-sequence { display: grid; gap: 12px; margin-top: 14px; }
@@ -700,7 +757,7 @@ details[open] > summary .disclosure-icon { transform: rotate(180deg); }
 .command-list { margin-top: 40px; padding: 22px; }
 .command-list ol { display: grid; gap: 16px; margin-bottom: 0; padding-left: 22px; }
 .command-list li > span { color: var(--dim); }
-.command-list pre { margin-top: 5px; padding: 10px; overflow-x: auto; background: var(--sunk); font-size: 12px; }
+.command-list pre { max-width: 100%; margin-top: 5px; padding: 10px; overflow-x: auto; background: var(--sunk); font-size: 12px; }
 .method-door { display: flex; gap: 20px; align-items: end; justify-content: space-between; margin-top: 14px; padding: 22px; }
 .method-door h2 { margin-bottom: 7px; font-size: 20px; }
 .method-door p:not(.eyebrow) { max-width: 64ch; margin-bottom: 0; color: var(--dim); }

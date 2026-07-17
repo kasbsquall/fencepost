@@ -4,6 +4,7 @@ import json
 import re
 import threading
 from html.parser import HTMLParser
+from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
@@ -143,6 +144,25 @@ def test_every_rendered_view_is_free_of_utf8_mojibake(tmp_path) -> None:
         render_probe_error("That question does not exist."),
     )
     _assert_no_mojibake(*documents)
+
+
+def test_landing_commands_are_portable_and_do_not_expose_absolute_paths(tmp_path) -> None:
+    report = load_report(_fixture_report(tmp_path))
+    report["repository_path"] = str(Path.cwd() / "demo" / "student-repo")
+    report["student_email"] = "d.ramos@alumnos.ejemplo.edu"
+    document = render_landing_document(
+        report,
+        artifact_dir=tmp_path / ".fp_demo",
+        probe_url="http://127.0.0.1:8766/",
+    )
+
+    assert (
+        "fencepost demo/student-repo --student-email "
+        "d.ramos@alumnos.ejemplo.edu --output .fp_run"
+    ) in document
+    assert "fencepost serve .fp_run" in document
+    assert "fencepost probe .fp_run --out answers.json" in document
+    assert str(Path.cwd()) not in document
 
 
 def test_report_v2_renders_key_fixture_facts_without_a_browser(tmp_path) -> None:

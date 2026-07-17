@@ -1316,6 +1316,19 @@ def _command_arg(value: object) -> str:
     return rendered
 
 
+def _portable_command_path(value: object) -> str | None:
+    """Return a copyable path relative to the process directory, never an absolute one."""
+    if not isinstance(value, str) or not value:
+        return None
+    candidate = Path(value).expanduser()
+    try:
+        relative = candidate.resolve().relative_to(Path.cwd().resolve())
+    except (OSError, ValueError):
+        return candidate.name or None
+    rendered = relative.as_posix()
+    return rendered if rendered else "."
+
+
 def render_landing_document(
     report: Mapping[str, Any],
     *,
@@ -1352,16 +1365,18 @@ def render_landing_document(
             f'<div><dt>Run started</dt><dd><time datetime="{_text(started_at)}">{_human_timestamp(started_at)}</time></dd></div>'
         )
 
-    artifact_arg = _command_arg(artifact_dir)
+    # The landing page documents a portable fresh run rather than replaying this
+    # machine's artifact directory. A reader can paste these commands anywhere.
+    artifact_arg = ".fp_run"
+    repository_arg = _portable_command_path(repository_path)
     commands = []
-    if repository_path and report.get("student_email") and commit:
+    if repository_arg and report.get("student_email"):
         commands.append(
             (
                 "Produce this analysis",
                 "fencepost "
-                f"{_command_arg(repository_path)} --student-email "
-                f"{_command_arg(report['student_email'])} --output {artifact_arg} "
-                f"--commit {_command_arg(commit)}",
+                f"{_command_arg(repository_arg)} --student-email "
+                f"{_command_arg(report['student_email'])} --output {artifact_arg}",
             )
         )
     commands.extend(
